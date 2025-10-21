@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Utilisateur {
+  id        Int             @id @default(autoincrement())
+  nom       String          @db.VarChar(100)
+  prenom    String          @db.VarChar(100)
+  email     String          @unique @db.VarChar(150)
+  createdAt DateTime        @default(now())
+  updateAt  DateTime        @updatedAt
+  role      RoleUtilisateur @default(utilisateurSimple)
+  emprunts  Emprunt[]
+}
+
+model Emprunt {
+  id                  Int            @id @default(autoincrement())
+  dateEmprunt         DateTime       @default(now())
+  dateRetourPrevu     DateTime
+  dateRetourEffective DateTime?
+  utilisateur         Utilisateur    @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+  utilisateurId       Int            @unique
+  statut              Statut         @default(EnCours)
+  equipement          Equipement[]
+  notification        Notification[]
+}
+
+model Equipement {
+  id        Int     @id @default(autoincrement())
+  nom       String  @db.VarChar(100)
+  type      String  @db.VarChar(100)
+  etat      Etat    @default(Disponible)
+  emprunt   Emprunt @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  empruntId Int     @unique
+}
+
+model Notification {
+  id            Int              @id @default(autoincrement())
+  message       String
+  DateEnvoi     DateTime         @default(now())
+  type          TypeNotification @default(AlerteStock)
+  emprunt       Emprunt          @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  empruntId     Int              @unique
+  consommable   Consommable      @relation(fields: [consommableId], references: [id], onDelete: Cascade)
+  consommableId Int              @unique
+}
+
+model Consommable {
+  id                 Int            @id @default(autoincrement())
+  nom                String         @db.VarChar(100)
+  quantiteDisponible Int
+  seuilCritique      Int
+  notification       Notification[]
+}
+
+model Rapport {
+  id      Int         @id @default(autoincrement())
+  contenu String
+  type    TypeRapport @default(Stock)
+  periode Periode     @default(Mensuel)
+}
+
+enum Periode {
+  Mensuel
+  Hebdo
+}
+
+enum TypeRapport {
+  Stock
+  Consommation
+  UtilisationEquipement
+}
+
+enum TypeNotification {
+  AlerteStock
+  RappelRetour
+}
+
+enum Statut {
+  EnCours
+  Retourner
+}
+
+enum Etat {
+  Disponible
+  Emprunter
+  EnMaintenance
+}
+
+enum RoleUtilisateur {
+  admin
+  responsableRH
+  utilisateurSimple
+}

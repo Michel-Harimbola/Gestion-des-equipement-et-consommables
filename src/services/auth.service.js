@@ -26,7 +26,7 @@ async function registerUser({ nom, prenom, email, motDePasse }) {
         }
     });
 
-    const token = jwt.sign({ userId: utilisateur.id, role: utilisateur.role }, JWT_SECRET, { expiresIn: 'id' });
+    const token = jwt.sign({ userId: utilisateur.id, role: utilisateur.role }, JWT_SECRET, { expiresIn: '1d' });
 
     // Retourner les donnees sans le mdp
     return {
@@ -57,7 +57,7 @@ async function loginUser({ email, motDePasse }) {
     }
     
     // Generer le jeton
-    const token = jwt.sign({ userId: utilisateur.id, role: utilisateur.role }, JWT_SECRET, { expiresIn: 'id' });
+    const token = jwt.sign({ userId: utilisateur.id, role: utilisateur.role }, JWT_SECRET, { expiresIn: '1d' });
 
     // Retourner les donnees
     return {

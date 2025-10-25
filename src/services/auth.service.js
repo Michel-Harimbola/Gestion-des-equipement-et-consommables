@@ -16,14 +16,14 @@
                 throw new Error("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.");
             }
 
-            const hashedPassord = await PasswordUtils.hashPassword(motDePasse);
+            const hashedPassword = await PasswordUtils.hashPassword(motDePasse);
 
             const user = await prisma.utilisateur.create({
                 data: {
                     nom,
                     prenom,
                     email,
-                    motDePasse: hashedPassord,
+                    motDePasse: hashedPassword,
                     role,
                 },
             });
@@ -68,11 +68,11 @@
             );
             if(!isValid) throw new Error("Mot de passe actuel invalide");
 
-            const hashedPassord = await PasswordUtils.hashPassword(newPassword);
+            const hashedPassword = await PasswordUtils.hashPassword(newPassword);
 
             await prisma.utilisateur.update({
                 where: { id: userId },
-                data: { motDePasse: hashedPassord },
+                data: { motDePasse: hashedPassword },
             });
 
             return { message: "Mot de passe modifié avec succès" }; 

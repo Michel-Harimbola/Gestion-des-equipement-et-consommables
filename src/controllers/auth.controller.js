@@ -1,48 +1,33 @@
-const authService = require('../services/auth.service');
+const AuthServie = require('../services/auth.service.js');
 
-// Contrôleur pour l'inscription
-async function register(req, res) {
-    // Récupération des champs selon le modèle Utilisateur
-    const { nom, prenom, email, motDePasse } = req.body;
-
-    if (!email || !motDePasse || !nom || !prenom) {
-        return res.status(400).json({ error: 'Tous les champs (nom, prenom, email, motDePasse) sont requis.' });
-    }
-
+exports.register = async (req, res) => {
     try {
-        const result = await authService.registerUser({ nom, prenom, email, motDePasse });
+        const result = await AuthServie.register(req.body);
         res.status(201).json(result);
-    } catch (error) {
-        if (error.message === 'Cet email est déjà utilisé.') {
-            return res.status(409).json({ error: error.message });
-        }
-        console.error(error);
-        res.status(500).json({ error: 'Échec de l\'inscription.' });
+    } catch (err) {
+        res.status(400).json({ error: err.mesage });
     }
 }
 
-// Contrôleur pour la connexion
-async function login(req, res) {
-    // Récupération de l'email et du mot de passe
-    const { email, motDePasse } = req.body;
-
-    if (!email || !motDePasse) {
-        return res.status(400).json({ error: 'Email et motDePasse sont requis.' });
-    }
-
+exports.login = async (req, res) => {
     try {
-        const result = await authService.loginUser({ email, motDePasse });
+        const result = await AuthServie.login(req.body);
         res.status(200).json(result);
-    } catch (error) {
-        if (error.message === 'Identifiants invalides.') {
-            return res.status(401).json({ error: error.message }); 
-        }
-        console.error(error);
-        res.status(500).json({ error: 'Échec de la connexion.' });
+    } catch (err) {
+        res.status(400).json({ error: err.mesage });
     }
 }
 
-module.exports = {
-    register,
-    login,
-};
+exports.changePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const result = await AuthServie.changePassword(
+            req.params.id,
+            oldPassword,
+            newPassword,
+        );
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+}

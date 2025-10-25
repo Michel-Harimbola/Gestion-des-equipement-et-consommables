@@ -14,7 +14,7 @@ async function protect(req, res, next) {
             // Verifier le jeton et obtenir l'ID de l'utilisateur
             const decoded = jwt.verify(token, JWT_SECRET);
 
-            // Charger l'useur dans l'objet req (sans le mdp)
+            // Charger l'user dans l'objet req (sans le mdp)
             req.user = await prisma.Utilisateur.findUnique({
                 where: { id: decoded.userId },
                 select: { id: true, email: true, nom: true, prenom: true, role: true }

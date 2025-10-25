@@ -1,78 +1,81 @@
-const prisma = require('../lib/prisma');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const prisma = require("../lib/prisma.js");
+const PasswordUtils = require("../utils/password.util.js");
+const generateToken = require("../utils/jwt.util.js");
+const { use } = require("react");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+class AuthService {
+    static async register({ nom, prenom, email, motdeDePasse, role }) {
+        // Vérifier si l'user est déjà exister
+        const existing = await prisma.utilisateur.findUnique({ where: { email }});
+        if (existing) throw new Error("Email déjà existant");
+        
+        // Validation de la mdp
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordRegex.test(motdeDePasse)) {
+            throw new Error("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.");
+        }
 
-// Inscription
-async function registerUser({ nom, prenom, email, motDePasse }) {
-    // Verifier si l'user existe
-    const existingUser = await prisma.Utilisateur.findUnique({ where: { email } });
-    if (existingUser) {
-        throw new Error('Cet email est déjà utilisé.');
+        const hashedPassord = await PasswordUtils.hashPassword(motdeDePasse);
+
+        const user = await prisma.utilisateur.create({
+            data: {
+                nom,
+                prenom,
+                email,
+                motdeDePasse: hashedPassord,
+                role,
+            },
+        });
+
+        return {
+            id: user.id,
+            email: user.email,
+            token: generateToken({ id: user.id, role: user.role }),
+        };
     }
 
-    //Hacher le mdp
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(motDePasse, salt);
+    static async login({ email, motdeDePasse }) {
+        const user = await prisma.utilisateur.findUnique({ where: { email } });
+        if (!use) throw new Error("Email ou mot de passe invalide");
 
-    // creer l'user 
-    const utilisateur = await prisma.Utilisateur.create({
-        data: {
-            nom,
-            prenom,
-            email,
-            motDePasse: hashedPassword,
-        }
-    });
+        const isValid = await PasswordUtils.verifyPassword(
+            motdeDePasse,
+            user.motDePasse,
+        );
 
-    const token = jwt.sign({ userId: utilisateur.id, role: utilisateur.role }, JWT_SECRET, { expiresIn: '1d' });
+        if (!isValid) throw new Error("Email ou mot de passe invalide");
 
-    // Retourner les donnees sans le mdp
-    return {
-        token,
-        Utilisateur: {
-            id: utilisateur.id,
-            nom: utilisateur.nom,
-            prenom: utilisateur.prenom,
-            email: utilisateur.email,
-            role: utilisateur.role
-        }
-    };
+        return {
+            id: user.id,
+            email: user.email,
+            token: generateToken({ id: user.id, role: user.role }),
+        };
+    }
+
+    static async changePassword(id, oldPassword, newPassword) {
+        const userId = parseInt(id, 10);
+        if (isNaN(userId)) throw new Error("ID invalide");
+
+        const user = await prisma.utilisateur.findUnique({
+            where: { id: userId },
+        });
+        if (!user) throw new Error("Utilisateur non trouvé");
+
+        const isValid = await PasswordUtils.verifyPassword(
+            oldPassword,
+            user.motdeDePasse,
+        );
+        if(!isValid) throw new Error("Mot de passe actuel invalide");
+
+        const hashedPassord = await PasswordUtils.hashPassword(newPassword);
+
+        await prisma.utilisateur.update({
+            where: { id: userId },
+            data: { motDePasse: hashedPassord },
+        });
+
+        return { message: "Mot de passe modifié avec succès" }; 
+    }
 }
 
-
-// Connexion
-async function loginUser({ email, motDePasse }) {
-    // Chercher l'user
-    const utilisateur = await prisma.Utilisateur.findUnique({ where: { email } });
-    if (!utilisateur) {
-        throw new Error('Identifiants invalides.');
-    }
-
-    // Comparer les mdp (avec le champ motDePasse)
-    const isMatch = await bcrypt.compare(motDePasse, utilisateur.motDePasse);
-    if (!isMatch) {
-        throw new Error('Identifiants invalides.');
-    }
-    
-    // Generer le jeton
-    const token = jwt.sign({ userId: utilisateur.id, role: utilisateur.role }, JWT_SECRET, { expiresIn: '1d' });
-
-    // Retourner les donnees
-    return {
-        token,
-        Utilisateur: {
-            id: utilisateur.id,
-            nom: utilisateur.nom,
-            prenom: utilisateur.prenom,
-            email: utilisateur.email,
-            role: utilisateur.role
-        }
-    };
-}
-
-module.exports = {
-    registerUser,
-    loginUser,
-};
+module.exports = AuthService;

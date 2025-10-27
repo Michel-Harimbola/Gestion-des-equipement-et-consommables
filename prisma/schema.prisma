@@ -42,8 +42,8 @@ model Equipement {
   nom        String       @db.VarChar(100)
   type       String       @db.VarChar(100)
   etat       Etat         @default(Disponible)
-  emprunt    Emprunt      @relation(fields: [empruntId], references: [id], onDelete: Cascade)
-  empruntId  Int          @unique
+  emprunt    Emprunt?      @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  empruntId  Int?         
 }
 
 model Notification {

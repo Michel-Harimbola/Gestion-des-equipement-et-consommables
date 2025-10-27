@@ -27,7 +27,7 @@ class ConsommableService {
         return consommable;
     }
 
-    static async getAllConsommable() {
+    static async getAllConsommables() {
         const consommables = await prisma.consommable.findMany({
             select: {
                 id: true,

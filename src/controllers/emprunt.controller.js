@@ -2,7 +2,7 @@ const empruntService = require("../services/emprunt.service.js");
 
 exports.createEmprunt = async (req, res) => {
     try {
-        const emprunt = await empruntService.createEmprunt(req.body, req.utilisateur.id);
+        const emprunt = await empruntService.createEmprunt(req.body, req.user.id);
         res.status(201).json(emprunt);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -30,7 +30,7 @@ exports.getAllEmprunts = async (req, res) => {
 
 exports.getUserEmprunts = async (req, res) => {
     try {
-        const emprunts = await empruntService.getUserEmprunts(req.utilisateur.id);
+        const emprunts = await empruntService.getUserEmprunts(req.user.id);
         res.status(200).json(emprunts);
     } catch (error) {
         res.status(404).json({ error: error.message });
@@ -48,7 +48,7 @@ exports.updateEmprunt = async (req, res) => {
 
 exports.returnEmprunt = async (req, res) => {
     try {
-        const emprunt = await empruntService.returnEmprunt(req.params.id, req.utilisateur.id);
+        const emprunt = await empruntService.returnEmprunt(req.params.id, req.user.id);
         res.status(200).json(emprunt);
     } catch (error) {
         res.status(400).json({ error: error.message });

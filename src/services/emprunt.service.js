@@ -40,8 +40,10 @@ class EmpruntService {
         const emprunts = await prisma.emprunt.findMany({
             orderBy: { dateEmprunt: "desc" },
             include: {
-                utilisateur: { nom: true, prenom: true, email: true }
-            }
+                utilisateur: {
+                    select: { nom: true, prenom: true, email: true }
+                }
+            },
         });
 
         return emprunts
@@ -89,8 +91,10 @@ class EmpruntService {
             where: { id: empruntId },
             data,
             include: {
-                utilisateur: { nom: true, prenom: true, email: true }
-            }
+                utilisateur: { 
+                    select: { nom: true, prenom: true, email: true },
+                 },
+            },
         });
 
         return emprunt;

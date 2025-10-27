@@ -19,7 +19,7 @@ exports.getUserById = async (req, res) => {
     }
 }
 
-exports.getAllusers = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
     try {
         const users = await UserService.getAllUsers();
         res.status(200).json(users);

@@ -30,7 +30,7 @@ exports.getAllEquipements = async (req, res) => {
 
 exports.updateEquipement = async (req, res) => {
     try {
-        const equipement = await EquipementService.updateEquipement(req.params.id, req,body);
+        const equipement = await EquipementService.updateEquipement(req.params.id, req.body);
         res.status(200).json(equipement);
     } catch (error) {
         res.status(400).json({ error: error.message });

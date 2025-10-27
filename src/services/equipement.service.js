@@ -1,13 +1,9 @@
 const prisma = require("../lib/prisma.js");
 
 class EquipementService {
-    static async createEquipement(nom, type, etat) {
+    static async createEquipement(data) {
         const equipement = await prisma.equipement.create({
-            data:{
-                nom,
-                type,
-                etat,
-            },
+            data,
         });
 
         return equipement;

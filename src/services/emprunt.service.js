@@ -2,25 +2,56 @@ const prisma = require("../lib/prisma.js");
 
 class EmpruntService {
     static async createEmprunt(data, userId) {
-        const { dateRetourPrevu } = data;
+        const { dateRetourPrevu, equipementIds } = data;
+
+        if (!equipementIds || equipementIds.length === 0) {
+            throw new Error("Aucun équipement spécifié pour l'emprunt.");
+        }
+
         if (new Date(dateRetourPrevu) <= new Date()) {
             throw new Error("La date de retour prévue doit être future.");
         }
 
-        const emprunt = await prisma.emprunt.create({
-            data: {
-                dateRetourPrevu: new Date(dateRetourPrevu),
-                utilisateurId: userId,
-            },
-
-            include: {
-                utilisateur: {
-                    select: { nom: true, prenom: true, email: true }
-                }
+        const equipements = await prisma.equipement.findMany({
+            where: {
+                id: { in: equipementIds }
             }
         });
 
-        return emprunt;
+        const indisponible = equipements.filter(e => e.etat !== 'Disponible');
+        if (indisponible.length > 0) {
+            const noms = indisponible.map(e => e.nom).join(', ');
+            throw new Error(`Les équipements suivants ne sont pas disponibles (État actuel: ${indisponible[0].etat}): ${noms}`);
+        }
+
+        const transaction = await prisma.$transaction(async (tx) => {
+            const emprunt = await prisma.emprunt.create({
+                data: {
+                    dateRetourPrevu: new Date(dateRetourPrevu),
+                    utilisateurId: userId,
+                },
+            });
+
+            await tx.equipement.updateMany({
+                where: { id: { in: equipementIds } },
+                data: {
+                    etat: "Emprunter",
+                    empruntId: emprunt.id,
+                },
+            });
+
+            return emprunt;
+        });
+
+        return prisma.emprunt.findUnique({
+            where: { id: transaction.id },
+            include: {
+                utilisateur: {
+                    select: { nom: true, prenom: true, email: true }
+                },
+                equipement: true,
+            },
+        });
     }
 
     static async getEmpruntById (id) {
@@ -29,7 +60,10 @@ class EmpruntService {
         
         const emprunt = await prisma.emprunt.findUnique({
             where: { id: empruntId },
-            include: { utilisateur: true },
+            include: { 
+                utilisateur: true,
+                equipement: true,
+            },
         });
         if(!emprunt) throw new Error("Emprunt non trouvé");
         
@@ -41,7 +75,8 @@ class EmpruntService {
             orderBy: { dateEmprunt: "desc" },
             include: {
                 utilisateur: {
-                    select: { nom: true, prenom: true, email: true }
+                    select: { nom: true, prenom: true, email: true },
+                    equipement: true,
                 }
             },
         });
@@ -60,7 +95,11 @@ class EmpruntService {
         const empruntId = parseInt(id, 10);
         const dateEffective = new Date();
 
-        const emprunt = await prisma.emprunt.findUnique({ where: { id: empruntId }});
+        const emprunt = await prisma.emprunt.findUnique({ 
+            where: { id: empruntId },
+            include: { equipement: true }
+        });
+
         if(!emprunt) throw new Error("Emprunt non trouvé");
 
         if(emprunt.utilisateurId !== userId) {
@@ -71,16 +110,30 @@ class EmpruntService {
             throw new Error("Cet emprunt est déjà marqué comme retourné.");
         }
 
-        const updateEmprunt = await prisma.emprunt.update({
-            where: { id: empruntId },
-            data: {
-                statut: "Retourner",
-                dateRetourEffective: dateEffective,
-            }
+        const equipementIds = emprunt.equipement.map(e => e.id);
+
+        const updateResult = await prisma.$transaction(async (tx) => {
+            await tx.equipement.updateMany({
+                where: { id: { in: equipementIds } },
+                data: {
+                    etat: "Disponible",
+                    empruntId: null,
+                } 
+            });
+
+            const updateEmprunt = await prisma.emprunt.update({
+                where: { id: empruntId },
+                data: {
+                    statut: "Retourner",
+                    dateRetourEffective: dateEffective,
+                },
+                include: { equipement: true }
+            });
+
+            return updateEmprunt;
         });
 
-        return updateEmprunt;
-
+        return updateResult;
     }
 
     static async updateEmprunt (id, data) {

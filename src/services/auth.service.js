@@ -1,5 +1,5 @@
     const prisma = require("../lib/prisma.js");
-    const PasswordUtils = require("../utils/password.util.js");
+    const passwordUtils = require("../utils/password.util.js");
     const generateToken = require("../utils/jwt.util.js");
 
     class AuthService {
@@ -16,7 +16,7 @@
                 throw new Error("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.");
             }
 
-            const hashedPassword = await PasswordUtils.hashPassword(motDePasse);
+            const hashedPassword = await passwordUtils.hashPassword(motDePasse);
 
             const user = await prisma.utilisateur.create({
                 data: {
@@ -39,7 +39,7 @@
             const user = await prisma.utilisateur.findUnique({ where: { email } });
             if (!user) throw new Error("Email ou mot de passe invalide");
 
-            const isValid = await PasswordUtils.verifyPassword(
+            const isValid = await passwordUtils.verifyPassword(
                 motDePasse,
                 user.motDePasse,
             );
@@ -62,13 +62,13 @@
             });
             if (!user) throw new Error("Utilisateur non trouvé");
 
-            const isValid = await PasswordUtils.verifyPassword(
+            const isValid = await passwordUtils.verifyPassword(
                 oldPassword,
                 user.motDePasse,
             );
             if(!isValid) throw new Error("Mot de passe actuel invalide");
 
-            const hashedPassword = await PasswordUtils.hashPassword(newPassword);
+            const hashedPassword = await passwordUtils.hashPassword(newPassword);
 
             await prisma.utilisateur.update({
                 where: { id: userId },

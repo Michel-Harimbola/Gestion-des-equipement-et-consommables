@@ -16,9 +16,11 @@ async function protect(req, res, next) {
 
             // Charger l'user dans l'objet req (sans le mdp)
             req.user = await prisma.utilisateur.findUnique({
-                where: { id: decoded.userId },
+                where: { id: decoded.id },
                 select: { id: true, email: true, nom: true, prenom: true, role: true }
             });
+
+            console.log(req.user);
 
             if (!req.user) {
                 return res.status(401).json({ error: 'Utilisateur non trouvé, jeton invalide.' });

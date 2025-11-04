@@ -37,6 +37,15 @@ exports.getUserEmprunts = async (req, res) => {
     }
 }
 
+exports.getUserEmpruntsInProgress = async (req, res) => {
+    try {
+        const emprunts = await empruntService.getUserEmpruntsInProgress(req.user.id);
+        res.status(200).json(emprunts);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+}
+
 exports.updateEmprunt = async (req, res) => {
     try {
         const emprunt = await empruntService.updateEmprunt(req.params.id, req.body);

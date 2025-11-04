@@ -2,9 +2,9 @@ const prisma = require("../lib/prisma.js");
 
 class EmpruntService {
     static async createEmprunt(data, userId) {
-        const { dateRetourPrevu, equipementIds } = data;
-
-        if (!equipementIds || equipementIds.length === 0) {
+        const { dateRetourPrevu, equipementId } = data;
+        const equipId = parseInt(equipementId, 10)
+        if (!equipId || equipId.length === 0) {
             throw new Error("Aucun équipement spécifié pour l'emprunt.");
         }
 
@@ -12,13 +12,11 @@ class EmpruntService {
             throw new Error("La date de retour prévue doit être future.");
         }
 
-        const equipements = await prisma.equipement.findMany({
-            where: {
-                id: { in: equipementIds }
-            }
+        const equipement = await prisma.equipement.findUnique({
+            where: {id: equipId }
         });
 
-        const indisponible = equipements.filter(e => e.etat !== 'Disponible');
+        const indisponible = () => { equipement.etat !== "Disponible" };
         if (indisponible.length > 0) {
             const noms = indisponible.map(e => e.nom).join(', ');
             throw new Error(`Les équipements suivants ne sont pas disponibles (État actuel: ${indisponible[0].etat}): ${noms}`);
@@ -32,8 +30,8 @@ class EmpruntService {
                 },
             });
 
-            await tx.equipement.updateMany({
-                where: { id: { in: equipementIds } },
+            await tx.equipement.update({
+                where: { id: equipId },
                 data: {
                     etat: "Emprunter",
                     empruntId: emprunt.id,
@@ -110,11 +108,11 @@ class EmpruntService {
             throw new Error("Cet emprunt est déjà marqué comme retourné.");
         }
 
-        const equipementIds = emprunt.equipement.map(e => e.id);
+        const equipementId = emprunt.equipement.id;
 
         const updateResult = await prisma.$transaction(async (tx) => {
             await tx.equipement.updateMany({
-                where: { id: { in: equipementIds } },
+                where: { id: { in: equipementId } },
                 data: {
                     etat: "Disponible",
                     empruntId: null,

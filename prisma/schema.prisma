@@ -31,7 +31,7 @@ model Emprunt {
   dateRetourPrevu     DateTime
   dateRetourEffective DateTime?
   utilisateur         Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
-  utilisateurId       Int             @unique
+  utilisateurId       Int             
   statut              Statut          @default(EnCours)
   equipement          Equipement[]
   notification        Notification[]

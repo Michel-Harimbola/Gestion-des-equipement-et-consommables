@@ -36,7 +36,6 @@ class EquipementService {
                 etat: true,
             },
         });
-
         return equipements;
     }
 

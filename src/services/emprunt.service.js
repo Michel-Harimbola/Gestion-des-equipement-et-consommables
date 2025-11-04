@@ -87,6 +87,22 @@ class EmpruntService {
             where: { utilisateurId: userId },
             orderBy: { dateEmprunt: "desc" }
         });
+        console.log(emprunts);
+        return emprunts;
+    }
+
+    static async getUserEmpruntsInProgress(userId) {
+        const emprunt = await prisma.emprunt.findMany({
+            where: {
+                utilisateurId: userId,
+                statut: "EnCours",
+            },
+            include: {
+                equipement: { 
+                    select: {nom: true}
+                }
+            }
+        })
     }
 
     static async returnEmprunt (id, userId) {

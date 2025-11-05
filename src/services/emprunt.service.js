@@ -73,9 +73,9 @@ class EmpruntService {
             orderBy: { dateEmprunt: "desc" },
             include: {
                 utilisateur: {
-                    select: { nom: true, prenom: true, email: true },
-                    equipement: true,
-                }
+                    select: { nom: true, prenom: true, email: true }
+                },
+                equipement: true,
             },
         });
 
@@ -87,12 +87,12 @@ class EmpruntService {
             where: { utilisateurId: userId },
             orderBy: { dateEmprunt: "desc" }
         });
-        console.log(emprunts);
+
         return emprunts;
     }
 
     static async getUserEmpruntsInProgress(userId) {
-        const emprunt = await prisma.emprunt.findMany({
+        const emprunts = await prisma.emprunt.findMany({
             where: {
                 utilisateurId: userId,
                 statut: "EnCours",
@@ -102,7 +102,9 @@ class EmpruntService {
                     select: {nom: true}
                 }
             }
-        })
+        });
+        console.log(emprunts);
+        return emprunts
     }
 
     static async returnEmprunt (id, userId) {

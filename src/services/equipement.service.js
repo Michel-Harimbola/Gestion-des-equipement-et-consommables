@@ -36,6 +36,11 @@ class EquipementService {
                 etat: true,
             },
         });
+        const ordreEtat = ["Disponible", "EnMaintenance", "Emprunter"];
+        equipements.sort((a, b) => {
+            return ordreEtat.indexOf(a.etat) - ordreEtat.indexOf(b.etat);
+        })
+
         return equipements;
     }
 

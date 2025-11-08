@@ -14,15 +14,16 @@ datasource db {
 }
 
 model Utilisateur {
-  id          Int             @id @default(autoincrement())
-  nom         String          @db.VarChar(100)
-  prenom      String          @db.VarChar(100)
-  email       String          @unique @db.VarChar(100)
-  motDePasse  String
-  createdAt   DateTime        @default(now())
-  updateAt    DateTime        @updatedAt
-  role        RoleUtilisateur @default(utilisateurSimple)
-  emprunts    Emprunt[]
+  id             Int             @id @default(autoincrement())
+  nom            String          @db.VarChar(100)
+  prenom         String          @db.VarChar(100)
+  email          String          @unique @db.VarChar(100)
+  motDePasse     String
+  createdAt      DateTime        @default(now())
+  updateAt       DateTime        @updatedAt
+  role           RoleUtilisateur @default(utilisateurSimple)
+  emprunts       Emprunt[]
+  demandeEmprunt DemandeEmprunt[]
 } 
 
 model Emprunt {
@@ -37,13 +38,28 @@ model Emprunt {
   notification        Notification[]
 }
 
+model DemandeEmprunt {
+  id                Int           @id  @default(autoincrement())
+  utilisateurId     Int          
+  equipementId      Int
+  dateDemande       DateTime      @default(now())
+  dateRetourPrevu   DateTime
+  statut            StatutDemande @default(enAttente)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  utilisateur       Utilisateur   @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
+  equipement        Equipement    @relation(fields: [equipementId], references: [id], onDelete: Cascade)
+}
+
 model Equipement {
-  id         Int          @id  @default(autoincrement())
-  nom        String       @db.VarChar(25)
-  type       String       @db.VarChar(25)
-  etat       Etat         @default(Disponible)
-  emprunt    Emprunt?      @relation(fields: [empruntId], references: [id], onDelete: Cascade)
-  empruntId  Int?         
+  id             Int          @id  @default(autoincrement())
+  nom            String       @db.VarChar(25)
+  type           String       @db.VarChar(25)
+  etat           Etat         @default(Disponible)
+  emprunt        Emprunt?     @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  empruntId      Int?         
+  demandeEmprunt DemandeEmprunt[]
 }
 
 model Notification {
@@ -105,3 +121,9 @@ enum RoleUtilisateur {
   responsableRH
   utilisateurSimple
 } 
+
+enum StatutDemande {
+  enAttente
+  approuver
+  refuser
+}

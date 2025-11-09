@@ -2,33 +2,44 @@ const prisma = require("../lib/prisma");
 
 class DemandeEmpruntService {
   static async createDemande(utilisateurId, equipementId, dateRetourPrevu) {
+    const equipementIdInt = parseInt(equipementId, 10);
+    const utilisateurIdInt = parseInt(utilisateurId, 10);
+
+    console.log("user =", utilisateurId, "eq =", equipementId, dateRetourPrevu);
+    
     // Vérifier si équipement existe et est dispo
-    const equipement = await prisma.equipement.findUnique({ where: { id: equipementId } });
+    const equipement = await prisma.equipement.findUnique({ where: { id: equipementIdInt } });
     if (!equipement) throw new Error("Équipement introuvable");
     if (equipement.etat !== "Disponible") throw new Error("Équipement non disponible");
 
     // Changer temporairement l'état à EnMaintenance
     await prisma.equipement.update({
-      where: { id: equipementId },
+      where: { id: equipementIdInt },
       data: { etat: "EnMaintenance" },
     });
 
     // Créer la demande
     const demande = await prisma.demandeEmprunt.create({
-      data: { utilisateurId, equipementId, dateRetourPrevu, statut: "EnAttente" },
+      data: { 
+        utilisateur: { connect: { id: utilisateurIdInt } },
+        equipement: {connect: { id: equipementIdInt } },
+        dateRetourPrevu, 
+        statut: "enAttente" },
     });
 
     return demande;
   }
 
   static async getAllDemandes() {
-    return prisma.demandeEmprunt.findMany({
+    const res = await prisma.demandeEmprunt.findMany({
       include: {
         utilisateur: { select: { nom: true, prenom: true, email: true } },
         equipement: { select: { nom: true, type: true } },
       },
       orderBy: { createdAt: "desc" },
     });
+
+    return res;
   }
 
   static async approuverDemande(id) {
@@ -39,7 +50,6 @@ class DemandeEmpruntService {
     await prisma.emprunt.create({
       data: {
         utilisateurId: demande.utilisateurId,
-        equipementId: demande.equipementId,
         dateRetourPrevu: demande.dateRetourPrevu,
         statut: "EnCours",
       },
@@ -48,7 +58,7 @@ class DemandeEmpruntService {
     // Changer statut de la demande et équipement
     await prisma.demandeEmprunt.update({
       where: { id },
-      data: { statut: "Approuve" },
+      data: { statut: "approuver" },
     });
 
     await prisma.equipement.update({
@@ -65,7 +75,7 @@ class DemandeEmpruntService {
 
     await prisma.demandeEmprunt.update({
       where: { id },
-      data: { statut: "Refuse" },
+      data: { statut: "refuser" },
     });
 
     // Remettre équipement en dispo

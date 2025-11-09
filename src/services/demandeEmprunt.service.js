@@ -4,8 +4,6 @@ class DemandeEmpruntService {
   static async createDemande(utilisateurId, equipementId, dateRetourPrevu) {
     const equipementIdInt = parseInt(equipementId, 10);
     const utilisateurIdInt = parseInt(utilisateurId, 10);
-
-    console.log("user =", utilisateurId, "eq =", equipementId, dateRetourPrevu);
     
     // Vérifier si équipement existe et est dispo
     const equipement = await prisma.equipement.findUnique({ where: { id: equipementIdInt } });
@@ -13,20 +11,21 @@ class DemandeEmpruntService {
     if (equipement.etat !== "Disponible") throw new Error("Équipement non disponible");
 
     // Changer temporairement l'état à EnMaintenance
-    await prisma.equipement.update({
-      where: { id: equipementIdInt },
-      data: { etat: "EnMaintenance" },
-    });
-
+    
     // Créer la demande
     const demande = await prisma.demandeEmprunt.create({
       data: { 
         utilisateur: { connect: { id: utilisateurIdInt } },
         equipement: {connect: { id: equipementIdInt } },
-        dateRetourPrevu, 
+        dateRetourPrevu: new Date(dateRetourPrevu), 
         statut: "enAttente" },
+      });
+      
+    await prisma.equipement.update({
+      where: { id: equipementIdInt },
+      data: { etat: "EnMaintenance" },
     });
-
+      
     return demande;
   }
 

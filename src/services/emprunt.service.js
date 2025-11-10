@@ -75,7 +75,9 @@ class EmpruntService {
                 utilisateur: {
                     select: { nom: true, prenom: true, email: true }
                 },
-                equipement: true,
+                equipement: {
+                    select: {nom: true}
+                },
             },
         });
 

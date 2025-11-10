@@ -60,6 +60,26 @@ class DemandeEmpruntService {
     return demandes;
   }
 
+  static async updateDemande (id, data) {
+        const demandeId = parseInt(id, 10);
+        if(isNaN(demandeId)) throw new Error("ID invalide");
+
+        const demande = await prisma.demandeEmprunt.update({
+            where: { id: demandeId },
+            data,
+            include: {
+                utilisateur: { 
+                    select: { nom: true, prenom: true, email: true },
+                 },
+                equipement: {
+                  select: { nom: true }
+                }
+            },
+        });
+
+        return demande;
+    }
+
   static async approuverDemande(id) {
     const demande = await prisma.demandeEmprunt.findUnique({ where: { id } });
     if (!demande) throw new Error("Demande introuvable");

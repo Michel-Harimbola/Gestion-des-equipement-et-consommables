@@ -45,6 +45,18 @@ class DemandeEmpruntService {
     return res;
   }
 
+  static async getUserDemandes(userId) {
+    const demandes = await prisma.demandeEmprunt.findMany({
+      where: { id: userId },
+      orderBy: { dateDemande: "desc" },
+      include: {
+        equipement: { select: { nom: true } }
+      },
+    });
+
+    return demandes;
+  }
+
   static async approuverDemande(id) {
     const demande = await prisma.demandeEmprunt.findUnique({ where: { id } });
     if (!demande) throw new Error("Demande introuvable");

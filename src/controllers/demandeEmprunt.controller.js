@@ -21,6 +21,15 @@ exports.getAllDemandes = async (req, res) => {
   }
 };
 
+exports.getUserDemandes = async (req, res) => {
+  try {
+    const demandes = await DemandeEmpruntService.getUserDemandes(req.user.id);
+    res.status(200).json(demandes);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.approuverDemande = async (req, res) => {
   try {
     const result = await DemandeEmpruntService.approuverDemande(parseInt(req.params.id));

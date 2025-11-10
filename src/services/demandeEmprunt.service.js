@@ -26,7 +26,10 @@ class DemandeEmpruntService {
       data: { etat: "EnMaintenance" },
     });
       
-    return demande;
+    return await prisma.demandeEmprunt.findUnique({
+      where: { id: demande.id },
+      include: { utilisateur: true, equipement: true },
+    });;
   }
 
   static async getAllDemandes() {

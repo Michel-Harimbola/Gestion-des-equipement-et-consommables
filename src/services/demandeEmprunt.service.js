@@ -1,4 +1,5 @@
 const prisma = require("../lib/prisma");
+const EmpruntService = require('./emprunt.service');
 
 class DemandeEmpruntService {
   static async createDemande(utilisateurId, equipementId, dateRetourPrevu) {
@@ -49,13 +50,13 @@ class DemandeEmpruntService {
     if (!demande) throw new Error("Demande introuvable");
 
     // Créer l’emprunt réel
-    await prisma.emprunt.create({
-      data: {
-        utilisateurId: demande.utilisateurId,
+    const emprunt = await EmpruntService.createEmprunt(
+      {
+        equipementId: demande.equipementId,
         dateRetourPrevu: demande.dateRetourPrevu,
-        statut: "EnCours",
       },
-    });
+      demande.utilisateurId
+    );
 
     // Changer statut de la demande et équipement
     await prisma.demandeEmprunt.update({
@@ -68,7 +69,7 @@ class DemandeEmpruntService {
       data: { etat: "Emprunter" },
     });
 
-    return { message: "Demande approuvée et emprunt créé" };
+    return { message: "Demande approuvée et emprunt créé", emprunt: emprunt };
   }
 
   static async refuserDemande(id) {

@@ -47,7 +47,10 @@ class DemandeEmpruntService {
 
   static async getUserDemandes(userId) {
     const demandes = await prisma.demandeEmprunt.findMany({
-      where: { id: userId },
+      where: { 
+        utilisateurId: userId,
+        statut: "enAttente"
+      },
       orderBy: { dateDemande: "desc" },
       include: {
         equipement: { select: { nom: true } }
@@ -100,6 +103,22 @@ class DemandeEmpruntService {
     });
 
     return { message: "Demande refusée" };
+  }
+
+  static async AnnulerDemande(id) {
+    const demande = await prisma.demandeEmprunt.findUnique({ where: { id } });
+    if (!demande) throw new Error("Demande introuvable");
+
+    await prisma.equipement.update({
+      where: { id: demande.equipementId },
+      data: { etat: "Disponible" },
+    });
+
+    const demandeId = parseInt(id, 10);
+    
+    await prisma.demandeEmprunt.delete({
+      where: {id: demandeId}
+    });
   }
 }
 

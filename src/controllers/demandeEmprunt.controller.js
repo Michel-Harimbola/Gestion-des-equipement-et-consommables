@@ -47,3 +47,12 @@ exports.refuserDemande = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.AnnulerDemande = async (req, res) => {
+  try {
+    const result = await DemandeEmpruntService.AnnulerDemande(parseInt(req.params.id));
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};

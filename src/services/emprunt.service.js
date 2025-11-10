@@ -179,9 +179,24 @@ class EmpruntService {
     static async deleteEmprunt (id) {
         const empruntId = parseInt(id, 10);
         if(isNaN(empruntId)) throw new Error("ID invalide");
+        
+        const emprunt = await prisma.emprunt.findUnique({ 
+            where: { id: empruntId },
+            include: { equipement: true }
+        });
 
+        const equipementId = emprunt.equipement.id;
+        
         await prisma.emprunt.delete({
             where: { id: empruntId },
+        });
+
+        await prisma.equipement.updateMany({
+            where: { id: { in: equipementId } },
+            data: {
+                etat: "Disponible",
+                empruntId: null,
+            } 
         });
     }
 }

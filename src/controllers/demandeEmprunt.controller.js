@@ -9,6 +9,15 @@ exports.createDemande = async (req, res) => {
   }
 };
 
+exports.demandeRetour = async (req, res) => {
+  try {
+    const demande = await DemandeEmpruntService.demandeRetour(req.user.id, req.body);
+    res.status(201).json(demande);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getAllDemandes = async (req, res) => {
   try {
     const demandes = await DemandeEmpruntService.getAllDemandes();
@@ -29,7 +38,7 @@ exports.getUserDemandes = async (req, res) => {
 
 exports.updateDemande = async (req, res) => {
   try {
-    const result = await DemandeEmpruntService.updateDemande(parseInt(req.params.id), req.body);
+    const result = await DemandeEmpruntService.updateDemande(req.params.id, req.body);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -38,7 +47,7 @@ exports.updateDemande = async (req, res) => {
 
 exports.approuverDemande = async (req, res) => {
   try {
-    const result = await DemandeEmpruntService.approuverDemande(parseInt(req.params.id));
+    const result = await DemandeEmpruntService.approuverDemande(req.params.id);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -47,7 +56,7 @@ exports.approuverDemande = async (req, res) => {
 
 exports.refuserDemande = async (req, res) => {
   try {
-    const result = await DemandeEmpruntService.refuserDemande(parseInt(req.params.id));
+    const result = await DemandeEmpruntService.refuserDemande(req.params.id);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -56,7 +65,7 @@ exports.refuserDemande = async (req, res) => {
 
 exports.AnnulerDemande = async (req, res) => {
   try {
-    const result = await DemandeEmpruntService.AnnulerDemande(parseInt(req.params.id));
+    const result = await DemandeEmpruntService.annulerDemande(req.params.id);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });

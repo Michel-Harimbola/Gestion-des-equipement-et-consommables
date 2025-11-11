@@ -4,6 +4,7 @@ class EmpruntService {
     static async createEmprunt(data, userId) {
         const { dateRetourPrevu, equipementId } = data;
         const equipId = parseInt(equipementId, 10)
+
         if (!equipId || equipId.length === 0) {
             throw new Error("Aucun équipement spécifié pour l'emprunt.");
         }
@@ -16,20 +17,23 @@ class EmpruntService {
             where: {id: equipId }
         });
 
-        const indisponible = () => { equipement.etat !== "Disponible" };
-        if (indisponible.length > 0) {
-            const noms = indisponible.map(e => e.nom).join(', ');
-            throw new Error(`Les équipements suivants ne sont pas disponibles (État actuel: ${indisponible[0].etat}): ${noms}`);
+        if (!equipement) {
+          throw new Error("Équipement introuvable.");
+        }
+        //vérifier disponnibilité équipement
+        if (equipement.etat !== "Disponible" && equipement.etat !== "EnMaintenance") {
+          throw new Error(`L'équipement "${equipement.nom}" n'est pas disponible.`);
         }
 
         const transaction = await prisma.$transaction(async (tx) => {
+            //création emprunt
             const emprunt = await prisma.emprunt.create({
                 data: {
                     dateRetourPrevu: new Date(dateRetourPrevu),
                     utilisateurId: userId,
                 },
             });
-
+            //mise à jour l'état de l'équipement
             await tx.equipement.update({
                 where: { id: equipId },
                 data: {
@@ -90,7 +94,7 @@ class EmpruntService {
             orderBy: { dateEmprunt: "desc" },
             include: {
                 equipement: { 
-                    select: {nom: true}
+                    select: {id: true, nom: true}
                 }
             }
         });
@@ -106,7 +110,7 @@ class EmpruntService {
             },
             include: {
                 equipement: { 
-                    select: {nom: true}
+                    select: {id: true, nom: true}
                 }
             }
         });

@@ -2,18 +2,18 @@ const prisma = require("../lib/prisma");
 const EmpruntService = require('./emprunt.service');
 
 class DemandeEmpruntService {
-
-  static async createDemande(utilisateurId, data) {
+  // demande d'emprunt
+  static async createDemande (utilisateurId, data) {
     const { dateRetourPrevu, equipementId } = data;
     const equipementIdInt = parseInt(equipementId, 10);
     const utilisateurIdInt = parseInt(utilisateurId, 10);
     
-    // Vérifier si équipement existe et est dispo
+    // Vérifier si équipement existe et dispo
     const equipement = await prisma.equipement.findUnique({ where: { id: equipementIdInt } });
     if (!equipement) throw new Error("Équipement introuvable");
     if (equipement.etat !== "Disponible") throw new Error("Équipement non disponible");
 
-    // Changer temporairement l'état à EnMaintenance
+
     
     // Créer la demande
     const demande = await prisma.demandeEmprunt.create({
@@ -21,9 +21,16 @@ class DemandeEmpruntService {
         utilisateur: { connect: { id: utilisateurIdInt } },
         equipement: {connect: { id: equipementIdInt } },
         dateRetourPrevu: new Date(dateRetourPrevu), 
-        statut: "enAttente" },
+        statut: "enAttente" ,
+        type: "EMPRUNT"
+      },
+      include: {
+        utilisateur: true,
+        equipement: true,
+      },
       });
-      
+
+    // Changer temporairement l'état à EnMaintenance
     await prisma.equipement.update({
       where: { id: equipementIdInt },
       data: { etat: "EnMaintenance" },
@@ -33,6 +40,68 @@ class DemandeEmpruntService {
       where: { id: demande.id },
       include: { utilisateur: true, equipement: true },
     });;
+  }
+
+   // Demande de retour
+  static async demandeRetour(utilisateurId, data) {
+    const { equipementId, empruntId } = data;
+    const utilisateurIdInt = parseInt(utilisateurId, 10);
+    const equipementIdInt = parseInt(equipementId, 10);
+    const empruntIdInt = parseInt(empruntId, 10);
+
+    // Vérifie l’emprunt actif
+    const emprunt = await prisma.emprunt.findFirst({
+      where: {
+        id: empruntIdInt,
+        utilisateurId: utilisateurIdInt,
+        statut: "EnCours",
+        equipement: {
+          some: { id: equipementIdInt },
+        },
+      },
+      include: { equipement: true },
+    });
+
+    if (!emprunt) {
+      throw new Error("Aucun emprunt en cours pour cet équipement.");
+    }
+
+    // Vérifie qu’il n’y a pas déjà une demande de retour pour ce matériel
+    const demandeExistante = await prisma.demandeEmprunt.findFirst({
+      where: {
+        utilisateurId: utilisateurIdInt,
+        equipementId: equipementIdInt,
+        type: "RETOUR",
+        statut: "enAttente",
+      },
+    });
+
+    if (demandeExistante)
+      throw new Error("Une demande de retour est déjà en attente pour cet équipement.");
+
+    // Crée la demande de retour
+    const demandeRetour = await prisma.demandeEmprunt.create({
+      data: {
+        utilisateurId: utilisateurIdInt,
+        equipementId: equipementIdInt,
+        dateRetourPrevu: emprunt.dateRetourPrevu,
+        statut: "enAttente",
+        type: "RETOUR",
+      },
+    });
+
+    await prisma.equipement.update({
+      where: { id: equipementIdInt },
+      data: { etat: "EnMaintenance" },
+    });
+
+    return prisma.demandeEmprunt.findUnique({
+      where: { id: demandeRetour.id },
+      include: {
+        utilisateur: { select: { nom: true, prenom: true } },
+        equipement: { select: { nom: true, type: true } },
+      },
+    });
   }
 
   static async getAllDemandes() {
@@ -47,7 +116,7 @@ class DemandeEmpruntService {
     return res;
   }
 
-  static async getUserDemandes(userId) {
+  static async getUserDemandes (userId) {
     const demandes = await prisma.demandeEmprunt.findMany({
       where: { 
         utilisateurId: userId,
@@ -80,65 +149,109 @@ class DemandeEmpruntService {
     return demande;
   }
 
+  // Approuver une demande (emprunt ou retour)
   static async approuverDemande(id) {
-    const demande = await prisma.demandeEmprunt.findUnique({ where: { id } });
+    const demandeId = parseInt(id, 10);
+    const demande = await prisma.demandeEmprunt.findUnique({ where: { id: demandeId } });
     if (!demande) throw new Error("Demande introuvable");
 
-    // Créer l’emprunt réel
-    const emprunt = await EmpruntService.createEmprunt(
-      {
-        equipementId: demande.equipementId,
-        dateRetourPrevu: demande.dateRetourPrevu,
-      },
-      demande.utilisateurId
-    );
+    if (demande.type === "EMPRUNT") {
+      const emprunt = await EmpruntService.createEmprunt(
+        {
+          equipementId: demande.equipementId,
+          dateRetourPrevu: demande.dateRetourPrevu,
+        },
+        demande.utilisateurId
+      );
 
-    // Changer statut de la demande et équipement
-    await prisma.demandeEmprunt.update({
-      where: { id },
-      data: { statut: "approuver" },
-    });
+      await prisma.demandeEmprunt.update({
+        where: { id: demandeId },
+        data: { statut: "approuver" },
+      });
 
-    await prisma.equipement.update({
-      where: { id: demande.equipementId },
-      data: { etat: "Emprunter" },
-    });
+      return {
+        message: "Demande d'emprunt approuvée et emprunt créé.",
+        emprunt,
+      };
 
-    return { message: "Demande approuvée et emprunt créé", emprunt: emprunt };
+    } else if (demande.type === "RETOUR") {
+      const emprunt = await prisma.emprunt.findFirst({
+        where: {
+          utilisateurId: demande.utilisateurId,
+          equipement: { some: { id: demande.equipementId } },
+          statut: "EnCours",
+        },
+      });
+
+      if (!emprunt) throw new Error("Aucun emprunt en cours pour ce matériel.");
+
+      // Marquer comme retourné
+      await EmpruntService.returnEmprunt(emprunt.id, demande.utilisateurId);
+
+      // Mettre la demande à approuvée
+      await prisma.demandeEmprunt.update({
+        where: { id: demandeId },
+        data: { statut: "approuver" },
+      });
+
+      return {
+        message: "Demande de retour approuvée. Équipement marqué comme retourné.",
+      };
+    }
   }
 
+  // Refuser une demande (emprunt ou retour)
   static async refuserDemande(id) {
-    const demande = await prisma.demandeEmprunt.findUnique({ where: { id } });
+    const demandeId = parseInt(id, 10);
+    const demande = await prisma.demandeEmprunt.findUnique({ where: { id: demandeId } });
     if (!demande) throw new Error("Demande introuvable");
 
     await prisma.demandeEmprunt.update({
-      where: { id },
+      where: { id: demandeId },
       data: { statut: "refuser" },
     });
 
-    // Remettre équipement en dispo
-    await prisma.equipement.update({
-      where: { id: demande.equipementId },
-      data: { etat: "Disponible" },
-    });
+    if (demande.type === "EMPRUNT") {
+      await prisma.equipement.update({
+        where: { id: demande.equipementId },
+        data: { etat: "Disponible" },
+      });
 
-    return { message: "Demande refusée" };
+    } else if (demande.type === "RETOUR") {
+      await prisma.equipement.update({
+        where: { id: demande.equipementId },
+        data: { etat: "Emprunter" },
+      });
+    }
+
+    return { message: "Demande refusée avec succès." };
   }
 
-  static async AnnulerDemande(id) {
-    const demande = await prisma.demandeEmprunt.findUnique({ where: { id } });
+  // Annuler une demande (par utilisateur)
+  static async annulerDemande(id) {
+    const demandeId = parseInt(id, 10);
+    const demande = await prisma.demandeEmprunt.findUnique({ where: { id: demandeId } });
     if (!demande) throw new Error("Demande introuvable");
 
-    await prisma.equipement.update({
-      where: { id: demande.equipementId },
-      data: { etat: "Disponible" },
+    await prisma.demandeEmprunt.delete({
+      where: { id: demandeId }
     });
 
-    const demandeId = parseInt(id, 10);
-    
-    await prisma.demandeEmprunt.delete({
-      where: {id: demandeId}
-    });
+    // Libérer le matériel
+    if (demande.type === "EMPRUNT") {
+      await prisma.equipement.update({
+        where: { id: demande.equipementId },
+        data: { etat: "Disponible" },
+      });
+    }
+
+    // Garder l'état en "Emprunter"
+    if (demande.type === "RETOUR") {
+      await prisma.equipement.update({
+        where: { id: demande.equipementId },
+        data: { etat: "Emprunter" },
+      });
+    }
   }
 }
 

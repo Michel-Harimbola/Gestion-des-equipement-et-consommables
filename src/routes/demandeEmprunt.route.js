@@ -3,7 +3,8 @@ const auth = require("../middlewares/authMiddleware.js");
 const DemandeEmpruntController = require("../controllers/demandeEmprunt.controller");
 const router = express.Router();
 
-router.post("/create", auth, DemandeEmpruntController.createDemande);
+router.post("/emprunt", auth, DemandeEmpruntController.createDemande);
+router.post("/retour", auth, DemandeEmpruntController.demandeRetour);
 router.get("/", auth, DemandeEmpruntController.getAllDemandes);
 router.get("/userDemandes", auth, DemandeEmpruntController.getUserDemandes);
 router.put("/:id", auth, DemandeEmpruntController.updateDemande);

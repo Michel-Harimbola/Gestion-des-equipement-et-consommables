@@ -45,6 +45,7 @@ model DemandeEmprunt {
   dateDemande       DateTime      @default(now())
   dateRetourPrevu   DateTime
   statut            StatutDemande @default(enAttente)
+  type              TypeDemande   @default(EMPRUNT)
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
 
@@ -126,4 +127,9 @@ enum StatutDemande {
   enAttente
   approuver
   refuser
+}
+
+enum TypeDemande {
+  EMPRUNT
+  RETOUR
 }

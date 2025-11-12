@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const empruntController = require("../controllers/emprunt.controller.js");
 const auth = require("../middlewares/authMiddleware.js");
+
+const router = express.Router();
 
 router.post("/create", auth, empruntController.createEmprunt);
 router.get("/:id/byId", auth, empruntController.getEmpruntById);

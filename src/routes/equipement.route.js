@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const EquipementController = require("../controllers/equipement.controller.js");
 const auth = require("../middlewares/authMiddleware.js");
+
+const router = express.Router();
 
 router.post("/create", auth, EquipementController.createEquipement);
 router.get("/:id", auth, EquipementController.getEquipementById);

@@ -1,6 +1,7 @@
 const express = require("express");
 const auth = require("../middlewares/authMiddleware.js");
 const DemandeEmpruntController = require("../controllers/demandeEmprunt.controller");
+
 const router = express.Router();
 
 router.post("/emprunt", auth, DemandeEmpruntController.createDemande);

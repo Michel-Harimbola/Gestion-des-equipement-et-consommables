@@ -1,7 +1,8 @@
 const express = require("express");
-const router = express.Router();
 const ConsommableController = require("../controllers/consommable.controller.js");
 const auth = require("../middlewares/authMiddleware.js");
+
+const router = express.Router();
 
 router.post("/create", auth, ConsommableController.createConsommable);
 router.get("/:id", auth, ConsommableController.getConsommableById);

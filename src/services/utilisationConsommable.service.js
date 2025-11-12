@@ -1,25 +1,27 @@
-import { prisma } from "../config/prisma.js";
+const prisma = require("../lib/prisma.js");
 
-export default class UtilisationConsommableService {
+class UtilisationConsommableService {
 
-
-  static async create(data) {
-    const { utilisateurId, consommableId, quantiteUtilise, description } = data;
+  static async create(utilisateurId, data) {
+    const { consommableId, quantiteUtilise, description } = data;
+    const quantiteUtiliseInd = parseInt(quantiteUtilise, 10);
+    const utilisateurIdInt = parseInt(utilisateurId, 10);
 
     // Vérifie que la quantité est disponible
     const consommable = await prisma.consommable.findUnique({
       where: { id: consommableId },
     });
+    
     if (!consommable) throw new Error("Consommable non trouvé");
-    if (consommable.stock < quantiteUtilise) {
+    if (consommable.quantiteDisponible < quantiteUtiliseInd) {
       throw new Error("Stock insuffisant pour cette utilisation");
     }
 
     const utilisation = await prisma.utilisationConsommable.create({
       data: {
-        utilisateurId,
+        utilisateurId: utilisateurIdInt,
         consommableId,
-        quantiteUtilise,
+        quantiteUtilise: quantiteUtiliseInd,
         description,
       },
       include: {
@@ -28,10 +30,10 @@ export default class UtilisationConsommableService {
       },
     });
 
-    // Réduit le stock du consommable
+    // Réduit le quantiteDisponible du consommable
     await prisma.consommable.update({
       where: { id: consommableId },
-      data: { stock: consommable.stock - quantiteUtilise },
+      data: { quantiteDisponible: consommable.quantiteDisponible - quantiteUtilise },
     });
 
     return utilisation;
@@ -70,3 +72,5 @@ export default class UtilisationConsommableService {
     });
   }
 }
+
+module.exports = UtilisationConsommableService;

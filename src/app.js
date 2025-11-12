@@ -6,6 +6,7 @@ const empruntRouter = require("./routes/emprunt.route.js");
 const equipementRouter = require("./routes/equipement.route.js");
 const consommabletRouter = require("./routes/consommable.route.js");
 const demandeEmpruntRouter = require("./routes/demandeEmprunt.route.js");
+const utilisationConsommableRouter = require("./routes/utilisationConsommable.route.js");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/emprunt', empruntRouter);
 app.use('/api/equipement', equipementRouter);
 app.use('/api/consommable', consommabletRouter);
 app.use('/api/demande', demandeEmpruntRouter);
+app.use('/api/utilisation', utilisationConsommableRouter);
 
 // Route de base(pour le test)
 app.get('/', (req, res) => {

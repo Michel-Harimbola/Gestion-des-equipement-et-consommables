@@ -94,7 +94,7 @@ model UtilisationConsommable {
   consommableId   Int
   quantiteUtilise Int
   dateUtilisation DateTime      @default(now())
-  description     String?       // Optionnel : raison ou note d'utilisation
+  description     String?       
 
   utilisateur     Utilisateur   @relation(fields: [utilisateurId], references: [id])
   consommable     Consommable   @relation(fields: [consommableId], references: [id])

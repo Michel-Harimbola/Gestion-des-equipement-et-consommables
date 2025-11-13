@@ -1,4 +1,5 @@
 const prisma = require("../lib/prisma.js");
+const { getIO } = require("../socket.js");
 const notificationService = require("./notification.service.js");
 
 class UtilisationConsommableService {
@@ -42,6 +43,7 @@ class UtilisationConsommableService {
         type: "AlerteStock",
         consommableId: consommable.id,
       });
+      const io = getIO();
       io.emit("newNotification", notif);
     }
 

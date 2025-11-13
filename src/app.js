@@ -1,12 +1,6 @@
 const express = require('express');
-const cors = require("cors");      
-const authRouter = require('./routes/auth.route.js');
-const userRouter = require('./routes/user.route.js');
-const empruntRouter = require("./routes/emprunt.route.js");
-const equipementRouter = require("./routes/equipement.route.js");
-const consommabletRouter = require("./routes/consommable.route.js");
-const demandeEmpruntRouter = require("./routes/demandeEmprunt.route.js");
-const utilisationConsommableRouter = require("./routes/utilisationConsommable.route.js");
+const cors = require("cors"); 
+
 
 const app = express();
 
@@ -19,6 +13,16 @@ app.use(
     })
 );
 
+
+const authRouter = require('./routes/auth.route.js');
+const userRouter = require('./routes/user.route.js');
+const empruntRouter = require("./routes/emprunt.route.js");
+const equipementRouter = require("./routes/equipement.route.js");
+const consommabletRouter = require("./routes/consommable.route.js");
+const demandeEmpruntRouter = require("./routes/demandeEmprunt.route.js");
+const utilisationConsommableRouter = require("./routes/utilisationConsommable.route.js");
+
+
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/emprunt', empruntRouter);
@@ -27,9 +31,11 @@ app.use('/api/consommable', consommabletRouter);
 app.use('/api/demande', demandeEmpruntRouter);
 app.use('/api/utilisation', utilisationConsommableRouter);
 
+
 // Route de base(pour le test)
 app.get('/', (req, res) => {
     res.send("API is running.");
 });
+
 
 module.exports = app;

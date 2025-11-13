@@ -1,23 +1,14 @@
-const UtilisationConsommableService = require("../services/utilisationConsommable.service");
+const NotificationService = require("../services/notification.service");
 
-class UtilisationConsommableController {
-  static async create(req, res, io) {
-    try {
-      const utilisation = await UtilisationConsommableService.createUtilisation(req.body, io);
-      res.status(201).json(utilisation);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
-  }
-
+class NotificationController {
   static async getAll(req, res) {
     try {
-      const utilisations = await UtilisationConsommableService.getAllUtilisations();
-      res.json(utilisations);
+      const notifications = await NotificationService.getAllNotifications();
+      res.json(notifications);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   }
 }
 
-module.exports = UtilisationConsommableController;
+module.exports = NotificationController;

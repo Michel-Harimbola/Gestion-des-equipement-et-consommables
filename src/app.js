@@ -14,7 +14,7 @@ const io = new Server(server, {
     },
 });
 
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 
 notificationSocket(io);
@@ -34,7 +34,7 @@ app.use('/api/user', userRouter);
 app.use('/api/emprunt', empruntRouter);
 app.use('/api/equipement', equipementRouter);
 app.use('/api/consommable', consommabletRouter);
-app.use('./notification', notificationRoutes);
+app.use('/api/notification', notificationRoutes);
 app.use('/api/demande', demandeEmpruntRouter);
 app.use('/api/utilisation', utilisationConsommableRouter);
 
@@ -45,4 +45,4 @@ app.get('/', (req, res) => {
 });
 
 
-module.exports = app;
+module.exports = { app, server, io };

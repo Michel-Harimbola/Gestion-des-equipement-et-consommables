@@ -7,7 +7,7 @@ class NotificationService {
     });
   }
 
-  static async getAllNotifications() {
+  static async getAllStockNotifications() {
     return prisma.notification.findMany({
       where: { type: "AlerteStock" },
       orderBy: { DateEnvoi: "desc" },

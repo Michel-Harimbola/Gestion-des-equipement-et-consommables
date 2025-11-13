@@ -1,27 +1,27 @@
 const prisma = require("../lib/prisma.js");
+const notificationService = require("./notification.service.js");
 
 class UtilisationConsommableService {
 
-  static async create(utilisateurId, data) {
+  static async create(utilisateurId, data, io) {
     const { consommableId, quantiteUtilise, description } = data;
-    const quantiteUtiliseInd = parseInt(quantiteUtilise, 10);
+    const quantiteUtiliseInt = parseInt(quantiteUtilise, 10);
     const utilisateurIdInt = parseInt(utilisateurId, 10);
 
-    // Vérifie que la quantité est disponible
     const consommable = await prisma.consommable.findUnique({
       where: { id: consommableId },
     });
     
     if (!consommable) throw new Error("Consommable non trouvé");
-    if (consommable.quantiteDisponible < quantiteUtiliseInd) {
-      throw new Error("Stock insuffisant pour cette utilisation");
-    }
+
+    const quantiteRestante = consommable.quantiteDisponible - quantiteUtiliseInt;
+    if (quantiteRestante < 0) throw new Error("Stock insuffisant");
 
     const utilisation = await prisma.utilisationConsommable.create({
       data: {
         utilisateurId: utilisateurIdInt,
         consommableId,
-        quantiteUtilise: quantiteUtiliseInd,
+        quantiteUtilise: quantiteUtiliseInt,
         description,
       },
       include: {
@@ -33,8 +33,17 @@ class UtilisationConsommableService {
     // Réduit le quantiteDisponible du consommable
     await prisma.consommable.update({
       where: { id: consommableId },
-      data: { quantiteDisponible: consommable.quantiteDisponible - quantiteUtilise },
+      data: { quantiteDisponible: quantiteRestante },
     });
+    
+    if(quantiteRestante <= consommable.seuilCritique) {
+      const notif = await notificationService.createNotification({
+        message: `Stock critique pour ${consommable.nom}: ${quantiteRestante} restant.`,
+        type: "AlerteStock",
+        consommableId: consommable.id,
+      });
+      io.emit("newNotification", notif);
+    }
 
     return utilisation;
   }

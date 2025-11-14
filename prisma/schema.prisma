@@ -21,7 +21,7 @@ model Utilisateur {
   motDePasse              String
   createdAt               DateTime        @default(now())
   updateAt                DateTime        @updatedAt
-  role                    RoleUtilisateur @default(utilisateurSimple)
+  role                    RoleUtilisateur @default(personnelInterne)
         
   emprunts                Emprunt[]
   demandeEmprunt          DemandeEmprunt[]
@@ -60,7 +60,8 @@ model Equipement {
   id             Int              @id  @default(autoincrement())
   nom            String           @db.VarChar(25)
   type           String           @db.VarChar(25)
-  etat           Etat             @default(Disponible)
+  disponibilite  Disponibilite    @default(Disponible)
+  etatMateriel   EtatMateriel     @default(BonEtat)
   emprunt        Emprunt?         @relation(fields: [empruntId], references: [id], onDelete: Cascade)
   empruntId      Int?         
 
@@ -130,16 +131,28 @@ enum Statut {
   Retourner
 }
 
-enum Etat {
+enum Disponibilite {
   Disponible
-  Emprunter
+  Emprunte
   EnMaintenance
+  Indisponible
+}
+
+enum EtatMateriel {
+  Neuf
+  BonEtat
+  EtatMoyen
+  MauvaisEtat
+  HorsUsage
+  EnReparation
 }
 
 enum RoleUtilisateur {
   admin
-  responsableRH
-  utilisateurSimple
+  regisseurEquipementInterne
+  client
+  patenaire
+  personnelInterne
 } 
 
 enum StatutDemande {

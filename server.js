@@ -9,10 +9,9 @@ const server = http.createServer(app);
 // Initialise Socket.IO
 const io = initIO(server);
 
-// Event socket générique (si tu as un socket dédié, tu peux l'appeler ici)
+// Event socket générique 
 io.on("connection", (socket) => {
   console.log("Un client est connecté :", socket.id);
-  // Ici tu peux écouter les events client
 });
 
 const PORT = process.env.PORT || 3000;

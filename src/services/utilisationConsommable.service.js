@@ -39,7 +39,7 @@ class UtilisationConsommableService {
     
     if(quantiteRestante <= consommable.seuilCritique) {
       const notif = await notificationService.createNotification({
-        message: `Stock critique pour ${consommable.nom}: ${quantiteRestante} restant.`,
+        message: `${consommable.nom}: ${quantiteRestante} restant.`,
         type: "AlerteStock",
         consommableId: consommable.id,
       });

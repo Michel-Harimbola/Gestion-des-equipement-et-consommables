@@ -18,8 +18,10 @@ class EquipementService {
             select: {
                 id: true,
                 nom: true,
-                type: true,
-                etat: true,
+                numeroDeSerie: true,
+                marque: true,
+                disponibilite: true,
+                etatMateriel: true,
             },
         });
         if(!equipement) throw new Error("Equipement non trouvé");
@@ -32,13 +34,15 @@ class EquipementService {
             select: {
                 id: true,
                 nom: true,
-                type: true,
-                etat: true,
+                numeroDeSerie: true,
+                marque: true,
+                disponibilite: true,
+                etatMateriel: true,
             },
         });
-        const ordreEtat = ["Disponible", "EnMaintenance", "Emprunter"];
+        const ordreDisponibilite = ["Disponible", "EnMaintenance", "Emprunte", "Indisponible"];
         equipements.sort((a, b) => {
-            return ordreEtat.indexOf(a.etat) - ordreEtat.indexOf(b.etat);
+            return ordreDisponibilite.indexOf(a.disponibilite) - ordreDisponibilite.indexOf(b.disponibilite);
         })
 
         return equipements;
@@ -48,8 +52,8 @@ class EquipementService {
         const equipementId = parseInt(id, 10);
         if(isNaN(equipementId)) throw new Error("ID invalide");
 
-        if(data.etat =="Emprunter") {
-            throw new Error("L'état 'Emprunter' est géré via le service d'emprunt.");
+        if(data.disponibilite =="Emprunte") {
+            throw new Error("L'état 'Emprunté' est géré via le service d'emprunt.");
         }
 
         const equipement = await prisma.equipement.update({

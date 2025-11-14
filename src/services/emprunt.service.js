@@ -21,7 +21,7 @@ class EmpruntService {
           throw new Error("Équipement introuvable.");
         }
         //vérifier disponnibilité équipement
-        if (equipement.etat !== "Disponible" && equipement.etat !== "EnMaintenance") {
+        if (equipement.disponibilite !== "Disponible" && equipement.disponibilite !== "EnMaintenance" && equipement.disponibilite !== "Indisponible") {
           throw new Error(`L'équipement "${equipement.nom}" n'est pas disponible.`);
         }
 
@@ -37,7 +37,7 @@ class EmpruntService {
             await tx.equipement.update({
                 where: { id: equipId },
                 data: {
-                    etat: "Emprunter",
+                    disponibilite: "Emprunte",
                     empruntId: emprunt.id,
                 },
             });
@@ -143,7 +143,7 @@ class EmpruntService {
             await tx.equipement.updateMany({
                 where: { id: { in: equipementId } },
                 data: {
-                    etat: "Disponible",
+                    disponibilite: "Disponible",
                     empruntId: null,
                 } 
             });

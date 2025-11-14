@@ -58,8 +58,9 @@ model DemandeEmprunt {
 
 model Equipement {
   id             Int              @id  @default(autoincrement())
-  nom            String           @db.VarChar(25)
-  type           String           @db.VarChar(25)
+  nom            String           @db.VarChar(30)
+  numeroDeSerie  String           @db.VarChar(30)
+  marque         String           @db.VarChar(30)
   disponibilite  Disponibilite    @default(Disponible)
   etatMateriel   EtatMateriel     @default(BonEtat)
   emprunt        Emprunt?         @relation(fields: [empruntId], references: [id], onDelete: Cascade)
@@ -81,7 +82,7 @@ model Notification {
 
 model Consommable {
   id                      Int        @id  @default(autoincrement())
-  nom                     String     @db.VarChar(25)
+  nom                     String     @db.VarChar(30)
   quantiteDisponible      Int        
   seuilCritique           Int
 

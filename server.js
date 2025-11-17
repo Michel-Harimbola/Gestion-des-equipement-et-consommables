@@ -2,12 +2,13 @@ require('dotenv').config();
 const http = require("http");
 const app = require("./src/app");
 const { init: initIO } = require("./src/socket");
+const { startRetardCron } = require("./src/cron/retardCron");
 
-// Crée le serveur HTTP
+
 const server = http.createServer(app);
-
-// Initialise Socket.IO
 const io = initIO(server);
+
+startRetardCron();
 
 // Event socket générique 
 io.on("connection", (socket) => {

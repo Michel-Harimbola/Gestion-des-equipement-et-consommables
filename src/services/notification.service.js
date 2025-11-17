@@ -17,15 +17,31 @@ class NotificationService {
     });
   }
 
-  static async getUserRetardNotifications() {
+  static async getUserRetardNotifications(userId) {
     return prisma.notification.findMany({
-      where: { type: "RappelRetour" } ,
+      where: { 
+        type: "RappelRetour",
+        emprunt: {
+          utilisateurId: userId
+        }
+      },
       orderBy: { DateEnvoi: "desc" },
       include: {
         consommable: { select: { id: true, nom: true } },
-        emprunt: { select: { id: true } },
+        emprunt: { select: { id: true, usage: true, dateRetourPrevu: true } },
       }
     });
+  }
+
+  static async markAllAsRead(userId) {
+    return prisma.notification.updateMany({
+      where: {
+        emprunt: {
+          utilisateurId: userId
+        }
+      },
+      data: { vu: true }
+    })
   }
 }
 

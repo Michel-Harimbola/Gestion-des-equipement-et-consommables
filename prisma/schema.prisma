@@ -84,8 +84,9 @@ model Notification {
   message        String      
   DateEnvoi      DateTime           @default(now())
   type           TypeNotification   @default(AlerteStock)
+  vu             Boolean            @default(false)
   empruntId      Int?               
-  consommableId  Int?                
+  consommableId  Int?               
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   emprunt        Emprunt?           @relation(fields: [empruntId], references: [id], onDelete: Cascade)

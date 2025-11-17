@@ -5,5 +5,6 @@ const auth = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 
 router.get("/", auth, NotificationController.getAll);
+router.get("/userNotification", auth, NotificationController.getUserNotification);
 
 module.exports = router;

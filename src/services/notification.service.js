@@ -16,6 +16,17 @@ class NotificationService {
       },
     });
   }
+
+  static async getUserRetardNotifications() {
+    return prisma.notification.findMany({
+      where: { type: "RappelRetour" } ,
+      orderBy: { DateEnvoi: "desc" },
+      include: {
+        consommable: { select: { id: true, nom: true } },
+        emprunt: { select: { id: true } },
+      }
+    });
+  }
 }
 
 module.exports = NotificationService;

@@ -57,7 +57,7 @@ class DemandeEmpruntService {
       where: {
         id: empruntIdInt,
         utilisateurId: utilisateurIdInt,
-        statut: "EnCours",
+        statut: { in: ["EnCours", "EnRetard"] },
         equipement: {
           some: { id: equipementIdInt },
         },
@@ -66,7 +66,7 @@ class DemandeEmpruntService {
     });
 
     if (!emprunt) {
-      throw new Error("Aucun emprunt en cours pour cet équipement.");
+      throw new Error("Aucun emprunt en cours ou ren retard pour cet équipement.");
     }
 
     // Vérifie qu’il n’y a pas déjà une demande de retour pour ce matériel
@@ -160,6 +160,12 @@ class DemandeEmpruntService {
     if (!demande) throw new Error("Demande introuvable");
 
     if (demande.type === "EMPRUNT") {
+      
+      await prisma.demandeEmprunt.update({
+        where: { id: demandeId },
+        data: { statut: "approuver" },
+      });
+
       const emprunt = await EmpruntService.createEmprunt(
         {
           equipementId: demande.equipementId,
@@ -169,10 +175,6 @@ class DemandeEmpruntService {
         demande.utilisateurId
       );
 
-      await prisma.demandeEmprunt.update({
-        where: { id: demandeId },
-        data: { statut: "approuver" },
-      });
 
       return {
         message: "Demande d'emprunt approuvée et emprunt créé.",
@@ -184,7 +186,7 @@ class DemandeEmpruntService {
         where: {
           utilisateurId: demande.utilisateurId,
           equipement: { some: { id: demande.equipementId } },
-          statut: "EnCours",
+          statut: { in: ["EnCours", "EnRetard"] },
         },
       });
 

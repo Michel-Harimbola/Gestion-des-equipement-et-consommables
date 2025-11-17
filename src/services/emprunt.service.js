@@ -21,7 +21,7 @@ class EmpruntService {
           throw new Error("Équipement introuvable.");
         }
         //vérifier disponnibilité équipement
-        if (equipement.disponibilite !== "Disponible" && equipement.disponibilite !== "EnMaintenance" && equipement.disponibilite !== "Indisponible") {
+        if (equipement.disponibilite !== "Disponible" && equipement.disponibilite == "EnMaintenance" && equipement.disponibilite == "Indisponible") {
           throw new Error(`L'équipement "${equipement.nom}" n'est pas disponible.`);
         }
 
@@ -52,7 +52,9 @@ class EmpruntService {
                 utilisateur: {
                     select: { nom: true, prenom: true, email: true }
                 },
-                equipement: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
+                equipement: {
+                    select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true } 
+                },
             },
         });
     }
@@ -107,7 +109,7 @@ class EmpruntService {
         const emprunts = await prisma.emprunt.findMany({
             where: {
                 utilisateurId: userId,
-                statut: "EnCours",
+                statut: { in: ["EnCours", "EnRetard"] },
             },
             include: {
                 equipement: { 
@@ -200,8 +202,12 @@ class EmpruntService {
                 dateRetourPrevu: { lt: now }
             },
             include: {
-                utilisateur: true,
-                equipement: true
+                utilisateur: {
+                    select: { nom: true },
+                },
+                equipement: {
+                    select: { nom: true }
+                }
             }
         });
 

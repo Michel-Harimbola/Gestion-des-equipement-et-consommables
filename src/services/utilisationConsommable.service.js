@@ -37,6 +37,7 @@ class UtilisationConsommableService {
       data: { quantiteDisponible: quantiteRestante },
     });
     
+    // Vérifier si le quantiteRestante <= seuilCritique et envoyer le notification d'alerte
     if(quantiteRestante <= consommable.seuilCritique) {
       const notif = await notificationService.createNotification({
         message: `${consommable.nom}: ${quantiteRestante} restant.`,
@@ -44,7 +45,7 @@ class UtilisationConsommableService {
         consommableId: consommable.id,
       });
       const io = getIO();
-      io.emit("newNotification", notif);
+      io.emit("stock_alert", notif);
     }
 
     return utilisation;

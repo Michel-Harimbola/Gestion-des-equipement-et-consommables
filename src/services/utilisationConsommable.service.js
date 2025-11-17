@@ -4,7 +4,7 @@ const notificationService = require("./notification.service.js");
 
 class UtilisationConsommableService {
 
-  static async create(utilisateurId, data, io) {
+  static async create(utilisateurId, data) {
     const { consommableId, quantiteUtilise, description } = data;
     const quantiteUtiliseInt = parseInt(quantiteUtilise, 10);
     const utilisateurIdInt = parseInt(utilisateurId, 10);

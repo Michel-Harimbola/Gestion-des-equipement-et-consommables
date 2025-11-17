@@ -4,16 +4,18 @@ const EmpruntService = require('./emprunt.service');
 class DemandeEmpruntService {
   // demande d'emprunt
   static async createDemande (utilisateurId, data) {
-    const { dateRetourPrevu, equipementId } = data;
+    const { dateRetourPrevu, usage, equipementId } = data;
     const equipementIdInt = parseInt(equipementId, 10);
     const utilisateurIdInt = parseInt(utilisateurId, 10);
     
     // Vérifier si équipement existe et dispo
     const equipement = await prisma.equipement.findUnique({ where: { id: equipementIdInt } });
     if (!equipement) throw new Error("Équipement introuvable");
-    if (equipement.etat !== "Disponible") throw new Error("Équipement non disponible");
+    if (equipement.disponibilite !== "Disponible") throw new Error("Équipement non disponible");
 
-
+    if (new Date(dateRetourPrevu) <= new Date()) {
+        throw new Error("La date de retour prévue doit être future.");
+    }
     
     // Créer la demande
     const demande = await prisma.demandeEmprunt.create({
@@ -21,6 +23,7 @@ class DemandeEmpruntService {
         utilisateur: { connect: { id: utilisateurIdInt } },
         equipement: {connect: { id: equipementIdInt } },
         dateRetourPrevu: new Date(dateRetourPrevu), 
+        usage: usage,
         statut: "enAttente" ,
         type: "EMPRUNT"
       },
@@ -33,7 +36,7 @@ class DemandeEmpruntService {
     // Changer temporairement l'état à EnMaintenance
     await prisma.equipement.update({
       where: { id: equipementIdInt },
-      data: { etat: "EnMaintenance" },
+      data: { disponibilite: "EnMaintenance" },
     });
       
     return await prisma.demandeEmprunt.findUnique({
@@ -85,6 +88,7 @@ class DemandeEmpruntService {
         utilisateurId: utilisateurIdInt,
         equipementId: equipementIdInt,
         dateRetourPrevu: emprunt.dateRetourPrevu,
+        usage: emprunt.usage,
         statut: "enAttente",
         type: "RETOUR",
       },
@@ -92,14 +96,14 @@ class DemandeEmpruntService {
 
     await prisma.equipement.update({
       where: { id: equipementIdInt },
-      data: { etat: "EnMaintenance" },
+      data: { disponibilite: "EnMaintenance" },
     });
 
     return prisma.demandeEmprunt.findUnique({
       where: { id: demandeRetour.id },
       include: {
         utilisateur: { select: { nom: true, prenom: true } },
-        equipement: { select: { nom: true, type: true } },
+        equipement: { select: { nom: true, numeroDeSerie: true, marque: true } },
       },
     });
   }
@@ -108,7 +112,7 @@ class DemandeEmpruntService {
     const res = await prisma.demandeEmprunt.findMany({
       include: {
         utilisateur: { select: { nom: true, prenom: true, email: true } },
-        equipement: { select: { nom: true, type: true } },
+        equipement: { select: { nom: true, numeroDeSerie: true, marque: true , etatMateriel: true } },
       },
       orderBy: { createdAt: "desc" },
     });
@@ -124,7 +128,7 @@ class DemandeEmpruntService {
       },
       orderBy: { dateDemande: "desc" },
       include: {
-        equipement: { select: { nom: true } }
+        equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true } }
       },
     });
 
@@ -160,6 +164,7 @@ class DemandeEmpruntService {
         {
           equipementId: demande.equipementId,
           dateRetourPrevu: demande.dateRetourPrevu,
+          usage: demande.usage,
         },
         demande.utilisateurId
       );
@@ -214,13 +219,13 @@ class DemandeEmpruntService {
     if (demande.type === "EMPRUNT") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
-        data: { etat: "Disponible" },
+        data: { disponibilite: "Disponible" },
       });
 
     } else if (demande.type === "RETOUR") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
-        data: { etat: "Emprunter" },
+        data: { disponibilite: "Emprunter" },
       });
     }
 
@@ -241,7 +246,7 @@ class DemandeEmpruntService {
     if (demande.type === "EMPRUNT") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
-        data: { etat: "Disponible" },
+        data: { disponibilite: "Disponible" },
       });
     }
 
@@ -249,7 +254,7 @@ class DemandeEmpruntService {
     if (demande.type === "RETOUR") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
-        data: { etat: "Emprunter" },
+        data: { disponibilite: "Emprunter" },
       });
     }
   }

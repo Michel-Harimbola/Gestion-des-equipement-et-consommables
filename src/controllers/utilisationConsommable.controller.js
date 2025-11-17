@@ -3,7 +3,7 @@ const UtilisationConsommableService = require("../services/utilisationConsommabl
 
 exports.create = async (req, res, io) => {
   try {
-    const utilisation = await UtilisationConsommableService.create(req.user.id, req.body, io);
+    const utilisation = await UtilisationConsommableService.create(req.user.id, req.body);
     res.status(201).json(utilisation);
   } catch (err) {
     res.status(400).json({ error: err.message });

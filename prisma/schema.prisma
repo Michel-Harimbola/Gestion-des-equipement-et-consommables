@@ -37,6 +37,8 @@ model Emprunt {
   utilisateur         Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
   utilisateurId       Int             
   statut              Statut          @default(EnCours)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
 
   equipement          Equipement[]
   notification        Notification[]
@@ -51,6 +53,8 @@ model DemandeEmprunt {
   usage             String
   statut            StatutDemande   @default(enAttente)
   type              TypeDemande     @default(EMPRUNT)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
   utilisateur       Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
   equipement        Equipement      @relation(fields: [equipementId], references: [id], onDelete: Cascade)
@@ -66,7 +70,7 @@ model Equipement {
   obtention      Obtention        @default(Achat)
   prix           Float
   fournisseur    String?
-  donnateur      String?
+  donateur      String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   emprunt        Emprunt?         @relation(fields: [empruntId], references: [id], onDelete: Cascade)
@@ -80,10 +84,12 @@ model Notification {
   message        String      
   DateEnvoi      DateTime           @default(now())
   type           TypeNotification   @default(AlerteStock)
-  emprunt        Emprunt?           @relation(fields: [empruntId], references: [id], onDelete: Cascade)
   empruntId      Int?               
-  consommable    Consommable?       @relation(fields: [consommableId], references: [id], onDelete: Cascade)
   consommableId  Int?                
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  emprunt        Emprunt?           @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  consommable    Consommable?       @relation(fields: [consommableId], references: [id], onDelete: Cascade)
 }
 
 model Consommable {
@@ -107,7 +113,9 @@ model UtilisationConsommable {
   consommableId   Int
   quantiteUtilise Int
   dateUtilisation DateTime      @default(now())
-  description     String?       
+  description     String?     
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt  
 
   utilisateur     Utilisateur   @relation(fields: [utilisateurId], references: [id])
   consommable     Consommable   @relation(fields: [consommableId], references: [id])
@@ -168,7 +176,7 @@ enum RoleUtilisateur {
   admin
   regisseurEquipementInterne
   client
-  patenaire
+  partenaire
   personnelInterne
 } 
 

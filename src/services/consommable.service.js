@@ -20,6 +20,9 @@ class ConsommableService {
                 nom: true,
                 quantiteDisponible: true,
                 seuilCritique: true,
+                obtention: true,
+                fournisseur: true,
+                donnateur: true,
             },
         });
         if(!consommable) throw new Error("Consommable non trouvé");
@@ -34,6 +37,9 @@ class ConsommableService {
                 nom: true,
                 quantiteDisponible: true,
                 seuilCritique: true,
+                obtention: true,
+                fournisseur: true,
+                donnateur: true,
             },
         });
 

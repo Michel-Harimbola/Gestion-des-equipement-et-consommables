@@ -2,8 +2,8 @@ const prisma = require("../lib/prisma.js");
 
 class EmpruntService {
     static async createEmprunt(data, userId) {
-        const { dateRetourPrevu, equipementId } = data;
-        const equipId = parseInt(equipementId, 10)
+        const { dateRetourPrevu, usage, equipementId } = data;
+        const equipId = parseInt(equipementId, 10);
 
         if (!equipId || equipId.length === 0) {
             throw new Error("Aucun équipement spécifié pour l'emprunt.");
@@ -30,6 +30,7 @@ class EmpruntService {
             const emprunt = await prisma.emprunt.create({
                 data: {
                     dateRetourPrevu: new Date(dateRetourPrevu),
+                    usage: usage,
                     utilisateurId: userId,
                 },
             });
@@ -51,7 +52,7 @@ class EmpruntService {
                 utilisateur: {
                     select: { nom: true, prenom: true, email: true }
                 },
-                equipement: true,
+                equipement: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
             },
         });
     }
@@ -63,8 +64,8 @@ class EmpruntService {
         const emprunt = await prisma.emprunt.findUnique({
             where: { id: empruntId },
             include: { 
-                utilisateur: true,
-                equipement: true,
+                utilisateur: { nom: true, prenom: true, email: true },
+                equipement: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
             },
         });
         if(!emprunt) throw new Error("Emprunt non trouvé");
@@ -80,7 +81,7 @@ class EmpruntService {
                     select: { nom: true, prenom: true, email: true }
                 },
                 equipement: {
-                    select: {nom: true}
+                    select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
                 },
             },
         });
@@ -94,7 +95,7 @@ class EmpruntService {
             orderBy: { dateEmprunt: "desc" },
             include: {
                 equipement: { 
-                    select: {id: true, nom: true}
+                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
                 }
             }
         });
@@ -110,7 +111,7 @@ class EmpruntService {
             },
             include: {
                 equipement: { 
-                    select: {id: true, nom: true}
+                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
                 }
             }
         });
@@ -188,6 +189,49 @@ class EmpruntService {
             where: { id: empruntId },
         });
     }
+
+    static async checkRetardAndNotify() {
+        const now = new Date();
+
+        // Trouver tous les emprunts en retard
+        const empruntsEnRetard = await prisma.emprunt.findMany({
+            where: {
+                statut: "EnCours",
+                dateRetourPrevu: { lt: now }
+            },
+            include: {
+                utilisateur: true,
+                equipement: true
+            }
+        });
+
+        if (empruntsEnRetard.length === 0) return;
+
+        const { getIO } = require("../socket.js");
+        const io = getIO();
+
+        for (const emprunt of empruntsEnRetard) {
+
+            // Mettre à jour le statut
+            await prisma.emprunt.update({
+                where: { id: emprunt.id },
+                data: { statut: "EnRetard" }
+            });
+
+            // Créer la notification
+            const notif = await prisma.notification.create({
+                data: {
+                    message: `L'équipement "${emprunt.equipement.nom}" doit être retourné.`,
+                    type: "RappelRetour",
+                    empruntId: emprunt.id,
+                }
+            });
+
+            // Émettre l’événement Socket.io
+            io.emit("notif_retard", notif);
+        }
+    }
+
 }
 
 module.exports = EmpruntService;

@@ -2,8 +2,18 @@ const prisma = require("../lib/prisma.js");
 
 class EquipementService {
     static async createEquipement(data) {
+        const {nom, numeroDeSerie, marque, disponibilite, etatMateriel, prix, fournisseur, donateur} = data;
         const equipement = await prisma.equipement.create({
-            data,
+            data: {
+                nom: nom, 
+                numeroDeSerie: numeroDeSerie,
+                marque: marque,
+                disponibilite: disponibilite,
+                etatMateriel: etatMateriel,
+                prix: Number(prix),
+                fournisseur: fournisseur,
+                donateur: donateur,
+            },
         });
 
         return equipement;
@@ -22,6 +32,9 @@ class EquipementService {
                 marque: true,
                 disponibilite: true,
                 etatMateriel: true,
+                prix: true,
+                fournisseur: true,
+                donateur: true,
             },
         });
         if(!equipement) throw new Error("Equipement non trouvé");
@@ -38,6 +51,9 @@ class EquipementService {
                 marque: true,
                 disponibilite: true,
                 etatMateriel: true,
+                prix: true,
+                fournisseur: true,
+                donateur: true,
             },
         });
         const ordreDisponibilite = ["Disponible", "EnMaintenance", "Emprunte", "Indisponible"];

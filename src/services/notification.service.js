@@ -9,7 +9,6 @@ class NotificationService {
 
   static async getAllStockNotifications() {
     return prisma.notification.findMany({
-      where: { type: "AlerteStock" },
       orderBy: { DateEnvoi: "desc" },
       include: {
         consommable: { select: { id: true, nom: true } },

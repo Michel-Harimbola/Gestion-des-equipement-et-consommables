@@ -24,6 +24,11 @@ export type Utilisateur = $Result.DefaultSelection<Prisma.$UtilisateurPayload>
  */
 export type Emprunt = $Result.DefaultSelection<Prisma.$EmpruntPayload>
 /**
+ * Model DemandeEmprunt
+ * 
+ */
+export type DemandeEmprunt = $Result.DefaultSelection<Prisma.$DemandeEmpruntPayload>
+/**
  * Model Equipement
  * 
  */
@@ -39,6 +44,11 @@ export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
  */
 export type Consommable = $Result.DefaultSelection<Prisma.$ConsommablePayload>
 /**
+ * Model UtilisationConsommable
+ * 
+ */
+export type UtilisationConsommable = $Result.DefaultSelection<Prisma.$UtilisationConsommablePayload>
+/**
  * Model Rapport
  * 
  */
@@ -48,7 +58,15 @@ export type Rapport = $Result.DefaultSelection<Prisma.$RapportPayload>
  * Enums
  */
 export namespace $Enums {
-  export const Periode: {
+  export const Obtention: {
+  Achat: 'Achat',
+  Don: 'Don'
+};
+
+export type Obtention = (typeof Obtention)[keyof typeof Obtention]
+
+
+export const Periode: {
   Mensuel: 'Mensuel',
   Hebdo: 'Hebdo'
 };
@@ -75,30 +93,67 @@ export type TypeNotification = (typeof TypeNotification)[keyof typeof TypeNotifi
 
 export const Statut: {
   EnCours: 'EnCours',
+  EnRetard: 'EnRetard',
   Retourner: 'Retourner'
 };
 
 export type Statut = (typeof Statut)[keyof typeof Statut]
 
 
-export const Etat: {
+export const Disponibilite: {
   Disponible: 'Disponible',
-  Emprunter: 'Emprunter',
-  EnMaintenance: 'EnMaintenance'
+  Emprunte: 'Emprunte',
+  EnMaintenance: 'EnMaintenance',
+  Indisponible: 'Indisponible'
 };
 
-export type Etat = (typeof Etat)[keyof typeof Etat]
+export type Disponibilite = (typeof Disponibilite)[keyof typeof Disponibilite]
+
+
+export const EtatMateriel: {
+  Neuf: 'Neuf',
+  BonEtat: 'BonEtat',
+  EtatMoyen: 'EtatMoyen',
+  MauvaisEtat: 'MauvaisEtat',
+  HorsUsage: 'HorsUsage',
+  EnReparation: 'EnReparation'
+};
+
+export type EtatMateriel = (typeof EtatMateriel)[keyof typeof EtatMateriel]
 
 
 export const RoleUtilisateur: {
   admin: 'admin',
-  responsableRH: 'responsableRH',
-  utilisateurSimple: 'utilisateurSimple'
+  regisseurEquipementInterne: 'regisseurEquipementInterne',
+  client: 'client',
+  partenaire: 'partenaire',
+  personnelInterne: 'personnelInterne'
 };
 
 export type RoleUtilisateur = (typeof RoleUtilisateur)[keyof typeof RoleUtilisateur]
 
+
+export const StatutDemande: {
+  enAttente: 'enAttente',
+  approuver: 'approuver',
+  refuser: 'refuser'
+};
+
+export type StatutDemande = (typeof StatutDemande)[keyof typeof StatutDemande]
+
+
+export const TypeDemande: {
+  EMPRUNT: 'EMPRUNT',
+  RETOUR: 'RETOUR'
+};
+
+export type TypeDemande = (typeof TypeDemande)[keyof typeof TypeDemande]
+
 }
+
+export type Obtention = $Enums.Obtention
+
+export const Obtention: typeof $Enums.Obtention
 
 export type Periode = $Enums.Periode
 
@@ -116,13 +171,25 @@ export type Statut = $Enums.Statut
 
 export const Statut: typeof $Enums.Statut
 
-export type Etat = $Enums.Etat
+export type Disponibilite = $Enums.Disponibilite
 
-export const Etat: typeof $Enums.Etat
+export const Disponibilite: typeof $Enums.Disponibilite
+
+export type EtatMateriel = $Enums.EtatMateriel
+
+export const EtatMateriel: typeof $Enums.EtatMateriel
 
 export type RoleUtilisateur = $Enums.RoleUtilisateur
 
 export const RoleUtilisateur: typeof $Enums.RoleUtilisateur
+
+export type StatutDemande = $Enums.StatutDemande
+
+export const StatutDemande: typeof $Enums.StatutDemande
+
+export type TypeDemande = $Enums.TypeDemande
+
+export const TypeDemande: typeof $Enums.TypeDemande
 
 /**
  * ##  Prisma Client ʲˢ
@@ -263,6 +330,16 @@ export class PrismaClient<
   get emprunt(): Prisma.EmpruntDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.demandeEmprunt`: Exposes CRUD operations for the **DemandeEmprunt** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DemandeEmprunts
+    * const demandeEmprunts = await prisma.demandeEmprunt.findMany()
+    * ```
+    */
+  get demandeEmprunt(): Prisma.DemandeEmpruntDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.equipement`: Exposes CRUD operations for the **Equipement** model.
     * Example usage:
     * ```ts
@@ -291,6 +368,16 @@ export class PrismaClient<
     * ```
     */
   get consommable(): Prisma.ConsommableDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.utilisationConsommable`: Exposes CRUD operations for the **UtilisationConsommable** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UtilisationConsommables
+    * const utilisationConsommables = await prisma.utilisationConsommable.findMany()
+    * ```
+    */
+  get utilisationConsommable(): Prisma.UtilisationConsommableDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.rapport`: Exposes CRUD operations for the **Rapport** model.
@@ -359,8 +446,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.17.1
-   * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
+   * Prisma Client JS version: 6.19.0
+   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
    */
   export type PrismaVersion = {
     client: string
@@ -373,6 +460,7 @@ export namespace Prisma {
    */
 
 
+  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -743,9 +831,11 @@ export namespace Prisma {
   export const ModelName: {
     Utilisateur: 'Utilisateur',
     Emprunt: 'Emprunt',
+    DemandeEmprunt: 'DemandeEmprunt',
     Equipement: 'Equipement',
     Notification: 'Notification',
     Consommable: 'Consommable',
+    UtilisationConsommable: 'UtilisationConsommable',
     Rapport: 'Rapport'
   };
 
@@ -765,7 +855,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "utilisateur" | "emprunt" | "equipement" | "notification" | "consommable" | "rapport"
+      modelProps: "utilisateur" | "emprunt" | "demandeEmprunt" | "equipement" | "notification" | "consommable" | "utilisationConsommable" | "rapport"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -914,6 +1004,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EmpruntCountArgs<ExtArgs>
             result: $Utils.Optional<EmpruntCountAggregateOutputType> | number
+          }
+        }
+      }
+      DemandeEmprunt: {
+        payload: Prisma.$DemandeEmpruntPayload<ExtArgs>
+        fields: Prisma.DemandeEmpruntFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DemandeEmpruntFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DemandeEmpruntFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>
+          }
+          findFirst: {
+            args: Prisma.DemandeEmpruntFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DemandeEmpruntFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>
+          }
+          findMany: {
+            args: Prisma.DemandeEmpruntFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>[]
+          }
+          create: {
+            args: Prisma.DemandeEmpruntCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>
+          }
+          createMany: {
+            args: Prisma.DemandeEmpruntCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.DemandeEmpruntCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>[]
+          }
+          delete: {
+            args: Prisma.DemandeEmpruntDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>
+          }
+          update: {
+            args: Prisma.DemandeEmpruntUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>
+          }
+          deleteMany: {
+            args: Prisma.DemandeEmpruntDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DemandeEmpruntUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.DemandeEmpruntUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>[]
+          }
+          upsert: {
+            args: Prisma.DemandeEmpruntUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DemandeEmpruntPayload>
+          }
+          aggregate: {
+            args: Prisma.DemandeEmpruntAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDemandeEmprunt>
+          }
+          groupBy: {
+            args: Prisma.DemandeEmpruntGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DemandeEmpruntGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.DemandeEmpruntCountArgs<ExtArgs>
+            result: $Utils.Optional<DemandeEmpruntCountAggregateOutputType> | number
           }
         }
       }
@@ -1139,6 +1303,80 @@ export namespace Prisma {
           }
         }
       }
+      UtilisationConsommable: {
+        payload: Prisma.$UtilisationConsommablePayload<ExtArgs>
+        fields: Prisma.UtilisationConsommableFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UtilisationConsommableFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UtilisationConsommableFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>
+          }
+          findFirst: {
+            args: Prisma.UtilisationConsommableFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UtilisationConsommableFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>
+          }
+          findMany: {
+            args: Prisma.UtilisationConsommableFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>[]
+          }
+          create: {
+            args: Prisma.UtilisationConsommableCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>
+          }
+          createMany: {
+            args: Prisma.UtilisationConsommableCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UtilisationConsommableCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>[]
+          }
+          delete: {
+            args: Prisma.UtilisationConsommableDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>
+          }
+          update: {
+            args: Prisma.UtilisationConsommableUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>
+          }
+          deleteMany: {
+            args: Prisma.UtilisationConsommableDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UtilisationConsommableUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UtilisationConsommableUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>[]
+          }
+          upsert: {
+            args: Prisma.UtilisationConsommableUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UtilisationConsommablePayload>
+          }
+          aggregate: {
+            args: Prisma.UtilisationConsommableAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUtilisationConsommable>
+          }
+          groupBy: {
+            args: Prisma.UtilisationConsommableGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UtilisationConsommableGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UtilisationConsommableCountArgs<ExtArgs>
+            result: $Utils.Optional<UtilisationConsommableCountAggregateOutputType> | number
+          }
+        }
+      }
       Rapport: {
         payload: Prisma.$RapportPayload<ExtArgs>
         fields: Prisma.RapportFieldRefs
@@ -1311,9 +1549,11 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     utilisateur?: UtilisateurOmit
     emprunt?: EmpruntOmit
+    demandeEmprunt?: DemandeEmpruntOmit
     equipement?: EquipementOmit
     notification?: NotificationOmit
     consommable?: ConsommableOmit
+    utilisationConsommable?: UtilisationConsommableOmit
     rapport?: RapportOmit
   }
 
@@ -1396,10 +1636,14 @@ export namespace Prisma {
 
   export type UtilisateurCountOutputType = {
     emprunts: number
+    demandeEmprunt: number
+    utilisationsConsommable: number
   }
 
   export type UtilisateurCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunts?: boolean | UtilisateurCountOutputTypeCountEmpruntsArgs
+    demandeEmprunt?: boolean | UtilisateurCountOutputTypeCountDemandeEmpruntArgs
+    utilisationsConsommable?: boolean | UtilisateurCountOutputTypeCountUtilisationsConsommableArgs
   }
 
   // Custom InputTypes
@@ -1418,6 +1662,20 @@ export namespace Prisma {
    */
   export type UtilisateurCountOutputTypeCountEmpruntsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EmpruntWhereInput
+  }
+
+  /**
+   * UtilisateurCountOutputType without action
+   */
+  export type UtilisateurCountOutputTypeCountDemandeEmpruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DemandeEmpruntWhereInput
+  }
+
+  /**
+   * UtilisateurCountOutputType without action
+   */
+  export type UtilisateurCountOutputTypeCountUtilisationsConsommableArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UtilisationConsommableWhereInput
   }
 
 
@@ -1462,15 +1720,48 @@ export namespace Prisma {
 
 
   /**
+   * Count Type EquipementCountOutputType
+   */
+
+  export type EquipementCountOutputType = {
+    demandeEmprunt: number
+  }
+
+  export type EquipementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    demandeEmprunt?: boolean | EquipementCountOutputTypeCountDemandeEmpruntArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EquipementCountOutputType without action
+   */
+  export type EquipementCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EquipementCountOutputType
+     */
+    select?: EquipementCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EquipementCountOutputType without action
+   */
+  export type EquipementCountOutputTypeCountDemandeEmpruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DemandeEmpruntWhereInput
+  }
+
+
+  /**
    * Count Type ConsommableCountOutputType
    */
 
   export type ConsommableCountOutputType = {
     notification: number
+    utilisationsConsommable: number
   }
 
   export type ConsommableCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     notification?: boolean | ConsommableCountOutputTypeCountNotificationArgs
+    utilisationsConsommable?: boolean | ConsommableCountOutputTypeCountUtilisationsConsommableArgs
   }
 
   // Custom InputTypes
@@ -1489,6 +1780,13 @@ export namespace Prisma {
    */
   export type ConsommableCountOutputTypeCountNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * ConsommableCountOutputType without action
+   */
+  export type ConsommableCountOutputTypeCountUtilisationsConsommableArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UtilisationConsommableWhereInput
   }
 
 
@@ -1521,9 +1819,10 @@ export namespace Prisma {
     nom: string | null
     prenom: string | null
     email: string | null
+    motdepasse: string | null
+    role: $Enums.RoleUtilisateur | null
     createdAt: Date | null
     updateAt: Date | null
-    role: $Enums.RoleUtilisateur | null
   }
 
   export type UtilisateurMaxAggregateOutputType = {
@@ -1531,9 +1830,10 @@ export namespace Prisma {
     nom: string | null
     prenom: string | null
     email: string | null
+    motdepasse: string | null
+    role: $Enums.RoleUtilisateur | null
     createdAt: Date | null
     updateAt: Date | null
-    role: $Enums.RoleUtilisateur | null
   }
 
   export type UtilisateurCountAggregateOutputType = {
@@ -1541,9 +1841,10 @@ export namespace Prisma {
     nom: number
     prenom: number
     email: number
+    motdepasse: number
+    role: number
     createdAt: number
     updateAt: number
-    role: number
     _all: number
   }
 
@@ -1561,9 +1862,10 @@ export namespace Prisma {
     nom?: true
     prenom?: true
     email?: true
+    motdepasse?: true
+    role?: true
     createdAt?: true
     updateAt?: true
-    role?: true
   }
 
   export type UtilisateurMaxAggregateInputType = {
@@ -1571,9 +1873,10 @@ export namespace Prisma {
     nom?: true
     prenom?: true
     email?: true
+    motdepasse?: true
+    role?: true
     createdAt?: true
     updateAt?: true
-    role?: true
   }
 
   export type UtilisateurCountAggregateInputType = {
@@ -1581,9 +1884,10 @@ export namespace Prisma {
     nom?: true
     prenom?: true
     email?: true
+    motdepasse?: true
+    role?: true
     createdAt?: true
     updateAt?: true
-    role?: true
     _all?: true
   }
 
@@ -1678,9 +1982,10 @@ export namespace Prisma {
     nom: string
     prenom: string
     email: string
+    motdepasse: string
+    role: $Enums.RoleUtilisateur
     createdAt: Date
     updateAt: Date
-    role: $Enums.RoleUtilisateur
     _count: UtilisateurCountAggregateOutputType | null
     _avg: UtilisateurAvgAggregateOutputType | null
     _sum: UtilisateurSumAggregateOutputType | null
@@ -1707,10 +2012,13 @@ export namespace Prisma {
     nom?: boolean
     prenom?: boolean
     email?: boolean
+    motdepasse?: boolean
+    role?: boolean
     createdAt?: boolean
     updateAt?: boolean
-    role?: boolean
     emprunts?: boolean | Utilisateur$empruntsArgs<ExtArgs>
+    demandeEmprunt?: boolean | Utilisateur$demandeEmpruntArgs<ExtArgs>
+    utilisationsConsommable?: boolean | Utilisateur$utilisationsConsommableArgs<ExtArgs>
     _count?: boolean | UtilisateurCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["utilisateur"]>
 
@@ -1719,9 +2027,10 @@ export namespace Prisma {
     nom?: boolean
     prenom?: boolean
     email?: boolean
+    motdepasse?: boolean
+    role?: boolean
     createdAt?: boolean
     updateAt?: boolean
-    role?: boolean
   }, ExtArgs["result"]["utilisateur"]>
 
   export type UtilisateurSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1729,9 +2038,10 @@ export namespace Prisma {
     nom?: boolean
     prenom?: boolean
     email?: boolean
+    motdepasse?: boolean
+    role?: boolean
     createdAt?: boolean
     updateAt?: boolean
-    role?: boolean
   }, ExtArgs["result"]["utilisateur"]>
 
   export type UtilisateurSelectScalar = {
@@ -1739,14 +2049,17 @@ export namespace Prisma {
     nom?: boolean
     prenom?: boolean
     email?: boolean
+    motdepasse?: boolean
+    role?: boolean
     createdAt?: boolean
     updateAt?: boolean
-    role?: boolean
   }
 
-  export type UtilisateurOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "prenom" | "email" | "createdAt" | "updateAt" | "role", ExtArgs["result"]["utilisateur"]>
+  export type UtilisateurOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "prenom" | "email" | "motdepasse" | "role" | "createdAt" | "updateAt", ExtArgs["result"]["utilisateur"]>
   export type UtilisateurInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunts?: boolean | Utilisateur$empruntsArgs<ExtArgs>
+    demandeEmprunt?: boolean | Utilisateur$demandeEmpruntArgs<ExtArgs>
+    utilisationsConsommable?: boolean | Utilisateur$utilisationsConsommableArgs<ExtArgs>
     _count?: boolean | UtilisateurCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UtilisateurIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1756,15 +2069,18 @@ export namespace Prisma {
     name: "Utilisateur"
     objects: {
       emprunts: Prisma.$EmpruntPayload<ExtArgs>[]
+      demandeEmprunt: Prisma.$DemandeEmpruntPayload<ExtArgs>[]
+      utilisationsConsommable: Prisma.$UtilisationConsommablePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nom: string
       prenom: string
       email: string
+      motdepasse: string
+      role: $Enums.RoleUtilisateur
       createdAt: Date
       updateAt: Date
-      role: $Enums.RoleUtilisateur
     }, ExtArgs["result"]["utilisateur"]>
     composites: {}
   }
@@ -2160,6 +2476,8 @@ export namespace Prisma {
   export interface Prisma__UtilisateurClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     emprunts<T extends Utilisateur$empruntsArgs<ExtArgs> = {}>(args?: Subset<T, Utilisateur$empruntsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    demandeEmprunt<T extends Utilisateur$demandeEmpruntArgs<ExtArgs> = {}>(args?: Subset<T, Utilisateur$demandeEmpruntArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    utilisationsConsommable<T extends Utilisateur$utilisationsConsommableArgs<ExtArgs> = {}>(args?: Subset<T, Utilisateur$utilisationsConsommableArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2193,9 +2511,10 @@ export namespace Prisma {
     readonly nom: FieldRef<"Utilisateur", 'String'>
     readonly prenom: FieldRef<"Utilisateur", 'String'>
     readonly email: FieldRef<"Utilisateur", 'String'>
+    readonly motdepasse: FieldRef<"Utilisateur", 'String'>
+    readonly role: FieldRef<"Utilisateur", 'RoleUtilisateur'>
     readonly createdAt: FieldRef<"Utilisateur", 'DateTime'>
     readonly updateAt: FieldRef<"Utilisateur", 'DateTime'>
-    readonly role: FieldRef<"Utilisateur", 'RoleUtilisateur'>
   }
     
 
@@ -2608,6 +2927,54 @@ export namespace Prisma {
   }
 
   /**
+   * Utilisateur.demandeEmprunt
+   */
+  export type Utilisateur$demandeEmpruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    where?: DemandeEmpruntWhereInput
+    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
+    cursor?: DemandeEmpruntWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DemandeEmpruntScalarFieldEnum | DemandeEmpruntScalarFieldEnum[]
+  }
+
+  /**
+   * Utilisateur.utilisationsConsommable
+   */
+  export type Utilisateur$utilisationsConsommableArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    where?: UtilisationConsommableWhereInput
+    orderBy?: UtilisationConsommableOrderByWithRelationInput | UtilisationConsommableOrderByWithRelationInput[]
+    cursor?: UtilisationConsommableWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UtilisationConsommableScalarFieldEnum | UtilisationConsommableScalarFieldEnum[]
+  }
+
+  /**
    * Utilisateur without action
    */
   export type UtilisateurDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2650,29 +3017,38 @@ export namespace Prisma {
 
   export type EmpruntMinAggregateOutputType = {
     id: number | null
+    utilisateurId: number | null
     dateEmprunt: Date | null
     dateRetourPrevu: Date | null
     dateRetourEffective: Date | null
-    utilisateurId: number | null
+    usage: string | null
     statut: $Enums.Statut | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type EmpruntMaxAggregateOutputType = {
     id: number | null
+    utilisateurId: number | null
     dateEmprunt: Date | null
     dateRetourPrevu: Date | null
     dateRetourEffective: Date | null
-    utilisateurId: number | null
+    usage: string | null
     statut: $Enums.Statut | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type EmpruntCountAggregateOutputType = {
     id: number
+    utilisateurId: number
     dateEmprunt: number
     dateRetourPrevu: number
     dateRetourEffective: number
-    utilisateurId: number
+    usage: number
     statut: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -2689,29 +3065,38 @@ export namespace Prisma {
 
   export type EmpruntMinAggregateInputType = {
     id?: true
+    utilisateurId?: true
     dateEmprunt?: true
     dateRetourPrevu?: true
     dateRetourEffective?: true
-    utilisateurId?: true
+    usage?: true
     statut?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type EmpruntMaxAggregateInputType = {
     id?: true
+    utilisateurId?: true
     dateEmprunt?: true
     dateRetourPrevu?: true
     dateRetourEffective?: true
-    utilisateurId?: true
+    usage?: true
     statut?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type EmpruntCountAggregateInputType = {
     id?: true
+    utilisateurId?: true
     dateEmprunt?: true
     dateRetourPrevu?: true
     dateRetourEffective?: true
-    utilisateurId?: true
+    usage?: true
     statut?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -2803,11 +3188,14 @@ export namespace Prisma {
 
   export type EmpruntGroupByOutputType = {
     id: number
+    utilisateurId: number
     dateEmprunt: Date
     dateRetourPrevu: Date
     dateRetourEffective: Date | null
-    utilisateurId: number
+    usage: string
     statut: $Enums.Statut
+    createdAt: Date
+    updatedAt: Date
     _count: EmpruntCountAggregateOutputType | null
     _avg: EmpruntAvgAggregateOutputType | null
     _sum: EmpruntSumAggregateOutputType | null
@@ -2831,11 +3219,14 @@ export namespace Prisma {
 
   export type EmpruntSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    utilisateurId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
-    utilisateurId?: boolean
+    usage?: boolean
     statut?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
     equipement?: boolean | Emprunt$equipementArgs<ExtArgs>
     notification?: boolean | Emprunt$notificationArgs<ExtArgs>
@@ -2844,34 +3235,43 @@ export namespace Prisma {
 
   export type EmpruntSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    utilisateurId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
-    utilisateurId?: boolean
+    usage?: boolean
     statut?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emprunt"]>
 
   export type EmpruntSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    utilisateurId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
-    utilisateurId?: boolean
+    usage?: boolean
     statut?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emprunt"]>
 
   export type EmpruntSelectScalar = {
     id?: boolean
+    utilisateurId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
-    utilisateurId?: boolean
+    usage?: boolean
     statut?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type EmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dateEmprunt" | "dateRetourPrevu" | "dateRetourEffective" | "utilisateurId" | "statut", ExtArgs["result"]["emprunt"]>
+  export type EmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "dateEmprunt" | "dateRetourPrevu" | "dateRetourEffective" | "usage" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["emprunt"]>
   export type EmpruntInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
     equipement?: boolean | Emprunt$equipementArgs<ExtArgs>
@@ -2894,11 +3294,14 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      utilisateurId: number
       dateEmprunt: Date
       dateRetourPrevu: Date
       dateRetourEffective: Date | null
-      utilisateurId: number
+      usage: string
       statut: $Enums.Statut
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["emprunt"]>
     composites: {}
   }
@@ -3326,11 +3729,14 @@ export namespace Prisma {
    */
   interface EmpruntFieldRefs {
     readonly id: FieldRef<"Emprunt", 'Int'>
+    readonly utilisateurId: FieldRef<"Emprunt", 'Int'>
     readonly dateEmprunt: FieldRef<"Emprunt", 'DateTime'>
     readonly dateRetourPrevu: FieldRef<"Emprunt", 'DateTime'>
     readonly dateRetourEffective: FieldRef<"Emprunt", 'DateTime'>
-    readonly utilisateurId: FieldRef<"Emprunt", 'Int'>
+    readonly usage: FieldRef<"Emprunt", 'String'>
     readonly statut: FieldRef<"Emprunt", 'Statut'>
+    readonly createdAt: FieldRef<"Emprunt", 'DateTime'>
+    readonly updatedAt: FieldRef<"Emprunt", 'DateTime'>
   }
     
 
@@ -3794,6 +4200,1179 @@ export namespace Prisma {
 
 
   /**
+   * Model DemandeEmprunt
+   */
+
+  export type AggregateDemandeEmprunt = {
+    _count: DemandeEmpruntCountAggregateOutputType | null
+    _avg: DemandeEmpruntAvgAggregateOutputType | null
+    _sum: DemandeEmpruntSumAggregateOutputType | null
+    _min: DemandeEmpruntMinAggregateOutputType | null
+    _max: DemandeEmpruntMaxAggregateOutputType | null
+  }
+
+  export type DemandeEmpruntAvgAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    equipementId: number | null
+  }
+
+  export type DemandeEmpruntSumAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    equipementId: number | null
+  }
+
+  export type DemandeEmpruntMinAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    equipementId: number | null
+    dateDemande: Date | null
+    dateRetourPrevu: Date | null
+    usage: string | null
+    statut: $Enums.StatutDemande | null
+    type: $Enums.TypeDemande | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DemandeEmpruntMaxAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    equipementId: number | null
+    dateDemande: Date | null
+    dateRetourPrevu: Date | null
+    usage: string | null
+    statut: $Enums.StatutDemande | null
+    type: $Enums.TypeDemande | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DemandeEmpruntCountAggregateOutputType = {
+    id: number
+    utilisateurId: number
+    equipementId: number
+    dateDemande: number
+    dateRetourPrevu: number
+    usage: number
+    statut: number
+    type: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DemandeEmpruntAvgAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    equipementId?: true
+  }
+
+  export type DemandeEmpruntSumAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    equipementId?: true
+  }
+
+  export type DemandeEmpruntMinAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    equipementId?: true
+    dateDemande?: true
+    dateRetourPrevu?: true
+    usage?: true
+    statut?: true
+    type?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DemandeEmpruntMaxAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    equipementId?: true
+    dateDemande?: true
+    dateRetourPrevu?: true
+    usage?: true
+    statut?: true
+    type?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DemandeEmpruntCountAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    equipementId?: true
+    dateDemande?: true
+    dateRetourPrevu?: true
+    usage?: true
+    statut?: true
+    type?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DemandeEmpruntAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DemandeEmprunt to aggregate.
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemandeEmprunts to fetch.
+     */
+    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DemandeEmpruntWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemandeEmprunts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemandeEmprunts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DemandeEmprunts
+    **/
+    _count?: true | DemandeEmpruntCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DemandeEmpruntAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DemandeEmpruntSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DemandeEmpruntMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DemandeEmpruntMaxAggregateInputType
+  }
+
+  export type GetDemandeEmpruntAggregateType<T extends DemandeEmpruntAggregateArgs> = {
+        [P in keyof T & keyof AggregateDemandeEmprunt]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDemandeEmprunt[P]>
+      : GetScalarType<T[P], AggregateDemandeEmprunt[P]>
+  }
+
+
+
+
+  export type DemandeEmpruntGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DemandeEmpruntWhereInput
+    orderBy?: DemandeEmpruntOrderByWithAggregationInput | DemandeEmpruntOrderByWithAggregationInput[]
+    by: DemandeEmpruntScalarFieldEnum[] | DemandeEmpruntScalarFieldEnum
+    having?: DemandeEmpruntScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DemandeEmpruntCountAggregateInputType | true
+    _avg?: DemandeEmpruntAvgAggregateInputType
+    _sum?: DemandeEmpruntSumAggregateInputType
+    _min?: DemandeEmpruntMinAggregateInputType
+    _max?: DemandeEmpruntMaxAggregateInputType
+  }
+
+  export type DemandeEmpruntGroupByOutputType = {
+    id: number
+    utilisateurId: number
+    equipementId: number
+    dateDemande: Date
+    dateRetourPrevu: Date
+    usage: string
+    statut: $Enums.StatutDemande
+    type: $Enums.TypeDemande
+    createdAt: Date
+    updatedAt: Date
+    _count: DemandeEmpruntCountAggregateOutputType | null
+    _avg: DemandeEmpruntAvgAggregateOutputType | null
+    _sum: DemandeEmpruntSumAggregateOutputType | null
+    _min: DemandeEmpruntMinAggregateOutputType | null
+    _max: DemandeEmpruntMaxAggregateOutputType | null
+  }
+
+  type GetDemandeEmpruntGroupByPayload<T extends DemandeEmpruntGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DemandeEmpruntGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DemandeEmpruntGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DemandeEmpruntGroupByOutputType[P]>
+            : GetScalarType<T[P], DemandeEmpruntGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DemandeEmpruntSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    utilisateurId?: boolean
+    equipementId?: boolean
+    dateDemande?: boolean
+    dateRetourPrevu?: boolean
+    usage?: boolean
+    statut?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["demandeEmprunt"]>
+
+  export type DemandeEmpruntSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    utilisateurId?: boolean
+    equipementId?: boolean
+    dateDemande?: boolean
+    dateRetourPrevu?: boolean
+    usage?: boolean
+    statut?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["demandeEmprunt"]>
+
+  export type DemandeEmpruntSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    utilisateurId?: boolean
+    equipementId?: boolean
+    dateDemande?: boolean
+    dateRetourPrevu?: boolean
+    usage?: boolean
+    statut?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["demandeEmprunt"]>
+
+  export type DemandeEmpruntSelectScalar = {
+    id?: boolean
+    utilisateurId?: boolean
+    equipementId?: boolean
+    dateDemande?: boolean
+    dateRetourPrevu?: boolean
+    usage?: boolean
+    statut?: boolean
+    type?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DemandeEmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "equipementId" | "dateDemande" | "dateRetourPrevu" | "usage" | "statut" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["demandeEmprunt"]>
+  export type DemandeEmpruntInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+  }
+  export type DemandeEmpruntIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+  }
+  export type DemandeEmpruntIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+  }
+
+  export type $DemandeEmpruntPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DemandeEmprunt"
+    objects: {
+      utilisateur: Prisma.$UtilisateurPayload<ExtArgs>
+      equipement: Prisma.$EquipementPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      utilisateurId: number
+      equipementId: number
+      dateDemande: Date
+      dateRetourPrevu: Date
+      usage: string
+      statut: $Enums.StatutDemande
+      type: $Enums.TypeDemande
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["demandeEmprunt"]>
+    composites: {}
+  }
+
+  type DemandeEmpruntGetPayload<S extends boolean | null | undefined | DemandeEmpruntDefaultArgs> = $Result.GetResult<Prisma.$DemandeEmpruntPayload, S>
+
+  type DemandeEmpruntCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DemandeEmpruntFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DemandeEmpruntCountAggregateInputType | true
+    }
+
+  export interface DemandeEmpruntDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DemandeEmprunt'], meta: { name: 'DemandeEmprunt' } }
+    /**
+     * Find zero or one DemandeEmprunt that matches the filter.
+     * @param {DemandeEmpruntFindUniqueArgs} args - Arguments to find a DemandeEmprunt
+     * @example
+     * // Get one DemandeEmprunt
+     * const demandeEmprunt = await prisma.demandeEmprunt.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DemandeEmpruntFindUniqueArgs>(args: SelectSubset<T, DemandeEmpruntFindUniqueArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DemandeEmprunt that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DemandeEmpruntFindUniqueOrThrowArgs} args - Arguments to find a DemandeEmprunt
+     * @example
+     * // Get one DemandeEmprunt
+     * const demandeEmprunt = await prisma.demandeEmprunt.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DemandeEmpruntFindUniqueOrThrowArgs>(args: SelectSubset<T, DemandeEmpruntFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DemandeEmprunt that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntFindFirstArgs} args - Arguments to find a DemandeEmprunt
+     * @example
+     * // Get one DemandeEmprunt
+     * const demandeEmprunt = await prisma.demandeEmprunt.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DemandeEmpruntFindFirstArgs>(args?: SelectSubset<T, DemandeEmpruntFindFirstArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DemandeEmprunt that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntFindFirstOrThrowArgs} args - Arguments to find a DemandeEmprunt
+     * @example
+     * // Get one DemandeEmprunt
+     * const demandeEmprunt = await prisma.demandeEmprunt.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DemandeEmpruntFindFirstOrThrowArgs>(args?: SelectSubset<T, DemandeEmpruntFindFirstOrThrowArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DemandeEmprunts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DemandeEmprunts
+     * const demandeEmprunts = await prisma.demandeEmprunt.findMany()
+     * 
+     * // Get first 10 DemandeEmprunts
+     * const demandeEmprunts = await prisma.demandeEmprunt.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const demandeEmpruntWithIdOnly = await prisma.demandeEmprunt.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DemandeEmpruntFindManyArgs>(args?: SelectSubset<T, DemandeEmpruntFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DemandeEmprunt.
+     * @param {DemandeEmpruntCreateArgs} args - Arguments to create a DemandeEmprunt.
+     * @example
+     * // Create one DemandeEmprunt
+     * const DemandeEmprunt = await prisma.demandeEmprunt.create({
+     *   data: {
+     *     // ... data to create a DemandeEmprunt
+     *   }
+     * })
+     * 
+     */
+    create<T extends DemandeEmpruntCreateArgs>(args: SelectSubset<T, DemandeEmpruntCreateArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DemandeEmprunts.
+     * @param {DemandeEmpruntCreateManyArgs} args - Arguments to create many DemandeEmprunts.
+     * @example
+     * // Create many DemandeEmprunts
+     * const demandeEmprunt = await prisma.demandeEmprunt.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DemandeEmpruntCreateManyArgs>(args?: SelectSubset<T, DemandeEmpruntCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many DemandeEmprunts and returns the data saved in the database.
+     * @param {DemandeEmpruntCreateManyAndReturnArgs} args - Arguments to create many DemandeEmprunts.
+     * @example
+     * // Create many DemandeEmprunts
+     * const demandeEmprunt = await prisma.demandeEmprunt.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many DemandeEmprunts and only return the `id`
+     * const demandeEmpruntWithIdOnly = await prisma.demandeEmprunt.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends DemandeEmpruntCreateManyAndReturnArgs>(args?: SelectSubset<T, DemandeEmpruntCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a DemandeEmprunt.
+     * @param {DemandeEmpruntDeleteArgs} args - Arguments to delete one DemandeEmprunt.
+     * @example
+     * // Delete one DemandeEmprunt
+     * const DemandeEmprunt = await prisma.demandeEmprunt.delete({
+     *   where: {
+     *     // ... filter to delete one DemandeEmprunt
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DemandeEmpruntDeleteArgs>(args: SelectSubset<T, DemandeEmpruntDeleteArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DemandeEmprunt.
+     * @param {DemandeEmpruntUpdateArgs} args - Arguments to update one DemandeEmprunt.
+     * @example
+     * // Update one DemandeEmprunt
+     * const demandeEmprunt = await prisma.demandeEmprunt.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DemandeEmpruntUpdateArgs>(args: SelectSubset<T, DemandeEmpruntUpdateArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DemandeEmprunts.
+     * @param {DemandeEmpruntDeleteManyArgs} args - Arguments to filter DemandeEmprunts to delete.
+     * @example
+     * // Delete a few DemandeEmprunts
+     * const { count } = await prisma.demandeEmprunt.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DemandeEmpruntDeleteManyArgs>(args?: SelectSubset<T, DemandeEmpruntDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DemandeEmprunts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DemandeEmprunts
+     * const demandeEmprunt = await prisma.demandeEmprunt.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DemandeEmpruntUpdateManyArgs>(args: SelectSubset<T, DemandeEmpruntUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DemandeEmprunts and returns the data updated in the database.
+     * @param {DemandeEmpruntUpdateManyAndReturnArgs} args - Arguments to update many DemandeEmprunts.
+     * @example
+     * // Update many DemandeEmprunts
+     * const demandeEmprunt = await prisma.demandeEmprunt.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more DemandeEmprunts and only return the `id`
+     * const demandeEmpruntWithIdOnly = await prisma.demandeEmprunt.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends DemandeEmpruntUpdateManyAndReturnArgs>(args: SelectSubset<T, DemandeEmpruntUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one DemandeEmprunt.
+     * @param {DemandeEmpruntUpsertArgs} args - Arguments to update or create a DemandeEmprunt.
+     * @example
+     * // Update or create a DemandeEmprunt
+     * const demandeEmprunt = await prisma.demandeEmprunt.upsert({
+     *   create: {
+     *     // ... data to create a DemandeEmprunt
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DemandeEmprunt we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DemandeEmpruntUpsertArgs>(args: SelectSubset<T, DemandeEmpruntUpsertArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of DemandeEmprunts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntCountArgs} args - Arguments to filter DemandeEmprunts to count.
+     * @example
+     * // Count the number of DemandeEmprunts
+     * const count = await prisma.demandeEmprunt.count({
+     *   where: {
+     *     // ... the filter for the DemandeEmprunts we want to count
+     *   }
+     * })
+    **/
+    count<T extends DemandeEmpruntCountArgs>(
+      args?: Subset<T, DemandeEmpruntCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DemandeEmpruntCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DemandeEmprunt.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DemandeEmpruntAggregateArgs>(args: Subset<T, DemandeEmpruntAggregateArgs>): Prisma.PrismaPromise<GetDemandeEmpruntAggregateType<T>>
+
+    /**
+     * Group by DemandeEmprunt.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DemandeEmpruntGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DemandeEmpruntGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DemandeEmpruntGroupByArgs['orderBy'] }
+        : { orderBy?: DemandeEmpruntGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DemandeEmpruntGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDemandeEmpruntGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DemandeEmprunt model
+   */
+  readonly fields: DemandeEmpruntFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DemandeEmprunt.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DemandeEmpruntClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    utilisateur<T extends UtilisateurDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UtilisateurDefaultArgs<ExtArgs>>): Prisma__UtilisateurClient<$Result.GetResult<Prisma.$UtilisateurPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    equipement<T extends EquipementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EquipementDefaultArgs<ExtArgs>>): Prisma__EquipementClient<$Result.GetResult<Prisma.$EquipementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DemandeEmprunt model
+   */
+  interface DemandeEmpruntFieldRefs {
+    readonly id: FieldRef<"DemandeEmprunt", 'Int'>
+    readonly utilisateurId: FieldRef<"DemandeEmprunt", 'Int'>
+    readonly equipementId: FieldRef<"DemandeEmprunt", 'Int'>
+    readonly dateDemande: FieldRef<"DemandeEmprunt", 'DateTime'>
+    readonly dateRetourPrevu: FieldRef<"DemandeEmprunt", 'DateTime'>
+    readonly usage: FieldRef<"DemandeEmprunt", 'String'>
+    readonly statut: FieldRef<"DemandeEmprunt", 'StatutDemande'>
+    readonly type: FieldRef<"DemandeEmprunt", 'TypeDemande'>
+    readonly createdAt: FieldRef<"DemandeEmprunt", 'DateTime'>
+    readonly updatedAt: FieldRef<"DemandeEmprunt", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DemandeEmprunt findUnique
+   */
+  export type DemandeEmpruntFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * Filter, which DemandeEmprunt to fetch.
+     */
+    where: DemandeEmpruntWhereUniqueInput
+  }
+
+  /**
+   * DemandeEmprunt findUniqueOrThrow
+   */
+  export type DemandeEmpruntFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * Filter, which DemandeEmprunt to fetch.
+     */
+    where: DemandeEmpruntWhereUniqueInput
+  }
+
+  /**
+   * DemandeEmprunt findFirst
+   */
+  export type DemandeEmpruntFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * Filter, which DemandeEmprunt to fetch.
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemandeEmprunts to fetch.
+     */
+    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DemandeEmprunts.
+     */
+    cursor?: DemandeEmpruntWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemandeEmprunts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemandeEmprunts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DemandeEmprunts.
+     */
+    distinct?: DemandeEmpruntScalarFieldEnum | DemandeEmpruntScalarFieldEnum[]
+  }
+
+  /**
+   * DemandeEmprunt findFirstOrThrow
+   */
+  export type DemandeEmpruntFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * Filter, which DemandeEmprunt to fetch.
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemandeEmprunts to fetch.
+     */
+    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DemandeEmprunts.
+     */
+    cursor?: DemandeEmpruntWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemandeEmprunts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemandeEmprunts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DemandeEmprunts.
+     */
+    distinct?: DemandeEmpruntScalarFieldEnum | DemandeEmpruntScalarFieldEnum[]
+  }
+
+  /**
+   * DemandeEmprunt findMany
+   */
+  export type DemandeEmpruntFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * Filter, which DemandeEmprunts to fetch.
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DemandeEmprunts to fetch.
+     */
+    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DemandeEmprunts.
+     */
+    cursor?: DemandeEmpruntWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DemandeEmprunts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DemandeEmprunts.
+     */
+    skip?: number
+    distinct?: DemandeEmpruntScalarFieldEnum | DemandeEmpruntScalarFieldEnum[]
+  }
+
+  /**
+   * DemandeEmprunt create
+   */
+  export type DemandeEmpruntCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DemandeEmprunt.
+     */
+    data: XOR<DemandeEmpruntCreateInput, DemandeEmpruntUncheckedCreateInput>
+  }
+
+  /**
+   * DemandeEmprunt createMany
+   */
+  export type DemandeEmpruntCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DemandeEmprunts.
+     */
+    data: DemandeEmpruntCreateManyInput | DemandeEmpruntCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * DemandeEmprunt createManyAndReturn
+   */
+  export type DemandeEmpruntCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * The data used to create many DemandeEmprunts.
+     */
+    data: DemandeEmpruntCreateManyInput | DemandeEmpruntCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DemandeEmprunt update
+   */
+  export type DemandeEmpruntUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DemandeEmprunt.
+     */
+    data: XOR<DemandeEmpruntUpdateInput, DemandeEmpruntUncheckedUpdateInput>
+    /**
+     * Choose, which DemandeEmprunt to update.
+     */
+    where: DemandeEmpruntWhereUniqueInput
+  }
+
+  /**
+   * DemandeEmprunt updateMany
+   */
+  export type DemandeEmpruntUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DemandeEmprunts.
+     */
+    data: XOR<DemandeEmpruntUpdateManyMutationInput, DemandeEmpruntUncheckedUpdateManyInput>
+    /**
+     * Filter which DemandeEmprunts to update
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * Limit how many DemandeEmprunts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DemandeEmprunt updateManyAndReturn
+   */
+  export type DemandeEmpruntUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * The data used to update DemandeEmprunts.
+     */
+    data: XOR<DemandeEmpruntUpdateManyMutationInput, DemandeEmpruntUncheckedUpdateManyInput>
+    /**
+     * Filter which DemandeEmprunts to update
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * Limit how many DemandeEmprunts to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * DemandeEmprunt upsert
+   */
+  export type DemandeEmpruntUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DemandeEmprunt to update in case it exists.
+     */
+    where: DemandeEmpruntWhereUniqueInput
+    /**
+     * In case the DemandeEmprunt found by the `where` argument doesn't exist, create a new DemandeEmprunt with this data.
+     */
+    create: XOR<DemandeEmpruntCreateInput, DemandeEmpruntUncheckedCreateInput>
+    /**
+     * In case the DemandeEmprunt was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DemandeEmpruntUpdateInput, DemandeEmpruntUncheckedUpdateInput>
+  }
+
+  /**
+   * DemandeEmprunt delete
+   */
+  export type DemandeEmpruntDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    /**
+     * Filter which DemandeEmprunt to delete.
+     */
+    where: DemandeEmpruntWhereUniqueInput
+  }
+
+  /**
+   * DemandeEmprunt deleteMany
+   */
+  export type DemandeEmpruntDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DemandeEmprunts to delete
+     */
+    where?: DemandeEmpruntWhereInput
+    /**
+     * Limit how many DemandeEmprunts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DemandeEmprunt without action
+   */
+  export type DemandeEmpruntDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Equipement
    */
 
@@ -3808,35 +5387,61 @@ export namespace Prisma {
   export type EquipementAvgAggregateOutputType = {
     id: number | null
     empruntId: number | null
+    prix: number | null
   }
 
   export type EquipementSumAggregateOutputType = {
     id: number | null
     empruntId: number | null
+    prix: number | null
   }
 
   export type EquipementMinAggregateOutputType = {
     id: number | null
-    nom: string | null
-    type: string | null
-    etat: $Enums.Etat | null
     empruntId: number | null
+    nom: string | null
+    numeroDeSerie: string | null
+    marque: string | null
+    disponibilite: $Enums.Disponibilite | null
+    etatMateriel: $Enums.EtatMateriel | null
+    obtention: $Enums.Obtention | null
+    prix: number | null
+    fournisseur: string | null
+    donateur: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type EquipementMaxAggregateOutputType = {
     id: number | null
-    nom: string | null
-    type: string | null
-    etat: $Enums.Etat | null
     empruntId: number | null
+    nom: string | null
+    numeroDeSerie: string | null
+    marque: string | null
+    disponibilite: $Enums.Disponibilite | null
+    etatMateriel: $Enums.EtatMateriel | null
+    obtention: $Enums.Obtention | null
+    prix: number | null
+    fournisseur: string | null
+    donateur: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type EquipementCountAggregateOutputType = {
     id: number
-    nom: number
-    type: number
-    etat: number
     empruntId: number
+    nom: number
+    numeroDeSerie: number
+    marque: number
+    disponibilite: number
+    etatMateriel: number
+    obtention: number
+    prix: number
+    fournisseur: number
+    donateur: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -3844,35 +5449,61 @@ export namespace Prisma {
   export type EquipementAvgAggregateInputType = {
     id?: true
     empruntId?: true
+    prix?: true
   }
 
   export type EquipementSumAggregateInputType = {
     id?: true
     empruntId?: true
+    prix?: true
   }
 
   export type EquipementMinAggregateInputType = {
     id?: true
-    nom?: true
-    type?: true
-    etat?: true
     empruntId?: true
+    nom?: true
+    numeroDeSerie?: true
+    marque?: true
+    disponibilite?: true
+    etatMateriel?: true
+    obtention?: true
+    prix?: true
+    fournisseur?: true
+    donateur?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type EquipementMaxAggregateInputType = {
     id?: true
-    nom?: true
-    type?: true
-    etat?: true
     empruntId?: true
+    nom?: true
+    numeroDeSerie?: true
+    marque?: true
+    disponibilite?: true
+    etatMateriel?: true
+    obtention?: true
+    prix?: true
+    fournisseur?: true
+    donateur?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type EquipementCountAggregateInputType = {
     id?: true
-    nom?: true
-    type?: true
-    etat?: true
     empruntId?: true
+    nom?: true
+    numeroDeSerie?: true
+    marque?: true
+    disponibilite?: true
+    etatMateriel?: true
+    obtention?: true
+    prix?: true
+    fournisseur?: true
+    donateur?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -3964,10 +5595,18 @@ export namespace Prisma {
 
   export type EquipementGroupByOutputType = {
     id: number
+    empruntId: number | null
     nom: string
-    type: string
-    etat: $Enums.Etat
-    empruntId: number
+    numeroDeSerie: string
+    marque: string
+    disponibilite: $Enums.Disponibilite
+    etatMateriel: $Enums.EtatMateriel
+    obtention: $Enums.Obtention
+    prix: number
+    fournisseur: string | null
+    donateur: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: EquipementCountAggregateOutputType | null
     _avg: EquipementAvgAggregateOutputType | null
     _sum: EquipementSumAggregateOutputType | null
@@ -3991,61 +5630,106 @@ export namespace Prisma {
 
   export type EquipementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nom?: boolean
-    type?: boolean
-    etat?: boolean
     empruntId?: boolean
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
+    nom?: boolean
+    numeroDeSerie?: boolean
+    marque?: boolean
+    disponibilite?: boolean
+    etatMateriel?: boolean
+    obtention?: boolean
+    prix?: boolean
+    fournisseur?: boolean
+    donateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Equipement$demandeEmpruntArgs<ExtArgs>
+    _count?: boolean | EquipementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["equipement"]>
 
   export type EquipementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nom?: boolean
-    type?: boolean
-    etat?: boolean
     empruntId?: boolean
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
+    nom?: boolean
+    numeroDeSerie?: boolean
+    marque?: boolean
+    disponibilite?: boolean
+    etatMateriel?: boolean
+    obtention?: boolean
+    prix?: boolean
+    fournisseur?: boolean
+    donateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
   }, ExtArgs["result"]["equipement"]>
 
   export type EquipementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nom?: boolean
-    type?: boolean
-    etat?: boolean
     empruntId?: boolean
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
+    nom?: boolean
+    numeroDeSerie?: boolean
+    marque?: boolean
+    disponibilite?: boolean
+    etatMateriel?: boolean
+    obtention?: boolean
+    prix?: boolean
+    fournisseur?: boolean
+    donateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
   }, ExtArgs["result"]["equipement"]>
 
   export type EquipementSelectScalar = {
     id?: boolean
-    nom?: boolean
-    type?: boolean
-    etat?: boolean
     empruntId?: boolean
+    nom?: boolean
+    numeroDeSerie?: boolean
+    marque?: boolean
+    disponibilite?: boolean
+    etatMateriel?: boolean
+    obtention?: boolean
+    prix?: boolean
+    fournisseur?: boolean
+    donateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type EquipementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "type" | "etat" | "empruntId", ExtArgs["result"]["equipement"]>
+  export type EquipementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "empruntId" | "nom" | "numeroDeSerie" | "marque" | "disponibilite" | "etatMateriel" | "obtention" | "prix" | "fournisseur" | "donateur" | "createdAt" | "updatedAt", ExtArgs["result"]["equipement"]>
   export type EquipementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
+    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Equipement$demandeEmpruntArgs<ExtArgs>
+    _count?: boolean | EquipementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EquipementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
+    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
   }
   export type EquipementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
+    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
   }
 
   export type $EquipementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Equipement"
     objects: {
-      emprunt: Prisma.$EmpruntPayload<ExtArgs>
+      emprunt: Prisma.$EmpruntPayload<ExtArgs> | null
+      demandeEmprunt: Prisma.$DemandeEmpruntPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      empruntId: number | null
       nom: string
-      type: string
-      etat: $Enums.Etat
-      empruntId: number
+      numeroDeSerie: string
+      marque: string
+      disponibilite: $Enums.Disponibilite
+      etatMateriel: $Enums.EtatMateriel
+      obtention: $Enums.Obtention
+      prix: number
+      fournisseur: string | null
+      donateur: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["equipement"]>
     composites: {}
   }
@@ -4440,7 +6124,8 @@ export namespace Prisma {
    */
   export interface Prisma__EquipementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    emprunt<T extends EmpruntDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmpruntDefaultArgs<ExtArgs>>): Prisma__EmpruntClient<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    emprunt<T extends Equipement$empruntArgs<ExtArgs> = {}>(args?: Subset<T, Equipement$empruntArgs<ExtArgs>>): Prisma__EmpruntClient<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    demandeEmprunt<T extends Equipement$demandeEmpruntArgs<ExtArgs> = {}>(args?: Subset<T, Equipement$demandeEmpruntArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4471,10 +6156,18 @@ export namespace Prisma {
    */
   interface EquipementFieldRefs {
     readonly id: FieldRef<"Equipement", 'Int'>
-    readonly nom: FieldRef<"Equipement", 'String'>
-    readonly type: FieldRef<"Equipement", 'String'>
-    readonly etat: FieldRef<"Equipement", 'Etat'>
     readonly empruntId: FieldRef<"Equipement", 'Int'>
+    readonly nom: FieldRef<"Equipement", 'String'>
+    readonly numeroDeSerie: FieldRef<"Equipement", 'String'>
+    readonly marque: FieldRef<"Equipement", 'String'>
+    readonly disponibilite: FieldRef<"Equipement", 'Disponibilite'>
+    readonly etatMateriel: FieldRef<"Equipement", 'EtatMateriel'>
+    readonly obtention: FieldRef<"Equipement", 'Obtention'>
+    readonly prix: FieldRef<"Equipement", 'Float'>
+    readonly fournisseur: FieldRef<"Equipement", 'String'>
+    readonly donateur: FieldRef<"Equipement", 'String'>
+    readonly createdAt: FieldRef<"Equipement", 'DateTime'>
+    readonly updatedAt: FieldRef<"Equipement", 'DateTime'>
   }
     
 
@@ -4871,6 +6564,49 @@ export namespace Prisma {
   }
 
   /**
+   * Equipement.emprunt
+   */
+  export type Equipement$empruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Emprunt
+     */
+    select?: EmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Emprunt
+     */
+    omit?: EmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmpruntInclude<ExtArgs> | null
+    where?: EmpruntWhereInput
+  }
+
+  /**
+   * Equipement.demandeEmprunt
+   */
+  export type Equipement$demandeEmpruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    where?: DemandeEmpruntWhereInput
+    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
+    cursor?: DemandeEmpruntWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DemandeEmpruntScalarFieldEnum | DemandeEmpruntScalarFieldEnum[]
+  }
+
+  /**
    * Equipement without action
    */
   export type EquipementDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4915,29 +6651,38 @@ export namespace Prisma {
 
   export type NotificationMinAggregateOutputType = {
     id: number | null
+    empruntId: number | null
+    consommableId: number | null
     message: string | null
     DateEnvoi: Date | null
     type: $Enums.TypeNotification | null
-    empruntId: number | null
-    consommableId: number | null
+    vu: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type NotificationMaxAggregateOutputType = {
     id: number | null
+    empruntId: number | null
+    consommableId: number | null
     message: string | null
     DateEnvoi: Date | null
     type: $Enums.TypeNotification | null
-    empruntId: number | null
-    consommableId: number | null
+    vu: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type NotificationCountAggregateOutputType = {
     id: number
+    empruntId: number
+    consommableId: number
     message: number
     DateEnvoi: number
     type: number
-    empruntId: number
-    consommableId: number
+    vu: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4956,29 +6701,38 @@ export namespace Prisma {
 
   export type NotificationMinAggregateInputType = {
     id?: true
+    empruntId?: true
+    consommableId?: true
     message?: true
     DateEnvoi?: true
     type?: true
-    empruntId?: true
-    consommableId?: true
+    vu?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type NotificationMaxAggregateInputType = {
     id?: true
+    empruntId?: true
+    consommableId?: true
     message?: true
     DateEnvoi?: true
     type?: true
-    empruntId?: true
-    consommableId?: true
+    vu?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type NotificationCountAggregateInputType = {
     id?: true
+    empruntId?: true
+    consommableId?: true
     message?: true
     DateEnvoi?: true
     type?: true
-    empruntId?: true
-    consommableId?: true
+    vu?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -5070,11 +6824,14 @@ export namespace Prisma {
 
   export type NotificationGroupByOutputType = {
     id: number
+    empruntId: number | null
+    consommableId: number | null
     message: string
     DateEnvoi: Date
     type: $Enums.TypeNotification
-    empruntId: number
-    consommableId: number
+    vu: boolean
+    createdAt: Date
+    updatedAt: Date
     _count: NotificationCountAggregateOutputType | null
     _avg: NotificationAvgAggregateOutputType | null
     _sum: NotificationSumAggregateOutputType | null
@@ -5098,73 +6855,88 @@ export namespace Prisma {
 
   export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    empruntId?: boolean
+    consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
     type?: boolean
-    empruntId?: boolean
-    consommableId?: boolean
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
-    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+    vu?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    empruntId?: boolean
+    consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
     type?: boolean
-    empruntId?: boolean
-    consommableId?: boolean
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
-    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+    vu?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    empruntId?: boolean
+    consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
     type?: boolean
-    empruntId?: boolean
-    consommableId?: boolean
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
-    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+    vu?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectScalar = {
     id?: boolean
+    empruntId?: boolean
+    consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
     type?: boolean
-    empruntId?: boolean
-    consommableId?: boolean
+    vu?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "message" | "DateEnvoi" | "type" | "empruntId" | "consommableId", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "empruntId" | "consommableId" | "message" | "DateEnvoi" | "type" | "vu" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
-    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+    emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }
   export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
-    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+    emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }
   export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | EmpruntDefaultArgs<ExtArgs>
-    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+    emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }
 
   export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Notification"
     objects: {
-      emprunt: Prisma.$EmpruntPayload<ExtArgs>
-      consommable: Prisma.$ConsommablePayload<ExtArgs>
+      emprunt: Prisma.$EmpruntPayload<ExtArgs> | null
+      consommable: Prisma.$ConsommablePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
+      empruntId: number | null
+      consommableId: number | null
       message: string
       DateEnvoi: Date
       type: $Enums.TypeNotification
-      empruntId: number
-      consommableId: number
+      vu: boolean
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["notification"]>
     composites: {}
   }
@@ -5559,8 +7331,8 @@ export namespace Prisma {
    */
   export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    emprunt<T extends EmpruntDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EmpruntDefaultArgs<ExtArgs>>): Prisma__EmpruntClient<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    consommable<T extends ConsommableDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ConsommableDefaultArgs<ExtArgs>>): Prisma__ConsommableClient<$Result.GetResult<Prisma.$ConsommablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    emprunt<T extends Notification$empruntArgs<ExtArgs> = {}>(args?: Subset<T, Notification$empruntArgs<ExtArgs>>): Prisma__EmpruntClient<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    consommable<T extends Notification$consommableArgs<ExtArgs> = {}>(args?: Subset<T, Notification$consommableArgs<ExtArgs>>): Prisma__ConsommableClient<$Result.GetResult<Prisma.$ConsommablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5591,11 +7363,14 @@ export namespace Prisma {
    */
   interface NotificationFieldRefs {
     readonly id: FieldRef<"Notification", 'Int'>
+    readonly empruntId: FieldRef<"Notification", 'Int'>
+    readonly consommableId: FieldRef<"Notification", 'Int'>
     readonly message: FieldRef<"Notification", 'String'>
     readonly DateEnvoi: FieldRef<"Notification", 'DateTime'>
     readonly type: FieldRef<"Notification", 'TypeNotification'>
-    readonly empruntId: FieldRef<"Notification", 'Int'>
-    readonly consommableId: FieldRef<"Notification", 'Int'>
+    readonly vu: FieldRef<"Notification", 'Boolean'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly updatedAt: FieldRef<"Notification", 'DateTime'>
   }
     
 
@@ -5992,6 +7767,44 @@ export namespace Prisma {
   }
 
   /**
+   * Notification.emprunt
+   */
+  export type Notification$empruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Emprunt
+     */
+    select?: EmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Emprunt
+     */
+    omit?: EmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmpruntInclude<ExtArgs> | null
+    where?: EmpruntWhereInput
+  }
+
+  /**
+   * Notification.consommable
+   */
+  export type Notification$consommableArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Consommable
+     */
+    select?: ConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Consommable
+     */
+    omit?: ConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ConsommableInclude<ExtArgs> | null
+    where?: ConsommableWhereInput
+  }
+
+  /**
    * Notification without action
    */
   export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6039,6 +7852,11 @@ export namespace Prisma {
     nom: string | null
     quantiteDisponible: number | null
     seuilCritique: number | null
+    obtention: $Enums.Obtention | null
+    fournisseur: string | null
+    donnateur: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ConsommableMaxAggregateOutputType = {
@@ -6046,6 +7864,11 @@ export namespace Prisma {
     nom: string | null
     quantiteDisponible: number | null
     seuilCritique: number | null
+    obtention: $Enums.Obtention | null
+    fournisseur: string | null
+    donnateur: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ConsommableCountAggregateOutputType = {
@@ -6053,6 +7876,11 @@ export namespace Prisma {
     nom: number
     quantiteDisponible: number
     seuilCritique: number
+    obtention: number
+    fournisseur: number
+    donnateur: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -6074,6 +7902,11 @@ export namespace Prisma {
     nom?: true
     quantiteDisponible?: true
     seuilCritique?: true
+    obtention?: true
+    fournisseur?: true
+    donnateur?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ConsommableMaxAggregateInputType = {
@@ -6081,6 +7914,11 @@ export namespace Prisma {
     nom?: true
     quantiteDisponible?: true
     seuilCritique?: true
+    obtention?: true
+    fournisseur?: true
+    donnateur?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ConsommableCountAggregateInputType = {
@@ -6088,6 +7926,11 @@ export namespace Prisma {
     nom?: true
     quantiteDisponible?: true
     seuilCritique?: true
+    obtention?: true
+    fournisseur?: true
+    donnateur?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -6182,6 +8025,11 @@ export namespace Prisma {
     nom: string
     quantiteDisponible: number
     seuilCritique: number
+    obtention: $Enums.Obtention
+    fournisseur: string | null
+    donnateur: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: ConsommableCountAggregateOutputType | null
     _avg: ConsommableAvgAggregateOutputType | null
     _sum: ConsommableSumAggregateOutputType | null
@@ -6208,7 +8056,13 @@ export namespace Prisma {
     nom?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
+    obtention?: boolean
+    fournisseur?: boolean
+    donnateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     notification?: boolean | Consommable$notificationArgs<ExtArgs>
+    utilisationsConsommable?: boolean | Consommable$utilisationsConsommableArgs<ExtArgs>
     _count?: boolean | ConsommableCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["consommable"]>
 
@@ -6217,6 +8071,11 @@ export namespace Prisma {
     nom?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
+    obtention?: boolean
+    fournisseur?: boolean
+    donnateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["consommable"]>
 
   export type ConsommableSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6224,6 +8083,11 @@ export namespace Prisma {
     nom?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
+    obtention?: boolean
+    fournisseur?: boolean
+    donnateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["consommable"]>
 
   export type ConsommableSelectScalar = {
@@ -6231,11 +8095,17 @@ export namespace Prisma {
     nom?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
+    obtention?: boolean
+    fournisseur?: boolean
+    donnateur?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ConsommableOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "quantiteDisponible" | "seuilCritique", ExtArgs["result"]["consommable"]>
+  export type ConsommableOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "quantiteDisponible" | "seuilCritique" | "obtention" | "fournisseur" | "donnateur" | "createdAt" | "updatedAt", ExtArgs["result"]["consommable"]>
   export type ConsommableInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     notification?: boolean | Consommable$notificationArgs<ExtArgs>
+    utilisationsConsommable?: boolean | Consommable$utilisationsConsommableArgs<ExtArgs>
     _count?: boolean | ConsommableCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ConsommableIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -6245,12 +8115,18 @@ export namespace Prisma {
     name: "Consommable"
     objects: {
       notification: Prisma.$NotificationPayload<ExtArgs>[]
+      utilisationsConsommable: Prisma.$UtilisationConsommablePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nom: string
       quantiteDisponible: number
       seuilCritique: number
+      obtention: $Enums.Obtention
+      fournisseur: string | null
+      donnateur: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["consommable"]>
     composites: {}
   }
@@ -6646,6 +8522,7 @@ export namespace Prisma {
   export interface Prisma__ConsommableClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     notification<T extends Consommable$notificationArgs<ExtArgs> = {}>(args?: Subset<T, Consommable$notificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    utilisationsConsommable<T extends Consommable$utilisationsConsommableArgs<ExtArgs> = {}>(args?: Subset<T, Consommable$utilisationsConsommableArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6679,6 +8556,11 @@ export namespace Prisma {
     readonly nom: FieldRef<"Consommable", 'String'>
     readonly quantiteDisponible: FieldRef<"Consommable", 'Int'>
     readonly seuilCritique: FieldRef<"Consommable", 'Int'>
+    readonly obtention: FieldRef<"Consommable", 'Obtention'>
+    readonly fournisseur: FieldRef<"Consommable", 'String'>
+    readonly donnateur: FieldRef<"Consommable", 'String'>
+    readonly createdAt: FieldRef<"Consommable", 'DateTime'>
+    readonly updatedAt: FieldRef<"Consommable", 'DateTime'>
   }
     
 
@@ -7091,6 +8973,30 @@ export namespace Prisma {
   }
 
   /**
+   * Consommable.utilisationsConsommable
+   */
+  export type Consommable$utilisationsConsommableArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    where?: UtilisationConsommableWhereInput
+    orderBy?: UtilisationConsommableOrderByWithRelationInput | UtilisationConsommableOrderByWithRelationInput[]
+    cursor?: UtilisationConsommableWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UtilisationConsommableScalarFieldEnum | UtilisationConsommableScalarFieldEnum[]
+  }
+
+  /**
    * Consommable without action
    */
   export type ConsommableDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7106,6 +9012,1157 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ConsommableInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UtilisationConsommable
+   */
+
+  export type AggregateUtilisationConsommable = {
+    _count: UtilisationConsommableCountAggregateOutputType | null
+    _avg: UtilisationConsommableAvgAggregateOutputType | null
+    _sum: UtilisationConsommableSumAggregateOutputType | null
+    _min: UtilisationConsommableMinAggregateOutputType | null
+    _max: UtilisationConsommableMaxAggregateOutputType | null
+  }
+
+  export type UtilisationConsommableAvgAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    consommableId: number | null
+    quantiteUtilise: number | null
+  }
+
+  export type UtilisationConsommableSumAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    consommableId: number | null
+    quantiteUtilise: number | null
+  }
+
+  export type UtilisationConsommableMinAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    consommableId: number | null
+    quantiteUtilise: number | null
+    dateUtilisation: Date | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UtilisationConsommableMaxAggregateOutputType = {
+    id: number | null
+    utilisateurId: number | null
+    consommableId: number | null
+    quantiteUtilise: number | null
+    dateUtilisation: Date | null
+    description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UtilisationConsommableCountAggregateOutputType = {
+    id: number
+    utilisateurId: number
+    consommableId: number
+    quantiteUtilise: number
+    dateUtilisation: number
+    description: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UtilisationConsommableAvgAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    consommableId?: true
+    quantiteUtilise?: true
+  }
+
+  export type UtilisationConsommableSumAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    consommableId?: true
+    quantiteUtilise?: true
+  }
+
+  export type UtilisationConsommableMinAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    consommableId?: true
+    quantiteUtilise?: true
+    dateUtilisation?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UtilisationConsommableMaxAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    consommableId?: true
+    quantiteUtilise?: true
+    dateUtilisation?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UtilisationConsommableCountAggregateInputType = {
+    id?: true
+    utilisateurId?: true
+    consommableId?: true
+    quantiteUtilise?: true
+    dateUtilisation?: true
+    description?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UtilisationConsommableAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UtilisationConsommable to aggregate.
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UtilisationConsommables to fetch.
+     */
+    orderBy?: UtilisationConsommableOrderByWithRelationInput | UtilisationConsommableOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UtilisationConsommableWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UtilisationConsommables from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UtilisationConsommables.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UtilisationConsommables
+    **/
+    _count?: true | UtilisationConsommableCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UtilisationConsommableAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UtilisationConsommableSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UtilisationConsommableMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UtilisationConsommableMaxAggregateInputType
+  }
+
+  export type GetUtilisationConsommableAggregateType<T extends UtilisationConsommableAggregateArgs> = {
+        [P in keyof T & keyof AggregateUtilisationConsommable]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUtilisationConsommable[P]>
+      : GetScalarType<T[P], AggregateUtilisationConsommable[P]>
+  }
+
+
+
+
+  export type UtilisationConsommableGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UtilisationConsommableWhereInput
+    orderBy?: UtilisationConsommableOrderByWithAggregationInput | UtilisationConsommableOrderByWithAggregationInput[]
+    by: UtilisationConsommableScalarFieldEnum[] | UtilisationConsommableScalarFieldEnum
+    having?: UtilisationConsommableScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UtilisationConsommableCountAggregateInputType | true
+    _avg?: UtilisationConsommableAvgAggregateInputType
+    _sum?: UtilisationConsommableSumAggregateInputType
+    _min?: UtilisationConsommableMinAggregateInputType
+    _max?: UtilisationConsommableMaxAggregateInputType
+  }
+
+  export type UtilisationConsommableGroupByOutputType = {
+    id: number
+    utilisateurId: number
+    consommableId: number
+    quantiteUtilise: number
+    dateUtilisation: Date
+    description: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: UtilisationConsommableCountAggregateOutputType | null
+    _avg: UtilisationConsommableAvgAggregateOutputType | null
+    _sum: UtilisationConsommableSumAggregateOutputType | null
+    _min: UtilisationConsommableMinAggregateOutputType | null
+    _max: UtilisationConsommableMaxAggregateOutputType | null
+  }
+
+  type GetUtilisationConsommableGroupByPayload<T extends UtilisationConsommableGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UtilisationConsommableGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UtilisationConsommableGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UtilisationConsommableGroupByOutputType[P]>
+            : GetScalarType<T[P], UtilisationConsommableGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UtilisationConsommableSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    utilisateurId?: boolean
+    consommableId?: boolean
+    quantiteUtilise?: boolean
+    dateUtilisation?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["utilisationConsommable"]>
+
+  export type UtilisationConsommableSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    utilisateurId?: boolean
+    consommableId?: boolean
+    quantiteUtilise?: boolean
+    dateUtilisation?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["utilisationConsommable"]>
+
+  export type UtilisationConsommableSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    utilisateurId?: boolean
+    consommableId?: boolean
+    quantiteUtilise?: boolean
+    dateUtilisation?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["utilisationConsommable"]>
+
+  export type UtilisationConsommableSelectScalar = {
+    id?: boolean
+    utilisateurId?: boolean
+    consommableId?: boolean
+    quantiteUtilise?: boolean
+    dateUtilisation?: boolean
+    description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UtilisationConsommableOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "consommableId" | "quantiteUtilise" | "dateUtilisation" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["utilisationConsommable"]>
+  export type UtilisationConsommableInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+  }
+  export type UtilisationConsommableIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+  }
+  export type UtilisationConsommableIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    consommable?: boolean | ConsommableDefaultArgs<ExtArgs>
+  }
+
+  export type $UtilisationConsommablePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UtilisationConsommable"
+    objects: {
+      utilisateur: Prisma.$UtilisateurPayload<ExtArgs>
+      consommable: Prisma.$ConsommablePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      utilisateurId: number
+      consommableId: number
+      quantiteUtilise: number
+      dateUtilisation: Date
+      description: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["utilisationConsommable"]>
+    composites: {}
+  }
+
+  type UtilisationConsommableGetPayload<S extends boolean | null | undefined | UtilisationConsommableDefaultArgs> = $Result.GetResult<Prisma.$UtilisationConsommablePayload, S>
+
+  type UtilisationConsommableCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UtilisationConsommableFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UtilisationConsommableCountAggregateInputType | true
+    }
+
+  export interface UtilisationConsommableDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UtilisationConsommable'], meta: { name: 'UtilisationConsommable' } }
+    /**
+     * Find zero or one UtilisationConsommable that matches the filter.
+     * @param {UtilisationConsommableFindUniqueArgs} args - Arguments to find a UtilisationConsommable
+     * @example
+     * // Get one UtilisationConsommable
+     * const utilisationConsommable = await prisma.utilisationConsommable.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UtilisationConsommableFindUniqueArgs>(args: SelectSubset<T, UtilisationConsommableFindUniqueArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UtilisationConsommable that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UtilisationConsommableFindUniqueOrThrowArgs} args - Arguments to find a UtilisationConsommable
+     * @example
+     * // Get one UtilisationConsommable
+     * const utilisationConsommable = await prisma.utilisationConsommable.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UtilisationConsommableFindUniqueOrThrowArgs>(args: SelectSubset<T, UtilisationConsommableFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UtilisationConsommable that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableFindFirstArgs} args - Arguments to find a UtilisationConsommable
+     * @example
+     * // Get one UtilisationConsommable
+     * const utilisationConsommable = await prisma.utilisationConsommable.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UtilisationConsommableFindFirstArgs>(args?: SelectSubset<T, UtilisationConsommableFindFirstArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UtilisationConsommable that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableFindFirstOrThrowArgs} args - Arguments to find a UtilisationConsommable
+     * @example
+     * // Get one UtilisationConsommable
+     * const utilisationConsommable = await prisma.utilisationConsommable.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UtilisationConsommableFindFirstOrThrowArgs>(args?: SelectSubset<T, UtilisationConsommableFindFirstOrThrowArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UtilisationConsommables that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UtilisationConsommables
+     * const utilisationConsommables = await prisma.utilisationConsommable.findMany()
+     * 
+     * // Get first 10 UtilisationConsommables
+     * const utilisationConsommables = await prisma.utilisationConsommable.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const utilisationConsommableWithIdOnly = await prisma.utilisationConsommable.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UtilisationConsommableFindManyArgs>(args?: SelectSubset<T, UtilisationConsommableFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UtilisationConsommable.
+     * @param {UtilisationConsommableCreateArgs} args - Arguments to create a UtilisationConsommable.
+     * @example
+     * // Create one UtilisationConsommable
+     * const UtilisationConsommable = await prisma.utilisationConsommable.create({
+     *   data: {
+     *     // ... data to create a UtilisationConsommable
+     *   }
+     * })
+     * 
+     */
+    create<T extends UtilisationConsommableCreateArgs>(args: SelectSubset<T, UtilisationConsommableCreateArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UtilisationConsommables.
+     * @param {UtilisationConsommableCreateManyArgs} args - Arguments to create many UtilisationConsommables.
+     * @example
+     * // Create many UtilisationConsommables
+     * const utilisationConsommable = await prisma.utilisationConsommable.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UtilisationConsommableCreateManyArgs>(args?: SelectSubset<T, UtilisationConsommableCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UtilisationConsommables and returns the data saved in the database.
+     * @param {UtilisationConsommableCreateManyAndReturnArgs} args - Arguments to create many UtilisationConsommables.
+     * @example
+     * // Create many UtilisationConsommables
+     * const utilisationConsommable = await prisma.utilisationConsommable.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UtilisationConsommables and only return the `id`
+     * const utilisationConsommableWithIdOnly = await prisma.utilisationConsommable.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UtilisationConsommableCreateManyAndReturnArgs>(args?: SelectSubset<T, UtilisationConsommableCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UtilisationConsommable.
+     * @param {UtilisationConsommableDeleteArgs} args - Arguments to delete one UtilisationConsommable.
+     * @example
+     * // Delete one UtilisationConsommable
+     * const UtilisationConsommable = await prisma.utilisationConsommable.delete({
+     *   where: {
+     *     // ... filter to delete one UtilisationConsommable
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UtilisationConsommableDeleteArgs>(args: SelectSubset<T, UtilisationConsommableDeleteArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UtilisationConsommable.
+     * @param {UtilisationConsommableUpdateArgs} args - Arguments to update one UtilisationConsommable.
+     * @example
+     * // Update one UtilisationConsommable
+     * const utilisationConsommable = await prisma.utilisationConsommable.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UtilisationConsommableUpdateArgs>(args: SelectSubset<T, UtilisationConsommableUpdateArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UtilisationConsommables.
+     * @param {UtilisationConsommableDeleteManyArgs} args - Arguments to filter UtilisationConsommables to delete.
+     * @example
+     * // Delete a few UtilisationConsommables
+     * const { count } = await prisma.utilisationConsommable.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UtilisationConsommableDeleteManyArgs>(args?: SelectSubset<T, UtilisationConsommableDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UtilisationConsommables.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UtilisationConsommables
+     * const utilisationConsommable = await prisma.utilisationConsommable.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UtilisationConsommableUpdateManyArgs>(args: SelectSubset<T, UtilisationConsommableUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UtilisationConsommables and returns the data updated in the database.
+     * @param {UtilisationConsommableUpdateManyAndReturnArgs} args - Arguments to update many UtilisationConsommables.
+     * @example
+     * // Update many UtilisationConsommables
+     * const utilisationConsommable = await prisma.utilisationConsommable.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UtilisationConsommables and only return the `id`
+     * const utilisationConsommableWithIdOnly = await prisma.utilisationConsommable.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UtilisationConsommableUpdateManyAndReturnArgs>(args: SelectSubset<T, UtilisationConsommableUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UtilisationConsommable.
+     * @param {UtilisationConsommableUpsertArgs} args - Arguments to update or create a UtilisationConsommable.
+     * @example
+     * // Update or create a UtilisationConsommable
+     * const utilisationConsommable = await prisma.utilisationConsommable.upsert({
+     *   create: {
+     *     // ... data to create a UtilisationConsommable
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UtilisationConsommable we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UtilisationConsommableUpsertArgs>(args: SelectSubset<T, UtilisationConsommableUpsertArgs<ExtArgs>>): Prisma__UtilisationConsommableClient<$Result.GetResult<Prisma.$UtilisationConsommablePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UtilisationConsommables.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableCountArgs} args - Arguments to filter UtilisationConsommables to count.
+     * @example
+     * // Count the number of UtilisationConsommables
+     * const count = await prisma.utilisationConsommable.count({
+     *   where: {
+     *     // ... the filter for the UtilisationConsommables we want to count
+     *   }
+     * })
+    **/
+    count<T extends UtilisationConsommableCountArgs>(
+      args?: Subset<T, UtilisationConsommableCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UtilisationConsommableCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UtilisationConsommable.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UtilisationConsommableAggregateArgs>(args: Subset<T, UtilisationConsommableAggregateArgs>): Prisma.PrismaPromise<GetUtilisationConsommableAggregateType<T>>
+
+    /**
+     * Group by UtilisationConsommable.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UtilisationConsommableGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UtilisationConsommableGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UtilisationConsommableGroupByArgs['orderBy'] }
+        : { orderBy?: UtilisationConsommableGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UtilisationConsommableGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUtilisationConsommableGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UtilisationConsommable model
+   */
+  readonly fields: UtilisationConsommableFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UtilisationConsommable.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UtilisationConsommableClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    utilisateur<T extends UtilisateurDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UtilisateurDefaultArgs<ExtArgs>>): Prisma__UtilisateurClient<$Result.GetResult<Prisma.$UtilisateurPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    consommable<T extends ConsommableDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ConsommableDefaultArgs<ExtArgs>>): Prisma__ConsommableClient<$Result.GetResult<Prisma.$ConsommablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UtilisationConsommable model
+   */
+  interface UtilisationConsommableFieldRefs {
+    readonly id: FieldRef<"UtilisationConsommable", 'Int'>
+    readonly utilisateurId: FieldRef<"UtilisationConsommable", 'Int'>
+    readonly consommableId: FieldRef<"UtilisationConsommable", 'Int'>
+    readonly quantiteUtilise: FieldRef<"UtilisationConsommable", 'Int'>
+    readonly dateUtilisation: FieldRef<"UtilisationConsommable", 'DateTime'>
+    readonly description: FieldRef<"UtilisationConsommable", 'String'>
+    readonly createdAt: FieldRef<"UtilisationConsommable", 'DateTime'>
+    readonly updatedAt: FieldRef<"UtilisationConsommable", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UtilisationConsommable findUnique
+   */
+  export type UtilisationConsommableFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * Filter, which UtilisationConsommable to fetch.
+     */
+    where: UtilisationConsommableWhereUniqueInput
+  }
+
+  /**
+   * UtilisationConsommable findUniqueOrThrow
+   */
+  export type UtilisationConsommableFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * Filter, which UtilisationConsommable to fetch.
+     */
+    where: UtilisationConsommableWhereUniqueInput
+  }
+
+  /**
+   * UtilisationConsommable findFirst
+   */
+  export type UtilisationConsommableFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * Filter, which UtilisationConsommable to fetch.
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UtilisationConsommables to fetch.
+     */
+    orderBy?: UtilisationConsommableOrderByWithRelationInput | UtilisationConsommableOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UtilisationConsommables.
+     */
+    cursor?: UtilisationConsommableWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UtilisationConsommables from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UtilisationConsommables.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UtilisationConsommables.
+     */
+    distinct?: UtilisationConsommableScalarFieldEnum | UtilisationConsommableScalarFieldEnum[]
+  }
+
+  /**
+   * UtilisationConsommable findFirstOrThrow
+   */
+  export type UtilisationConsommableFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * Filter, which UtilisationConsommable to fetch.
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UtilisationConsommables to fetch.
+     */
+    orderBy?: UtilisationConsommableOrderByWithRelationInput | UtilisationConsommableOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UtilisationConsommables.
+     */
+    cursor?: UtilisationConsommableWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UtilisationConsommables from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UtilisationConsommables.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UtilisationConsommables.
+     */
+    distinct?: UtilisationConsommableScalarFieldEnum | UtilisationConsommableScalarFieldEnum[]
+  }
+
+  /**
+   * UtilisationConsommable findMany
+   */
+  export type UtilisationConsommableFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * Filter, which UtilisationConsommables to fetch.
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UtilisationConsommables to fetch.
+     */
+    orderBy?: UtilisationConsommableOrderByWithRelationInput | UtilisationConsommableOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UtilisationConsommables.
+     */
+    cursor?: UtilisationConsommableWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UtilisationConsommables from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UtilisationConsommables.
+     */
+    skip?: number
+    distinct?: UtilisationConsommableScalarFieldEnum | UtilisationConsommableScalarFieldEnum[]
+  }
+
+  /**
+   * UtilisationConsommable create
+   */
+  export type UtilisationConsommableCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UtilisationConsommable.
+     */
+    data: XOR<UtilisationConsommableCreateInput, UtilisationConsommableUncheckedCreateInput>
+  }
+
+  /**
+   * UtilisationConsommable createMany
+   */
+  export type UtilisationConsommableCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UtilisationConsommables.
+     */
+    data: UtilisationConsommableCreateManyInput | UtilisationConsommableCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UtilisationConsommable createManyAndReturn
+   */
+  export type UtilisationConsommableCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * The data used to create many UtilisationConsommables.
+     */
+    data: UtilisationConsommableCreateManyInput | UtilisationConsommableCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UtilisationConsommable update
+   */
+  export type UtilisationConsommableUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UtilisationConsommable.
+     */
+    data: XOR<UtilisationConsommableUpdateInput, UtilisationConsommableUncheckedUpdateInput>
+    /**
+     * Choose, which UtilisationConsommable to update.
+     */
+    where: UtilisationConsommableWhereUniqueInput
+  }
+
+  /**
+   * UtilisationConsommable updateMany
+   */
+  export type UtilisationConsommableUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UtilisationConsommables.
+     */
+    data: XOR<UtilisationConsommableUpdateManyMutationInput, UtilisationConsommableUncheckedUpdateManyInput>
+    /**
+     * Filter which UtilisationConsommables to update
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * Limit how many UtilisationConsommables to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UtilisationConsommable updateManyAndReturn
+   */
+  export type UtilisationConsommableUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * The data used to update UtilisationConsommables.
+     */
+    data: XOR<UtilisationConsommableUpdateManyMutationInput, UtilisationConsommableUncheckedUpdateManyInput>
+    /**
+     * Filter which UtilisationConsommables to update
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * Limit how many UtilisationConsommables to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UtilisationConsommable upsert
+   */
+  export type UtilisationConsommableUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UtilisationConsommable to update in case it exists.
+     */
+    where: UtilisationConsommableWhereUniqueInput
+    /**
+     * In case the UtilisationConsommable found by the `where` argument doesn't exist, create a new UtilisationConsommable with this data.
+     */
+    create: XOR<UtilisationConsommableCreateInput, UtilisationConsommableUncheckedCreateInput>
+    /**
+     * In case the UtilisationConsommable was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UtilisationConsommableUpdateInput, UtilisationConsommableUncheckedUpdateInput>
+  }
+
+  /**
+   * UtilisationConsommable delete
+   */
+  export type UtilisationConsommableDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
+    /**
+     * Filter which UtilisationConsommable to delete.
+     */
+    where: UtilisationConsommableWhereUniqueInput
+  }
+
+  /**
+   * UtilisationConsommable deleteMany
+   */
+  export type UtilisationConsommableDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UtilisationConsommables to delete
+     */
+    where?: UtilisationConsommableWhereInput
+    /**
+     * Limit how many UtilisationConsommables to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UtilisationConsommable without action
+   */
+  export type UtilisationConsommableDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UtilisationConsommable
+     */
+    select?: UtilisationConsommableSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UtilisationConsommable
+     */
+    omit?: UtilisationConsommableOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UtilisationConsommableInclude<ExtArgs> | null
   }
 
 
@@ -8144,9 +11201,10 @@ export namespace Prisma {
     nom: 'nom',
     prenom: 'prenom',
     email: 'email',
+    motdepasse: 'motdepasse',
+    role: 'role',
     createdAt: 'createdAt',
-    updateAt: 'updateAt',
-    role: 'role'
+    updateAt: 'updateAt'
   };
 
   export type UtilisateurScalarFieldEnum = (typeof UtilisateurScalarFieldEnum)[keyof typeof UtilisateurScalarFieldEnum]
@@ -8154,22 +11212,49 @@ export namespace Prisma {
 
   export const EmpruntScalarFieldEnum: {
     id: 'id',
+    utilisateurId: 'utilisateurId',
     dateEmprunt: 'dateEmprunt',
     dateRetourPrevu: 'dateRetourPrevu',
     dateRetourEffective: 'dateRetourEffective',
-    utilisateurId: 'utilisateurId',
-    statut: 'statut'
+    usage: 'usage',
+    statut: 'statut',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type EmpruntScalarFieldEnum = (typeof EmpruntScalarFieldEnum)[keyof typeof EmpruntScalarFieldEnum]
 
 
+  export const DemandeEmpruntScalarFieldEnum: {
+    id: 'id',
+    utilisateurId: 'utilisateurId',
+    equipementId: 'equipementId',
+    dateDemande: 'dateDemande',
+    dateRetourPrevu: 'dateRetourPrevu',
+    usage: 'usage',
+    statut: 'statut',
+    type: 'type',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DemandeEmpruntScalarFieldEnum = (typeof DemandeEmpruntScalarFieldEnum)[keyof typeof DemandeEmpruntScalarFieldEnum]
+
+
   export const EquipementScalarFieldEnum: {
     id: 'id',
+    empruntId: 'empruntId',
     nom: 'nom',
-    type: 'type',
-    etat: 'etat',
-    empruntId: 'empruntId'
+    numeroDeSerie: 'numeroDeSerie',
+    marque: 'marque',
+    disponibilite: 'disponibilite',
+    etatMateriel: 'etatMateriel',
+    obtention: 'obtention',
+    prix: 'prix',
+    fournisseur: 'fournisseur',
+    donateur: 'donateur',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type EquipementScalarFieldEnum = (typeof EquipementScalarFieldEnum)[keyof typeof EquipementScalarFieldEnum]
@@ -8177,11 +11262,14 @@ export namespace Prisma {
 
   export const NotificationScalarFieldEnum: {
     id: 'id',
+    empruntId: 'empruntId',
+    consommableId: 'consommableId',
     message: 'message',
     DateEnvoi: 'DateEnvoi',
     type: 'type',
-    empruntId: 'empruntId',
-    consommableId: 'consommableId'
+    vu: 'vu',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
@@ -8191,10 +11279,29 @@ export namespace Prisma {
     id: 'id',
     nom: 'nom',
     quantiteDisponible: 'quantiteDisponible',
-    seuilCritique: 'seuilCritique'
+    seuilCritique: 'seuilCritique',
+    obtention: 'obtention',
+    fournisseur: 'fournisseur',
+    donnateur: 'donnateur',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ConsommableScalarFieldEnum = (typeof ConsommableScalarFieldEnum)[keyof typeof ConsommableScalarFieldEnum]
+
+
+  export const UtilisationConsommableScalarFieldEnum: {
+    id: 'id',
+    utilisateurId: 'utilisateurId',
+    consommableId: 'consommableId',
+    quantiteUtilise: 'quantiteUtilise',
+    dateUtilisation: 'dateUtilisation',
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UtilisationConsommableScalarFieldEnum = (typeof UtilisationConsommableScalarFieldEnum)[keyof typeof UtilisationConsommableScalarFieldEnum]
 
 
   export const RapportScalarFieldEnum: {
@@ -8265,20 +11372,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime[]'
-   */
-  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
    * Reference to a field of type 'RoleUtilisateur'
    */
   export type EnumRoleUtilisateurFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleUtilisateur'>
@@ -8289,6 +11382,20 @@ export namespace Prisma {
    * Reference to a field of type 'RoleUtilisateur[]'
    */
   export type ListEnumRoleUtilisateurFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RoleUtilisateur[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'DateTime[]'
+   */
+  export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -8307,16 +11414,86 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Etat'
+   * Reference to a field of type 'StatutDemande'
    */
-  export type EnumEtatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Etat'>
+  export type EnumStatutDemandeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDemande'>
     
 
 
   /**
-   * Reference to a field of type 'Etat[]'
+   * Reference to a field of type 'StatutDemande[]'
    */
-  export type ListEnumEtatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Etat[]'>
+  export type ListEnumStatutDemandeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDemande[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TypeDemande'
+   */
+  export type EnumTypeDemandeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDemande'>
+    
+
+
+  /**
+   * Reference to a field of type 'TypeDemande[]'
+   */
+  export type ListEnumTypeDemandeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDemande[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Disponibilite'
+   */
+  export type EnumDisponibiliteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Disponibilite'>
+    
+
+
+  /**
+   * Reference to a field of type 'Disponibilite[]'
+   */
+  export type ListEnumDisponibiliteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Disponibilite[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'EtatMateriel'
+   */
+  export type EnumEtatMaterielFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EtatMateriel'>
+    
+
+
+  /**
+   * Reference to a field of type 'EtatMateriel[]'
+   */
+  export type ListEnumEtatMaterielFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EtatMateriel[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Obtention'
+   */
+  export type EnumObtentionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Obtention'>
+    
+
+
+  /**
+   * Reference to a field of type 'Obtention[]'
+   */
+  export type ListEnumObtentionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Obtention[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -8331,6 +11508,13 @@ export namespace Prisma {
    * Reference to a field of type 'TypeNotification[]'
    */
   export type ListEnumTypeNotificationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeNotification[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -8360,20 +11544,6 @@ export namespace Prisma {
    */
   export type ListEnumPeriodeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Periode[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
   /**
    * Deep Input Types
    */
@@ -8387,10 +11557,13 @@ export namespace Prisma {
     nom?: StringFilter<"Utilisateur"> | string
     prenom?: StringFilter<"Utilisateur"> | string
     email?: StringFilter<"Utilisateur"> | string
+    motdepasse?: StringFilter<"Utilisateur"> | string
+    role?: EnumRoleUtilisateurFilter<"Utilisateur"> | $Enums.RoleUtilisateur
     createdAt?: DateTimeFilter<"Utilisateur"> | Date | string
     updateAt?: DateTimeFilter<"Utilisateur"> | Date | string
-    role?: EnumRoleUtilisateurFilter<"Utilisateur"> | $Enums.RoleUtilisateur
     emprunts?: EmpruntListRelationFilter
+    demandeEmprunt?: DemandeEmpruntListRelationFilter
+    utilisationsConsommable?: UtilisationConsommableListRelationFilter
   }
 
   export type UtilisateurOrderByWithRelationInput = {
@@ -8398,10 +11571,13 @@ export namespace Prisma {
     nom?: SortOrder
     prenom?: SortOrder
     email?: SortOrder
+    motdepasse?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updateAt?: SortOrder
-    role?: SortOrder
     emprunts?: EmpruntOrderByRelationAggregateInput
+    demandeEmprunt?: DemandeEmpruntOrderByRelationAggregateInput
+    utilisationsConsommable?: UtilisationConsommableOrderByRelationAggregateInput
   }
 
   export type UtilisateurWhereUniqueInput = Prisma.AtLeast<{
@@ -8412,10 +11588,13 @@ export namespace Prisma {
     NOT?: UtilisateurWhereInput | UtilisateurWhereInput[]
     nom?: StringFilter<"Utilisateur"> | string
     prenom?: StringFilter<"Utilisateur"> | string
+    motdepasse?: StringFilter<"Utilisateur"> | string
+    role?: EnumRoleUtilisateurFilter<"Utilisateur"> | $Enums.RoleUtilisateur
     createdAt?: DateTimeFilter<"Utilisateur"> | Date | string
     updateAt?: DateTimeFilter<"Utilisateur"> | Date | string
-    role?: EnumRoleUtilisateurFilter<"Utilisateur"> | $Enums.RoleUtilisateur
     emprunts?: EmpruntListRelationFilter
+    demandeEmprunt?: DemandeEmpruntListRelationFilter
+    utilisationsConsommable?: UtilisationConsommableListRelationFilter
   }, "id" | "email">
 
   export type UtilisateurOrderByWithAggregationInput = {
@@ -8423,9 +11602,10 @@ export namespace Prisma {
     nom?: SortOrder
     prenom?: SortOrder
     email?: SortOrder
+    motdepasse?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updateAt?: SortOrder
-    role?: SortOrder
     _count?: UtilisateurCountOrderByAggregateInput
     _avg?: UtilisateurAvgOrderByAggregateInput
     _max?: UtilisateurMaxOrderByAggregateInput
@@ -8441,9 +11621,10 @@ export namespace Prisma {
     nom?: StringWithAggregatesFilter<"Utilisateur"> | string
     prenom?: StringWithAggregatesFilter<"Utilisateur"> | string
     email?: StringWithAggregatesFilter<"Utilisateur"> | string
+    motdepasse?: StringWithAggregatesFilter<"Utilisateur"> | string
+    role?: EnumRoleUtilisateurWithAggregatesFilter<"Utilisateur"> | $Enums.RoleUtilisateur
     createdAt?: DateTimeWithAggregatesFilter<"Utilisateur"> | Date | string
     updateAt?: DateTimeWithAggregatesFilter<"Utilisateur"> | Date | string
-    role?: EnumRoleUtilisateurWithAggregatesFilter<"Utilisateur"> | $Enums.RoleUtilisateur
   }
 
   export type EmpruntWhereInput = {
@@ -8451,11 +11632,14 @@ export namespace Prisma {
     OR?: EmpruntWhereInput[]
     NOT?: EmpruntWhereInput | EmpruntWhereInput[]
     id?: IntFilter<"Emprunt"> | number
+    utilisateurId?: IntFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableFilter<"Emprunt"> | Date | string | null
-    utilisateurId?: IntFilter<"Emprunt"> | number
+    usage?: StringFilter<"Emprunt"> | string
     statut?: EnumStatutFilter<"Emprunt"> | $Enums.Statut
+    createdAt?: DateTimeFilter<"Emprunt"> | Date | string
+    updatedAt?: DateTimeFilter<"Emprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
     equipement?: EquipementListRelationFilter
     notification?: NotificationListRelationFilter
@@ -8463,11 +11647,14 @@ export namespace Prisma {
 
   export type EmpruntOrderByWithRelationInput = {
     id?: SortOrder
+    utilisateurId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrderInput | SortOrder
-    utilisateurId?: SortOrder
+    usage?: SortOrder
     statut?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     utilisateur?: UtilisateurOrderByWithRelationInput
     equipement?: EquipementOrderByRelationAggregateInput
     notification?: NotificationOrderByRelationAggregateInput
@@ -8475,26 +11662,32 @@ export namespace Prisma {
 
   export type EmpruntWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    utilisateurId?: number
     AND?: EmpruntWhereInput | EmpruntWhereInput[]
     OR?: EmpruntWhereInput[]
     NOT?: EmpruntWhereInput | EmpruntWhereInput[]
+    utilisateurId?: IntFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableFilter<"Emprunt"> | Date | string | null
+    usage?: StringFilter<"Emprunt"> | string
     statut?: EnumStatutFilter<"Emprunt"> | $Enums.Statut
+    createdAt?: DateTimeFilter<"Emprunt"> | Date | string
+    updatedAt?: DateTimeFilter<"Emprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
     equipement?: EquipementListRelationFilter
     notification?: NotificationListRelationFilter
-  }, "id" | "utilisateurId">
+  }, "id">
 
   export type EmpruntOrderByWithAggregationInput = {
     id?: SortOrder
+    utilisateurId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrderInput | SortOrder
-    utilisateurId?: SortOrder
+    usage?: SortOrder
     statut?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: EmpruntCountOrderByAggregateInput
     _avg?: EmpruntAvgOrderByAggregateInput
     _max?: EmpruntMaxOrderByAggregateInput
@@ -8507,11 +11700,99 @@ export namespace Prisma {
     OR?: EmpruntScalarWhereWithAggregatesInput[]
     NOT?: EmpruntScalarWhereWithAggregatesInput | EmpruntScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Emprunt"> | number
+    utilisateurId?: IntWithAggregatesFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeWithAggregatesFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeWithAggregatesFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableWithAggregatesFilter<"Emprunt"> | Date | string | null
-    utilisateurId?: IntWithAggregatesFilter<"Emprunt"> | number
+    usage?: StringWithAggregatesFilter<"Emprunt"> | string
     statut?: EnumStatutWithAggregatesFilter<"Emprunt"> | $Enums.Statut
+    createdAt?: DateTimeWithAggregatesFilter<"Emprunt"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Emprunt"> | Date | string
+  }
+
+  export type DemandeEmpruntWhereInput = {
+    AND?: DemandeEmpruntWhereInput | DemandeEmpruntWhereInput[]
+    OR?: DemandeEmpruntWhereInput[]
+    NOT?: DemandeEmpruntWhereInput | DemandeEmpruntWhereInput[]
+    id?: IntFilter<"DemandeEmprunt"> | number
+    utilisateurId?: IntFilter<"DemandeEmprunt"> | number
+    equipementId?: IntFilter<"DemandeEmprunt"> | number
+    dateDemande?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    dateRetourPrevu?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    usage?: StringFilter<"DemandeEmprunt"> | string
+    statut?: EnumStatutDemandeFilter<"DemandeEmprunt"> | $Enums.StatutDemande
+    type?: EnumTypeDemandeFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    createdAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
+    equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
+  }
+
+  export type DemandeEmpruntOrderByWithRelationInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+    dateDemande?: SortOrder
+    dateRetourPrevu?: SortOrder
+    usage?: SortOrder
+    statut?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    utilisateur?: UtilisateurOrderByWithRelationInput
+    equipement?: EquipementOrderByWithRelationInput
+  }
+
+  export type DemandeEmpruntWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: DemandeEmpruntWhereInput | DemandeEmpruntWhereInput[]
+    OR?: DemandeEmpruntWhereInput[]
+    NOT?: DemandeEmpruntWhereInput | DemandeEmpruntWhereInput[]
+    utilisateurId?: IntFilter<"DemandeEmprunt"> | number
+    equipementId?: IntFilter<"DemandeEmprunt"> | number
+    dateDemande?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    dateRetourPrevu?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    usage?: StringFilter<"DemandeEmprunt"> | string
+    statut?: EnumStatutDemandeFilter<"DemandeEmprunt"> | $Enums.StatutDemande
+    type?: EnumTypeDemandeFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    createdAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
+    equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
+  }, "id">
+
+  export type DemandeEmpruntOrderByWithAggregationInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+    dateDemande?: SortOrder
+    dateRetourPrevu?: SortOrder
+    usage?: SortOrder
+    statut?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DemandeEmpruntCountOrderByAggregateInput
+    _avg?: DemandeEmpruntAvgOrderByAggregateInput
+    _max?: DemandeEmpruntMaxOrderByAggregateInput
+    _min?: DemandeEmpruntMinOrderByAggregateInput
+    _sum?: DemandeEmpruntSumOrderByAggregateInput
+  }
+
+  export type DemandeEmpruntScalarWhereWithAggregatesInput = {
+    AND?: DemandeEmpruntScalarWhereWithAggregatesInput | DemandeEmpruntScalarWhereWithAggregatesInput[]
+    OR?: DemandeEmpruntScalarWhereWithAggregatesInput[]
+    NOT?: DemandeEmpruntScalarWhereWithAggregatesInput | DemandeEmpruntScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"DemandeEmprunt"> | number
+    utilisateurId?: IntWithAggregatesFilter<"DemandeEmprunt"> | number
+    equipementId?: IntWithAggregatesFilter<"DemandeEmprunt"> | number
+    dateDemande?: DateTimeWithAggregatesFilter<"DemandeEmprunt"> | Date | string
+    dateRetourPrevu?: DateTimeWithAggregatesFilter<"DemandeEmprunt"> | Date | string
+    usage?: StringWithAggregatesFilter<"DemandeEmprunt"> | string
+    statut?: EnumStatutDemandeWithAggregatesFilter<"DemandeEmprunt"> | $Enums.StatutDemande
+    type?: EnumTypeDemandeWithAggregatesFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    createdAt?: DateTimeWithAggregatesFilter<"DemandeEmprunt"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DemandeEmprunt"> | Date | string
   }
 
   export type EquipementWhereInput = {
@@ -8519,40 +11800,75 @@ export namespace Prisma {
     OR?: EquipementWhereInput[]
     NOT?: EquipementWhereInput | EquipementWhereInput[]
     id?: IntFilter<"Equipement"> | number
+    empruntId?: IntNullableFilter<"Equipement"> | number | null
     nom?: StringFilter<"Equipement"> | string
-    type?: StringFilter<"Equipement"> | string
-    etat?: EnumEtatFilter<"Equipement"> | $Enums.Etat
-    empruntId?: IntFilter<"Equipement"> | number
-    emprunt?: XOR<EmpruntScalarRelationFilter, EmpruntWhereInput>
+    numeroDeSerie?: StringFilter<"Equipement"> | string
+    marque?: StringFilter<"Equipement"> | string
+    disponibilite?: EnumDisponibiliteFilter<"Equipement"> | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFilter<"Equipement"> | $Enums.EtatMateriel
+    obtention?: EnumObtentionFilter<"Equipement"> | $Enums.Obtention
+    prix?: FloatFilter<"Equipement"> | number
+    fournisseur?: StringNullableFilter<"Equipement"> | string | null
+    donateur?: StringNullableFilter<"Equipement"> | string | null
+    createdAt?: DateTimeFilter<"Equipement"> | Date | string
+    updatedAt?: DateTimeFilter<"Equipement"> | Date | string
+    emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
+    demandeEmprunt?: DemandeEmpruntListRelationFilter
   }
 
   export type EquipementOrderByWithRelationInput = {
     id?: SortOrder
+    empruntId?: SortOrderInput | SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    etat?: SortOrder
-    empruntId?: SortOrder
+    numeroDeSerie?: SortOrder
+    marque?: SortOrder
+    disponibilite?: SortOrder
+    etatMateriel?: SortOrder
+    obtention?: SortOrder
+    prix?: SortOrder
+    fournisseur?: SortOrderInput | SortOrder
+    donateur?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     emprunt?: EmpruntOrderByWithRelationInput
+    demandeEmprunt?: DemandeEmpruntOrderByRelationAggregateInput
   }
 
   export type EquipementWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    empruntId?: number
     AND?: EquipementWhereInput | EquipementWhereInput[]
     OR?: EquipementWhereInput[]
     NOT?: EquipementWhereInput | EquipementWhereInput[]
+    empruntId?: IntNullableFilter<"Equipement"> | number | null
     nom?: StringFilter<"Equipement"> | string
-    type?: StringFilter<"Equipement"> | string
-    etat?: EnumEtatFilter<"Equipement"> | $Enums.Etat
-    emprunt?: XOR<EmpruntScalarRelationFilter, EmpruntWhereInput>
-  }, "id" | "empruntId">
+    numeroDeSerie?: StringFilter<"Equipement"> | string
+    marque?: StringFilter<"Equipement"> | string
+    disponibilite?: EnumDisponibiliteFilter<"Equipement"> | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFilter<"Equipement"> | $Enums.EtatMateriel
+    obtention?: EnumObtentionFilter<"Equipement"> | $Enums.Obtention
+    prix?: FloatFilter<"Equipement"> | number
+    fournisseur?: StringNullableFilter<"Equipement"> | string | null
+    donateur?: StringNullableFilter<"Equipement"> | string | null
+    createdAt?: DateTimeFilter<"Equipement"> | Date | string
+    updatedAt?: DateTimeFilter<"Equipement"> | Date | string
+    emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
+    demandeEmprunt?: DemandeEmpruntListRelationFilter
+  }, "id">
 
   export type EquipementOrderByWithAggregationInput = {
     id?: SortOrder
+    empruntId?: SortOrderInput | SortOrder
     nom?: SortOrder
-    type?: SortOrder
-    etat?: SortOrder
-    empruntId?: SortOrder
+    numeroDeSerie?: SortOrder
+    marque?: SortOrder
+    disponibilite?: SortOrder
+    etatMateriel?: SortOrder
+    obtention?: SortOrder
+    prix?: SortOrder
+    fournisseur?: SortOrderInput | SortOrder
+    donateur?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: EquipementCountOrderByAggregateInput
     _avg?: EquipementAvgOrderByAggregateInput
     _max?: EquipementMaxOrderByAggregateInput
@@ -8565,10 +11881,18 @@ export namespace Prisma {
     OR?: EquipementScalarWhereWithAggregatesInput[]
     NOT?: EquipementScalarWhereWithAggregatesInput | EquipementScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Equipement"> | number
+    empruntId?: IntNullableWithAggregatesFilter<"Equipement"> | number | null
     nom?: StringWithAggregatesFilter<"Equipement"> | string
-    type?: StringWithAggregatesFilter<"Equipement"> | string
-    etat?: EnumEtatWithAggregatesFilter<"Equipement"> | $Enums.Etat
-    empruntId?: IntWithAggregatesFilter<"Equipement"> | number
+    numeroDeSerie?: StringWithAggregatesFilter<"Equipement"> | string
+    marque?: StringWithAggregatesFilter<"Equipement"> | string
+    disponibilite?: EnumDisponibiliteWithAggregatesFilter<"Equipement"> | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielWithAggregatesFilter<"Equipement"> | $Enums.EtatMateriel
+    obtention?: EnumObtentionWithAggregatesFilter<"Equipement"> | $Enums.Obtention
+    prix?: FloatWithAggregatesFilter<"Equipement"> | number
+    fournisseur?: StringNullableWithAggregatesFilter<"Equipement"> | string | null
+    donateur?: StringNullableWithAggregatesFilter<"Equipement"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Equipement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Equipement"> | Date | string
   }
 
   export type NotificationWhereInput = {
@@ -8576,47 +11900,59 @@ export namespace Prisma {
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     id?: IntFilter<"Notification"> | number
+    empruntId?: IntNullableFilter<"Notification"> | number | null
+    consommableId?: IntNullableFilter<"Notification"> | number | null
     message?: StringFilter<"Notification"> | string
     DateEnvoi?: DateTimeFilter<"Notification"> | Date | string
     type?: EnumTypeNotificationFilter<"Notification"> | $Enums.TypeNotification
-    empruntId?: IntFilter<"Notification"> | number
-    consommableId?: IntFilter<"Notification"> | number
-    emprunt?: XOR<EmpruntScalarRelationFilter, EmpruntWhereInput>
-    consommable?: XOR<ConsommableScalarRelationFilter, ConsommableWhereInput>
+    vu?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
+    emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
+    consommable?: XOR<ConsommableNullableScalarRelationFilter, ConsommableWhereInput> | null
   }
 
   export type NotificationOrderByWithRelationInput = {
     id?: SortOrder
+    empruntId?: SortOrderInput | SortOrder
+    consommableId?: SortOrderInput | SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
     type?: SortOrder
-    empruntId?: SortOrder
-    consommableId?: SortOrder
+    vu?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     emprunt?: EmpruntOrderByWithRelationInput
     consommable?: ConsommableOrderByWithRelationInput
   }
 
   export type NotificationWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    empruntId?: number
-    consommableId?: number
     AND?: NotificationWhereInput | NotificationWhereInput[]
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
+    empruntId?: IntNullableFilter<"Notification"> | number | null
+    consommableId?: IntNullableFilter<"Notification"> | number | null
     message?: StringFilter<"Notification"> | string
     DateEnvoi?: DateTimeFilter<"Notification"> | Date | string
     type?: EnumTypeNotificationFilter<"Notification"> | $Enums.TypeNotification
-    emprunt?: XOR<EmpruntScalarRelationFilter, EmpruntWhereInput>
-    consommable?: XOR<ConsommableScalarRelationFilter, ConsommableWhereInput>
-  }, "id" | "empruntId" | "consommableId">
+    vu?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
+    emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
+    consommable?: XOR<ConsommableNullableScalarRelationFilter, ConsommableWhereInput> | null
+  }, "id">
 
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
+    empruntId?: SortOrderInput | SortOrder
+    consommableId?: SortOrderInput | SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
     type?: SortOrder
-    empruntId?: SortOrder
-    consommableId?: SortOrder
+    vu?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: NotificationCountOrderByAggregateInput
     _avg?: NotificationAvgOrderByAggregateInput
     _max?: NotificationMaxOrderByAggregateInput
@@ -8629,11 +11965,14 @@ export namespace Prisma {
     OR?: NotificationScalarWhereWithAggregatesInput[]
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Notification"> | number
+    empruntId?: IntNullableWithAggregatesFilter<"Notification"> | number | null
+    consommableId?: IntNullableWithAggregatesFilter<"Notification"> | number | null
     message?: StringWithAggregatesFilter<"Notification"> | string
     DateEnvoi?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
     type?: EnumTypeNotificationWithAggregatesFilter<"Notification"> | $Enums.TypeNotification
-    empruntId?: IntWithAggregatesFilter<"Notification"> | number
-    consommableId?: IntWithAggregatesFilter<"Notification"> | number
+    vu?: BoolWithAggregatesFilter<"Notification"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
   }
 
   export type ConsommableWhereInput = {
@@ -8644,7 +11983,13 @@ export namespace Prisma {
     nom?: StringFilter<"Consommable"> | string
     quantiteDisponible?: IntFilter<"Consommable"> | number
     seuilCritique?: IntFilter<"Consommable"> | number
+    obtention?: EnumObtentionFilter<"Consommable"> | $Enums.Obtention
+    fournisseur?: StringNullableFilter<"Consommable"> | string | null
+    donnateur?: StringNullableFilter<"Consommable"> | string | null
+    createdAt?: DateTimeFilter<"Consommable"> | Date | string
+    updatedAt?: DateTimeFilter<"Consommable"> | Date | string
     notification?: NotificationListRelationFilter
+    utilisationsConsommable?: UtilisationConsommableListRelationFilter
   }
 
   export type ConsommableOrderByWithRelationInput = {
@@ -8652,7 +11997,13 @@ export namespace Prisma {
     nom?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
+    obtention?: SortOrder
+    fournisseur?: SortOrderInput | SortOrder
+    donnateur?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     notification?: NotificationOrderByRelationAggregateInput
+    utilisationsConsommable?: UtilisationConsommableOrderByRelationAggregateInput
   }
 
   export type ConsommableWhereUniqueInput = Prisma.AtLeast<{
@@ -8663,7 +12014,13 @@ export namespace Prisma {
     nom?: StringFilter<"Consommable"> | string
     quantiteDisponible?: IntFilter<"Consommable"> | number
     seuilCritique?: IntFilter<"Consommable"> | number
+    obtention?: EnumObtentionFilter<"Consommable"> | $Enums.Obtention
+    fournisseur?: StringNullableFilter<"Consommable"> | string | null
+    donnateur?: StringNullableFilter<"Consommable"> | string | null
+    createdAt?: DateTimeFilter<"Consommable"> | Date | string
+    updatedAt?: DateTimeFilter<"Consommable"> | Date | string
     notification?: NotificationListRelationFilter
+    utilisationsConsommable?: UtilisationConsommableListRelationFilter
   }, "id">
 
   export type ConsommableOrderByWithAggregationInput = {
@@ -8671,6 +12028,11 @@ export namespace Prisma {
     nom?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
+    obtention?: SortOrder
+    fournisseur?: SortOrderInput | SortOrder
+    donnateur?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ConsommableCountOrderByAggregateInput
     _avg?: ConsommableAvgOrderByAggregateInput
     _max?: ConsommableMaxOrderByAggregateInput
@@ -8686,6 +12048,86 @@ export namespace Prisma {
     nom?: StringWithAggregatesFilter<"Consommable"> | string
     quantiteDisponible?: IntWithAggregatesFilter<"Consommable"> | number
     seuilCritique?: IntWithAggregatesFilter<"Consommable"> | number
+    obtention?: EnumObtentionWithAggregatesFilter<"Consommable"> | $Enums.Obtention
+    fournisseur?: StringNullableWithAggregatesFilter<"Consommable"> | string | null
+    donnateur?: StringNullableWithAggregatesFilter<"Consommable"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Consommable"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Consommable"> | Date | string
+  }
+
+  export type UtilisationConsommableWhereInput = {
+    AND?: UtilisationConsommableWhereInput | UtilisationConsommableWhereInput[]
+    OR?: UtilisationConsommableWhereInput[]
+    NOT?: UtilisationConsommableWhereInput | UtilisationConsommableWhereInput[]
+    id?: IntFilter<"UtilisationConsommable"> | number
+    utilisateurId?: IntFilter<"UtilisationConsommable"> | number
+    consommableId?: IntFilter<"UtilisationConsommable"> | number
+    quantiteUtilise?: IntFilter<"UtilisationConsommable"> | number
+    dateUtilisation?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    description?: StringNullableFilter<"UtilisationConsommable"> | string | null
+    createdAt?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    updatedAt?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
+    consommable?: XOR<ConsommableScalarRelationFilter, ConsommableWhereInput>
+  }
+
+  export type UtilisationConsommableOrderByWithRelationInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
+    dateUtilisation?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    utilisateur?: UtilisateurOrderByWithRelationInput
+    consommable?: ConsommableOrderByWithRelationInput
+  }
+
+  export type UtilisationConsommableWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: UtilisationConsommableWhereInput | UtilisationConsommableWhereInput[]
+    OR?: UtilisationConsommableWhereInput[]
+    NOT?: UtilisationConsommableWhereInput | UtilisationConsommableWhereInput[]
+    utilisateurId?: IntFilter<"UtilisationConsommable"> | number
+    consommableId?: IntFilter<"UtilisationConsommable"> | number
+    quantiteUtilise?: IntFilter<"UtilisationConsommable"> | number
+    dateUtilisation?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    description?: StringNullableFilter<"UtilisationConsommable"> | string | null
+    createdAt?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    updatedAt?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
+    consommable?: XOR<ConsommableScalarRelationFilter, ConsommableWhereInput>
+  }, "id">
+
+  export type UtilisationConsommableOrderByWithAggregationInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
+    dateUtilisation?: SortOrder
+    description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UtilisationConsommableCountOrderByAggregateInput
+    _avg?: UtilisationConsommableAvgOrderByAggregateInput
+    _max?: UtilisationConsommableMaxOrderByAggregateInput
+    _min?: UtilisationConsommableMinOrderByAggregateInput
+    _sum?: UtilisationConsommableSumOrderByAggregateInput
+  }
+
+  export type UtilisationConsommableScalarWhereWithAggregatesInput = {
+    AND?: UtilisationConsommableScalarWhereWithAggregatesInput | UtilisationConsommableScalarWhereWithAggregatesInput[]
+    OR?: UtilisationConsommableScalarWhereWithAggregatesInput[]
+    NOT?: UtilisationConsommableScalarWhereWithAggregatesInput | UtilisationConsommableScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"UtilisationConsommable"> | number
+    utilisateurId?: IntWithAggregatesFilter<"UtilisationConsommable"> | number
+    consommableId?: IntWithAggregatesFilter<"UtilisationConsommable"> | number
+    quantiteUtilise?: IntWithAggregatesFilter<"UtilisationConsommable"> | number
+    dateUtilisation?: DateTimeWithAggregatesFilter<"UtilisationConsommable"> | Date | string
+    description?: StringNullableWithAggregatesFilter<"UtilisationConsommable"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"UtilisationConsommable"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UtilisationConsommable"> | Date | string
   }
 
   export type RapportWhereInput = {
@@ -8741,10 +12183,13 @@ export namespace Prisma {
     nom: string
     prenom: string
     email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
     createdAt?: Date | string
     updateAt?: Date | string
-    role?: $Enums.RoleUtilisateur
     emprunts?: EmpruntCreateNestedManyWithoutUtilisateurInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutUtilisateurInput
+    utilisationsConsommable?: UtilisationConsommableCreateNestedManyWithoutUtilisateurInput
   }
 
   export type UtilisateurUncheckedCreateInput = {
@@ -8752,20 +12197,26 @@ export namespace Prisma {
     nom: string
     prenom: string
     email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
     createdAt?: Date | string
     updateAt?: Date | string
-    role?: $Enums.RoleUtilisateur
     emprunts?: EmpruntUncheckedCreateNestedManyWithoutUtilisateurInput
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutUtilisateurInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedCreateNestedManyWithoutUtilisateurInput
   }
 
   export type UtilisateurUpdateInput = {
     nom?: StringFieldUpdateOperationsInput | string
     prenom?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     emprunts?: EmpruntUpdateManyWithoutUtilisateurNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutUtilisateurNestedInput
+    utilisationsConsommable?: UtilisationConsommableUpdateManyWithoutUtilisateurNestedInput
   }
 
   export type UtilisateurUncheckedUpdateInput = {
@@ -8773,10 +12224,13 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     prenom?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     emprunts?: EmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurNestedInput
   }
 
   export type UtilisateurCreateManyInput = {
@@ -8784,18 +12238,20 @@ export namespace Prisma {
     nom: string
     prenom: string
     email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
     createdAt?: Date | string
     updateAt?: Date | string
-    role?: $Enums.RoleUtilisateur
   }
 
   export type UtilisateurUpdateManyMutationInput = {
     nom?: StringFieldUpdateOperationsInput | string
     prenom?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
   }
 
   export type UtilisateurUncheckedUpdateManyInput = {
@@ -8803,16 +12259,20 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     prenom?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
   }
 
   export type EmpruntCreateInput = {
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutEmpruntsInput
     equipement?: EquipementCreateNestedManyWithoutEmpruntInput
     notification?: NotificationCreateNestedManyWithoutEmpruntInput
@@ -8820,11 +12280,14 @@ export namespace Prisma {
 
   export type EmpruntUncheckedCreateInput = {
     id?: number
+    utilisateurId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
-    utilisateurId: number
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     equipement?: EquipementUncheckedCreateNestedManyWithoutEmpruntInput
     notification?: NotificationUncheckedCreateNestedManyWithoutEmpruntInput
   }
@@ -8833,7 +12296,10 @@ export namespace Prisma {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutEmpruntsNestedInput
     equipement?: EquipementUpdateManyWithoutEmpruntNestedInput
     notification?: NotificationUpdateManyWithoutEmpruntNestedInput
@@ -8841,155 +12307,340 @@ export namespace Prisma {
 
   export type EmpruntUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    utilisateurId?: IntFieldUpdateOperationsInput | number
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     equipement?: EquipementUncheckedUpdateManyWithoutEmpruntNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntCreateManyInput = {
     id?: number
+    utilisateurId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
-    utilisateurId: number
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EmpruntUpdateManyMutationInput = {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmpruntUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    utilisateurId?: IntFieldUpdateOperationsInput | number
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntCreateInput = {
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
+    equipement: EquipementCreateNestedOneWithoutDemandeEmpruntInput
+  }
+
+  export type DemandeEmpruntUncheckedCreateInput = {
+    id?: number
+    utilisateurId: number
+    equipementId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntUpdateInput = {
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+    equipement?: EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+  }
+
+  export type DemandeEmpruntUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntCreateManyInput = {
+    id?: number
+    utilisateurId: number
+    equipementId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntUpdateManyMutationInput = {
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EquipementCreateInput = {
     nom: string
-    type: string
-    etat?: $Enums.Etat
-    emprunt: EmpruntCreateNestedOneWithoutEquipementInput
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emprunt?: EmpruntCreateNestedOneWithoutEquipementInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutEquipementInput
   }
 
   export type EquipementUncheckedCreateInput = {
     id?: number
+    empruntId?: number | null
     nom: string
-    type: string
-    etat?: $Enums.Etat
-    empruntId: number
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput
   }
 
   export type EquipementUpdateInput = {
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
-    emprunt?: EmpruntUpdateOneRequiredWithoutEquipementNestedInput
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUpdateOneWithoutEquipementNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
   }
 
   export type EquipementUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
-    empruntId?: IntFieldUpdateOperationsInput | number
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
   }
 
   export type EquipementCreateManyInput = {
     id?: number
+    empruntId?: number | null
     nom: string
-    type: string
-    etat?: $Enums.Etat
-    empruntId: number
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EquipementUpdateManyMutationInput = {
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EquipementUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
-    empruntId?: IntFieldUpdateOperationsInput | number
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateInput = {
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    emprunt: EmpruntCreateNestedOneWithoutNotificationInput
-    consommable: ConsommableCreateNestedOneWithoutNotificationInput
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emprunt?: EmpruntCreateNestedOneWithoutNotificationInput
+    consommable?: ConsommableCreateNestedOneWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateInput = {
     id?: number
+    empruntId?: number | null
+    consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    empruntId: number
-    consommableId: number
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateInput = {
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    emprunt?: EmpruntUpdateOneRequiredWithoutNotificationNestedInput
-    consommable?: ConsommableUpdateOneRequiredWithoutNotificationNestedInput
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUpdateOneWithoutNotificationNestedInput
+    consommable?: ConsommableUpdateOneWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    empruntId?: IntFieldUpdateOperationsInput | number
-    consommableId?: IntFieldUpdateOperationsInput | number
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateManyInput = {
     id?: number
+    empruntId?: number | null
+    consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    empruntId: number
-    consommableId: number
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateManyMutationInput = {
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    empruntId?: IntFieldUpdateOperationsInput | number
-    consommableId?: IntFieldUpdateOperationsInput | number
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConsommableCreateInput = {
     nom: string
     quantiteDisponible: number
     seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     notification?: NotificationCreateNestedManyWithoutConsommableInput
+    utilisationsConsommable?: UtilisationConsommableCreateNestedManyWithoutConsommableInput
   }
 
   export type ConsommableUncheckedCreateInput = {
@@ -8997,14 +12648,26 @@ export namespace Prisma {
     nom: string
     quantiteDisponible: number
     seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutConsommableInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedCreateNestedManyWithoutConsommableInput
   }
 
   export type ConsommableUpdateInput = {
     nom?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUpdateManyWithoutConsommableNestedInput
+    utilisationsConsommable?: UtilisationConsommableUpdateManyWithoutConsommableNestedInput
   }
 
   export type ConsommableUncheckedUpdateInput = {
@@ -9012,7 +12675,13 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutConsommableNestedInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutConsommableNestedInput
   }
 
   export type ConsommableCreateManyInput = {
@@ -9020,12 +12689,22 @@ export namespace Prisma {
     nom: string
     quantiteDisponible: number
     seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ConsommableUpdateManyMutationInput = {
     nom?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ConsommableUncheckedUpdateManyInput = {
@@ -9033,6 +12712,83 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableCreateInput = {
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisateur: UtilisateurCreateNestedOneWithoutUtilisationsConsommableInput
+    consommable: ConsommableCreateNestedOneWithoutUtilisationsConsommableInput
+  }
+
+  export type UtilisationConsommableUncheckedCreateInput = {
+    id?: number
+    utilisateurId: number
+    consommableId: number
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UtilisationConsommableUpdateInput = {
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisateur?: UtilisateurUpdateOneRequiredWithoutUtilisationsConsommableNestedInput
+    consommable?: ConsommableUpdateOneRequiredWithoutUtilisationsConsommableNestedInput
+  }
+
+  export type UtilisationConsommableUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    consommableId?: IntFieldUpdateOperationsInput | number
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableCreateManyInput = {
+    id?: number
+    utilisateurId: number
+    consommableId: number
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UtilisationConsommableUpdateManyMutationInput = {
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    consommableId?: IntFieldUpdateOperationsInput | number
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RapportCreateInput = {
@@ -9107,6 +12863,13 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type EnumRoleUtilisateurFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleUtilisateurFilter<$PrismaModel> | $Enums.RoleUtilisateur
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -9118,20 +12881,33 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type EnumRoleUtilisateurFilter<$PrismaModel = never> = {
-    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleUtilisateurFilter<$PrismaModel> | $Enums.RoleUtilisateur
-  }
-
   export type EmpruntListRelationFilter = {
     every?: EmpruntWhereInput
     some?: EmpruntWhereInput
     none?: EmpruntWhereInput
   }
 
+  export type DemandeEmpruntListRelationFilter = {
+    every?: DemandeEmpruntWhereInput
+    some?: DemandeEmpruntWhereInput
+    none?: DemandeEmpruntWhereInput
+  }
+
+  export type UtilisationConsommableListRelationFilter = {
+    every?: UtilisationConsommableWhereInput
+    some?: UtilisationConsommableWhereInput
+    none?: UtilisationConsommableWhereInput
+  }
+
   export type EmpruntOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DemandeEmpruntOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UtilisationConsommableOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -9140,9 +12916,10 @@ export namespace Prisma {
     nom?: SortOrder
     prenom?: SortOrder
     email?: SortOrder
+    motdepasse?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updateAt?: SortOrder
-    role?: SortOrder
   }
 
   export type UtilisateurAvgOrderByAggregateInput = {
@@ -9154,9 +12931,10 @@ export namespace Prisma {
     nom?: SortOrder
     prenom?: SortOrder
     email?: SortOrder
+    motdepasse?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updateAt?: SortOrder
-    role?: SortOrder
   }
 
   export type UtilisateurMinOrderByAggregateInput = {
@@ -9164,9 +12942,10 @@ export namespace Prisma {
     nom?: SortOrder
     prenom?: SortOrder
     email?: SortOrder
+    motdepasse?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updateAt?: SortOrder
-    role?: SortOrder
   }
 
   export type UtilisateurSumOrderByAggregateInput = {
@@ -9207,6 +12986,16 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type EnumRoleUtilisateurWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleUtilisateurWithAggregatesFilter<$PrismaModel> | $Enums.RoleUtilisateur
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
+    _max?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -9219,16 +13008,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type EnumRoleUtilisateurWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleUtilisateurWithAggregatesFilter<$PrismaModel> | $Enums.RoleUtilisateur
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
-    _max?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -9281,11 +13060,14 @@ export namespace Prisma {
 
   export type EmpruntCountOrderByAggregateInput = {
     id?: SortOrder
+    utilisateurId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrder
-    utilisateurId?: SortOrder
+    usage?: SortOrder
     statut?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EmpruntAvgOrderByAggregateInput = {
@@ -9295,20 +13077,26 @@ export namespace Prisma {
 
   export type EmpruntMaxOrderByAggregateInput = {
     id?: SortOrder
+    utilisateurId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrder
-    utilisateurId?: SortOrder
+    usage?: SortOrder
     statut?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EmpruntMinOrderByAggregateInput = {
     id?: SortOrder
+    utilisateurId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrder
-    utilisateurId?: SortOrder
+    usage?: SortOrder
     statut?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EmpruntSumOrderByAggregateInput = {
@@ -9340,60 +13128,297 @@ export namespace Prisma {
     _max?: NestedEnumStatutFilter<$PrismaModel>
   }
 
-  export type EnumEtatFilter<$PrismaModel = never> = {
-    equals?: $Enums.Etat | EnumEtatFieldRefInput<$PrismaModel>
-    in?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    not?: NestedEnumEtatFilter<$PrismaModel> | $Enums.Etat
+  export type EnumStatutDemandeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatutDemande | EnumStatutDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatutDemandeFilter<$PrismaModel> | $Enums.StatutDemande
   }
 
-  export type EmpruntScalarRelationFilter = {
-    is?: EmpruntWhereInput
-    isNot?: EmpruntWhereInput
+  export type EnumTypeDemandeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TypeDemande | EnumTypeDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTypeDemandeFilter<$PrismaModel> | $Enums.TypeDemande
+  }
+
+  export type EquipementScalarRelationFilter = {
+    is?: EquipementWhereInput
+    isNot?: EquipementWhereInput
+  }
+
+  export type DemandeEmpruntCountOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+    dateDemande?: SortOrder
+    dateRetourPrevu?: SortOrder
+    usage?: SortOrder
+    statut?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DemandeEmpruntAvgOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+  }
+
+  export type DemandeEmpruntMaxOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+    dateDemande?: SortOrder
+    dateRetourPrevu?: SortOrder
+    usage?: SortOrder
+    statut?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DemandeEmpruntMinOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+    dateDemande?: SortOrder
+    dateRetourPrevu?: SortOrder
+    usage?: SortOrder
+    statut?: SortOrder
+    type?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DemandeEmpruntSumOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    equipementId?: SortOrder
+  }
+
+  export type EnumStatutDemandeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatutDemande | EnumStatutDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatutDemandeWithAggregatesFilter<$PrismaModel> | $Enums.StatutDemande
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatutDemandeFilter<$PrismaModel>
+    _max?: NestedEnumStatutDemandeFilter<$PrismaModel>
+  }
+
+  export type EnumTypeDemandeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TypeDemande | EnumTypeDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTypeDemandeWithAggregatesFilter<$PrismaModel> | $Enums.TypeDemande
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTypeDemandeFilter<$PrismaModel>
+    _max?: NestedEnumTypeDemandeFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EnumDisponibiliteFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disponibilite | EnumDisponibiliteFieldRefInput<$PrismaModel>
+    in?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisponibiliteFilter<$PrismaModel> | $Enums.Disponibilite
+  }
+
+  export type EnumEtatMaterielFilter<$PrismaModel = never> = {
+    equals?: $Enums.EtatMateriel | EnumEtatMaterielFieldRefInput<$PrismaModel>
+    in?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    not?: NestedEnumEtatMaterielFilter<$PrismaModel> | $Enums.EtatMateriel
+  }
+
+  export type EnumObtentionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Obtention | EnumObtentionFieldRefInput<$PrismaModel>
+    in?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    not?: NestedEnumObtentionFilter<$PrismaModel> | $Enums.Obtention
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type EmpruntNullableScalarRelationFilter = {
+    is?: EmpruntWhereInput | null
+    isNot?: EmpruntWhereInput | null
   }
 
   export type EquipementCountOrderByAggregateInput = {
     id?: SortOrder
-    nom?: SortOrder
-    type?: SortOrder
-    etat?: SortOrder
     empruntId?: SortOrder
+    nom?: SortOrder
+    numeroDeSerie?: SortOrder
+    marque?: SortOrder
+    disponibilite?: SortOrder
+    etatMateriel?: SortOrder
+    obtention?: SortOrder
+    prix?: SortOrder
+    fournisseur?: SortOrder
+    donateur?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EquipementAvgOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    prix?: SortOrder
   }
 
   export type EquipementMaxOrderByAggregateInput = {
     id?: SortOrder
-    nom?: SortOrder
-    type?: SortOrder
-    etat?: SortOrder
     empruntId?: SortOrder
+    nom?: SortOrder
+    numeroDeSerie?: SortOrder
+    marque?: SortOrder
+    disponibilite?: SortOrder
+    etatMateriel?: SortOrder
+    obtention?: SortOrder
+    prix?: SortOrder
+    fournisseur?: SortOrder
+    donateur?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EquipementMinOrderByAggregateInput = {
     id?: SortOrder
-    nom?: SortOrder
-    type?: SortOrder
-    etat?: SortOrder
     empruntId?: SortOrder
+    nom?: SortOrder
+    numeroDeSerie?: SortOrder
+    marque?: SortOrder
+    disponibilite?: SortOrder
+    etatMateriel?: SortOrder
+    obtention?: SortOrder
+    prix?: SortOrder
+    fournisseur?: SortOrder
+    donateur?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type EquipementSumOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    prix?: SortOrder
   }
 
-  export type EnumEtatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Etat | EnumEtatFieldRefInput<$PrismaModel>
-    in?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    not?: NestedEnumEtatWithAggregatesFilter<$PrismaModel> | $Enums.Etat
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumDisponibiliteWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disponibilite | EnumDisponibiliteFieldRefInput<$PrismaModel>
+    in?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisponibiliteWithAggregatesFilter<$PrismaModel> | $Enums.Disponibilite
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumEtatFilter<$PrismaModel>
-    _max?: NestedEnumEtatFilter<$PrismaModel>
+    _min?: NestedEnumDisponibiliteFilter<$PrismaModel>
+    _max?: NestedEnumDisponibiliteFilter<$PrismaModel>
+  }
+
+  export type EnumEtatMaterielWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EtatMateriel | EnumEtatMaterielFieldRefInput<$PrismaModel>
+    in?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    not?: NestedEnumEtatMaterielWithAggregatesFilter<$PrismaModel> | $Enums.EtatMateriel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEtatMaterielFilter<$PrismaModel>
+    _max?: NestedEnumEtatMaterielFilter<$PrismaModel>
+  }
+
+  export type EnumObtentionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Obtention | EnumObtentionFieldRefInput<$PrismaModel>
+    in?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    not?: NestedEnumObtentionWithAggregatesFilter<$PrismaModel> | $Enums.Obtention
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumObtentionFilter<$PrismaModel>
+    _max?: NestedEnumObtentionFilter<$PrismaModel>
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type EnumTypeNotificationFilter<$PrismaModel = never> = {
@@ -9403,18 +13428,26 @@ export namespace Prisma {
     not?: NestedEnumTypeNotificationFilter<$PrismaModel> | $Enums.TypeNotification
   }
 
-  export type ConsommableScalarRelationFilter = {
-    is?: ConsommableWhereInput
-    isNot?: ConsommableWhereInput
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type ConsommableNullableScalarRelationFilter = {
+    is?: ConsommableWhereInput | null
+    isNot?: ConsommableWhereInput | null
   }
 
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
+    empruntId?: SortOrder
+    consommableId?: SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
     type?: SortOrder
-    empruntId?: SortOrder
-    consommableId?: SortOrder
+    vu?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationAvgOrderByAggregateInput = {
@@ -9425,20 +13458,26 @@ export namespace Prisma {
 
   export type NotificationMaxOrderByAggregateInput = {
     id?: SortOrder
+    empruntId?: SortOrder
+    consommableId?: SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
     type?: SortOrder
-    empruntId?: SortOrder
-    consommableId?: SortOrder
+    vu?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationMinOrderByAggregateInput = {
     id?: SortOrder
+    empruntId?: SortOrder
+    consommableId?: SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
     type?: SortOrder
-    empruntId?: SortOrder
-    consommableId?: SortOrder
+    vu?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type NotificationSumOrderByAggregateInput = {
@@ -9457,11 +13496,24 @@ export namespace Prisma {
     _max?: NestedEnumTypeNotificationFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type ConsommableCountOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
+    obtention?: SortOrder
+    fournisseur?: SortOrder
+    donnateur?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ConsommableAvgOrderByAggregateInput = {
@@ -9475,6 +13527,11 @@ export namespace Prisma {
     nom?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
+    obtention?: SortOrder
+    fournisseur?: SortOrder
+    donnateur?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ConsommableMinOrderByAggregateInput = {
@@ -9482,12 +13539,69 @@ export namespace Prisma {
     nom?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
+    obtention?: SortOrder
+    fournisseur?: SortOrder
+    donnateur?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ConsommableSumOrderByAggregateInput = {
     id?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
+  }
+
+  export type ConsommableScalarRelationFilter = {
+    is?: ConsommableWhereInput
+    isNot?: ConsommableWhereInput
+  }
+
+  export type UtilisationConsommableCountOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
+    dateUtilisation?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UtilisationConsommableAvgOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
+  }
+
+  export type UtilisationConsommableMaxOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
+    dateUtilisation?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UtilisationConsommableMinOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
+    dateUtilisation?: SortOrder
+    description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UtilisationConsommableSumOrderByAggregateInput = {
+    id?: SortOrder
+    utilisateurId?: SortOrder
+    consommableId?: SortOrder
+    quantiteUtilise?: SortOrder
   }
 
   export type EnumTypeRapportFilter<$PrismaModel = never> = {
@@ -9560,6 +13674,20 @@ export namespace Prisma {
     connect?: EmpruntWhereUniqueInput | EmpruntWhereUniqueInput[]
   }
 
+  export type DemandeEmpruntCreateNestedManyWithoutUtilisateurInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutUtilisateurInput, DemandeEmpruntUncheckedCreateWithoutUtilisateurInput> | DemandeEmpruntCreateWithoutUtilisateurInput[] | DemandeEmpruntUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutUtilisateurInput | DemandeEmpruntCreateOrConnectWithoutUtilisateurInput[]
+    createMany?: DemandeEmpruntCreateManyUtilisateurInputEnvelope
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+  }
+
+  export type UtilisationConsommableCreateNestedManyWithoutUtilisateurInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutUtilisateurInput, UtilisationConsommableUncheckedCreateWithoutUtilisateurInput> | UtilisationConsommableCreateWithoutUtilisateurInput[] | UtilisationConsommableUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutUtilisateurInput | UtilisationConsommableCreateOrConnectWithoutUtilisateurInput[]
+    createMany?: UtilisationConsommableCreateManyUtilisateurInputEnvelope
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+  }
+
   export type EmpruntUncheckedCreateNestedManyWithoutUtilisateurInput = {
     create?: XOR<EmpruntCreateWithoutUtilisateurInput, EmpruntUncheckedCreateWithoutUtilisateurInput> | EmpruntCreateWithoutUtilisateurInput[] | EmpruntUncheckedCreateWithoutUtilisateurInput[]
     connectOrCreate?: EmpruntCreateOrConnectWithoutUtilisateurInput | EmpruntCreateOrConnectWithoutUtilisateurInput[]
@@ -9567,16 +13695,30 @@ export namespace Prisma {
     connect?: EmpruntWhereUniqueInput | EmpruntWhereUniqueInput[]
   }
 
+  export type DemandeEmpruntUncheckedCreateNestedManyWithoutUtilisateurInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutUtilisateurInput, DemandeEmpruntUncheckedCreateWithoutUtilisateurInput> | DemandeEmpruntCreateWithoutUtilisateurInput[] | DemandeEmpruntUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutUtilisateurInput | DemandeEmpruntCreateOrConnectWithoutUtilisateurInput[]
+    createMany?: DemandeEmpruntCreateManyUtilisateurInputEnvelope
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+  }
+
+  export type UtilisationConsommableUncheckedCreateNestedManyWithoutUtilisateurInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutUtilisateurInput, UtilisationConsommableUncheckedCreateWithoutUtilisateurInput> | UtilisationConsommableCreateWithoutUtilisateurInput[] | UtilisationConsommableUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutUtilisateurInput | UtilisationConsommableCreateOrConnectWithoutUtilisateurInput[]
+    createMany?: UtilisationConsommableCreateManyUtilisateurInputEnvelope
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
   export type EnumRoleUtilisateurFieldUpdateOperationsInput = {
     set?: $Enums.RoleUtilisateur
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type EmpruntUpdateManyWithoutUtilisateurNestedInput = {
@@ -9591,6 +13733,34 @@ export namespace Prisma {
     update?: EmpruntUpdateWithWhereUniqueWithoutUtilisateurInput | EmpruntUpdateWithWhereUniqueWithoutUtilisateurInput[]
     updateMany?: EmpruntUpdateManyWithWhereWithoutUtilisateurInput | EmpruntUpdateManyWithWhereWithoutUtilisateurInput[]
     deleteMany?: EmpruntScalarWhereInput | EmpruntScalarWhereInput[]
+  }
+
+  export type DemandeEmpruntUpdateManyWithoutUtilisateurNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutUtilisateurInput, DemandeEmpruntUncheckedCreateWithoutUtilisateurInput> | DemandeEmpruntCreateWithoutUtilisateurInput[] | DemandeEmpruntUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutUtilisateurInput | DemandeEmpruntCreateOrConnectWithoutUtilisateurInput[]
+    upsert?: DemandeEmpruntUpsertWithWhereUniqueWithoutUtilisateurInput | DemandeEmpruntUpsertWithWhereUniqueWithoutUtilisateurInput[]
+    createMany?: DemandeEmpruntCreateManyUtilisateurInputEnvelope
+    set?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    disconnect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    delete?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    update?: DemandeEmpruntUpdateWithWhereUniqueWithoutUtilisateurInput | DemandeEmpruntUpdateWithWhereUniqueWithoutUtilisateurInput[]
+    updateMany?: DemandeEmpruntUpdateManyWithWhereWithoutUtilisateurInput | DemandeEmpruntUpdateManyWithWhereWithoutUtilisateurInput[]
+    deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+  }
+
+  export type UtilisationConsommableUpdateManyWithoutUtilisateurNestedInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutUtilisateurInput, UtilisationConsommableUncheckedCreateWithoutUtilisateurInput> | UtilisationConsommableCreateWithoutUtilisateurInput[] | UtilisationConsommableUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutUtilisateurInput | UtilisationConsommableCreateOrConnectWithoutUtilisateurInput[]
+    upsert?: UtilisationConsommableUpsertWithWhereUniqueWithoutUtilisateurInput | UtilisationConsommableUpsertWithWhereUniqueWithoutUtilisateurInput[]
+    createMany?: UtilisationConsommableCreateManyUtilisateurInputEnvelope
+    set?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    disconnect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    delete?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    update?: UtilisationConsommableUpdateWithWhereUniqueWithoutUtilisateurInput | UtilisationConsommableUpdateWithWhereUniqueWithoutUtilisateurInput[]
+    updateMany?: UtilisationConsommableUpdateManyWithWhereWithoutUtilisateurInput | UtilisationConsommableUpdateManyWithWhereWithoutUtilisateurInput[]
+    deleteMany?: UtilisationConsommableScalarWhereInput | UtilisationConsommableScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -9613,6 +13783,34 @@ export namespace Prisma {
     update?: EmpruntUpdateWithWhereUniqueWithoutUtilisateurInput | EmpruntUpdateWithWhereUniqueWithoutUtilisateurInput[]
     updateMany?: EmpruntUpdateManyWithWhereWithoutUtilisateurInput | EmpruntUpdateManyWithWhereWithoutUtilisateurInput[]
     deleteMany?: EmpruntScalarWhereInput | EmpruntScalarWhereInput[]
+  }
+
+  export type DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutUtilisateurInput, DemandeEmpruntUncheckedCreateWithoutUtilisateurInput> | DemandeEmpruntCreateWithoutUtilisateurInput[] | DemandeEmpruntUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutUtilisateurInput | DemandeEmpruntCreateOrConnectWithoutUtilisateurInput[]
+    upsert?: DemandeEmpruntUpsertWithWhereUniqueWithoutUtilisateurInput | DemandeEmpruntUpsertWithWhereUniqueWithoutUtilisateurInput[]
+    createMany?: DemandeEmpruntCreateManyUtilisateurInputEnvelope
+    set?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    disconnect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    delete?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    update?: DemandeEmpruntUpdateWithWhereUniqueWithoutUtilisateurInput | DemandeEmpruntUpdateWithWhereUniqueWithoutUtilisateurInput[]
+    updateMany?: DemandeEmpruntUpdateManyWithWhereWithoutUtilisateurInput | DemandeEmpruntUpdateManyWithWhereWithoutUtilisateurInput[]
+    deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+  }
+
+  export type UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurNestedInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutUtilisateurInput, UtilisationConsommableUncheckedCreateWithoutUtilisateurInput> | UtilisationConsommableCreateWithoutUtilisateurInput[] | UtilisationConsommableUncheckedCreateWithoutUtilisateurInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutUtilisateurInput | UtilisationConsommableCreateOrConnectWithoutUtilisateurInput[]
+    upsert?: UtilisationConsommableUpsertWithWhereUniqueWithoutUtilisateurInput | UtilisationConsommableUpsertWithWhereUniqueWithoutUtilisateurInput[]
+    createMany?: UtilisationConsommableCreateManyUtilisateurInputEnvelope
+    set?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    disconnect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    delete?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    update?: UtilisationConsommableUpdateWithWhereUniqueWithoutUtilisateurInput | UtilisationConsommableUpdateWithWhereUniqueWithoutUtilisateurInput[]
+    updateMany?: UtilisationConsommableUpdateManyWithWhereWithoutUtilisateurInput | UtilisationConsommableUpdateManyWithWhereWithoutUtilisateurInput[]
+    deleteMany?: UtilisationConsommableScalarWhereInput | UtilisationConsommableScalarWhereInput[]
   }
 
   export type UtilisateurCreateNestedOneWithoutEmpruntsInput = {
@@ -9721,22 +13919,130 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type UtilisateurCreateNestedOneWithoutDemandeEmpruntInput = {
+    create?: XOR<UtilisateurCreateWithoutDemandeEmpruntInput, UtilisateurUncheckedCreateWithoutDemandeEmpruntInput>
+    connectOrCreate?: UtilisateurCreateOrConnectWithoutDemandeEmpruntInput
+    connect?: UtilisateurWhereUniqueInput
+  }
+
+  export type EquipementCreateNestedOneWithoutDemandeEmpruntInput = {
+    create?: XOR<EquipementCreateWithoutDemandeEmpruntInput, EquipementUncheckedCreateWithoutDemandeEmpruntInput>
+    connectOrCreate?: EquipementCreateOrConnectWithoutDemandeEmpruntInput
+    connect?: EquipementWhereUniqueInput
+  }
+
+  export type EnumStatutDemandeFieldUpdateOperationsInput = {
+    set?: $Enums.StatutDemande
+  }
+
+  export type EnumTypeDemandeFieldUpdateOperationsInput = {
+    set?: $Enums.TypeDemande
+  }
+
+  export type UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput = {
+    create?: XOR<UtilisateurCreateWithoutDemandeEmpruntInput, UtilisateurUncheckedCreateWithoutDemandeEmpruntInput>
+    connectOrCreate?: UtilisateurCreateOrConnectWithoutDemandeEmpruntInput
+    upsert?: UtilisateurUpsertWithoutDemandeEmpruntInput
+    connect?: UtilisateurWhereUniqueInput
+    update?: XOR<XOR<UtilisateurUpdateToOneWithWhereWithoutDemandeEmpruntInput, UtilisateurUpdateWithoutDemandeEmpruntInput>, UtilisateurUncheckedUpdateWithoutDemandeEmpruntInput>
+  }
+
+  export type EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput = {
+    create?: XOR<EquipementCreateWithoutDemandeEmpruntInput, EquipementUncheckedCreateWithoutDemandeEmpruntInput>
+    connectOrCreate?: EquipementCreateOrConnectWithoutDemandeEmpruntInput
+    upsert?: EquipementUpsertWithoutDemandeEmpruntInput
+    connect?: EquipementWhereUniqueInput
+    update?: XOR<XOR<EquipementUpdateToOneWithWhereWithoutDemandeEmpruntInput, EquipementUpdateWithoutDemandeEmpruntInput>, EquipementUncheckedUpdateWithoutDemandeEmpruntInput>
+  }
+
   export type EmpruntCreateNestedOneWithoutEquipementInput = {
     create?: XOR<EmpruntCreateWithoutEquipementInput, EmpruntUncheckedCreateWithoutEquipementInput>
     connectOrCreate?: EmpruntCreateOrConnectWithoutEquipementInput
     connect?: EmpruntWhereUniqueInput
   }
 
-  export type EnumEtatFieldUpdateOperationsInput = {
-    set?: $Enums.Etat
+  export type DemandeEmpruntCreateNestedManyWithoutEquipementInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
+    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
   }
 
-  export type EmpruntUpdateOneRequiredWithoutEquipementNestedInput = {
+  export type DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
+    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+  }
+
+  export type EnumDisponibiliteFieldUpdateOperationsInput = {
+    set?: $Enums.Disponibilite
+  }
+
+  export type EnumEtatMaterielFieldUpdateOperationsInput = {
+    set?: $Enums.EtatMateriel
+  }
+
+  export type EnumObtentionFieldUpdateOperationsInput = {
+    set?: $Enums.Obtention
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type EmpruntUpdateOneWithoutEquipementNestedInput = {
     create?: XOR<EmpruntCreateWithoutEquipementInput, EmpruntUncheckedCreateWithoutEquipementInput>
     connectOrCreate?: EmpruntCreateOrConnectWithoutEquipementInput
     upsert?: EmpruntUpsertWithoutEquipementInput
+    disconnect?: EmpruntWhereInput | boolean
+    delete?: EmpruntWhereInput | boolean
     connect?: EmpruntWhereUniqueInput
     update?: XOR<XOR<EmpruntUpdateToOneWithWhereWithoutEquipementInput, EmpruntUpdateWithoutEquipementInput>, EmpruntUncheckedUpdateWithoutEquipementInput>
+  }
+
+  export type DemandeEmpruntUpdateManyWithoutEquipementNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
+    upsert?: DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput[]
+    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
+    set?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    disconnect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    delete?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    update?: DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput[]
+    updateMany?: DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput | DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput[]
+    deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
+    upsert?: DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput[]
+    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
+    set?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    disconnect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    delete?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+    update?: DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput[]
+    updateMany?: DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput | DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput[]
+    deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
   }
 
   export type EmpruntCreateNestedOneWithoutNotificationInput = {
@@ -9755,18 +14061,26 @@ export namespace Prisma {
     set?: $Enums.TypeNotification
   }
 
-  export type EmpruntUpdateOneRequiredWithoutNotificationNestedInput = {
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type EmpruntUpdateOneWithoutNotificationNestedInput = {
     create?: XOR<EmpruntCreateWithoutNotificationInput, EmpruntUncheckedCreateWithoutNotificationInput>
     connectOrCreate?: EmpruntCreateOrConnectWithoutNotificationInput
     upsert?: EmpruntUpsertWithoutNotificationInput
+    disconnect?: EmpruntWhereInput | boolean
+    delete?: EmpruntWhereInput | boolean
     connect?: EmpruntWhereUniqueInput
     update?: XOR<XOR<EmpruntUpdateToOneWithWhereWithoutNotificationInput, EmpruntUpdateWithoutNotificationInput>, EmpruntUncheckedUpdateWithoutNotificationInput>
   }
 
-  export type ConsommableUpdateOneRequiredWithoutNotificationNestedInput = {
+  export type ConsommableUpdateOneWithoutNotificationNestedInput = {
     create?: XOR<ConsommableCreateWithoutNotificationInput, ConsommableUncheckedCreateWithoutNotificationInput>
     connectOrCreate?: ConsommableCreateOrConnectWithoutNotificationInput
     upsert?: ConsommableUpsertWithoutNotificationInput
+    disconnect?: ConsommableWhereInput | boolean
+    delete?: ConsommableWhereInput | boolean
     connect?: ConsommableWhereUniqueInput
     update?: XOR<XOR<ConsommableUpdateToOneWithWhereWithoutNotificationInput, ConsommableUpdateWithoutNotificationInput>, ConsommableUncheckedUpdateWithoutNotificationInput>
   }
@@ -9778,11 +14092,25 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type UtilisationConsommableCreateNestedManyWithoutConsommableInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutConsommableInput, UtilisationConsommableUncheckedCreateWithoutConsommableInput> | UtilisationConsommableCreateWithoutConsommableInput[] | UtilisationConsommableUncheckedCreateWithoutConsommableInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutConsommableInput | UtilisationConsommableCreateOrConnectWithoutConsommableInput[]
+    createMany?: UtilisationConsommableCreateManyConsommableInputEnvelope
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+  }
+
   export type NotificationUncheckedCreateNestedManyWithoutConsommableInput = {
     create?: XOR<NotificationCreateWithoutConsommableInput, NotificationUncheckedCreateWithoutConsommableInput> | NotificationCreateWithoutConsommableInput[] | NotificationUncheckedCreateWithoutConsommableInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutConsommableInput | NotificationCreateOrConnectWithoutConsommableInput[]
     createMany?: NotificationCreateManyConsommableInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type UtilisationConsommableUncheckedCreateNestedManyWithoutConsommableInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutConsommableInput, UtilisationConsommableUncheckedCreateWithoutConsommableInput> | UtilisationConsommableCreateWithoutConsommableInput[] | UtilisationConsommableUncheckedCreateWithoutConsommableInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutConsommableInput | UtilisationConsommableCreateOrConnectWithoutConsommableInput[]
+    createMany?: UtilisationConsommableCreateManyConsommableInputEnvelope
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
   }
 
   export type NotificationUpdateManyWithoutConsommableNestedInput = {
@@ -9799,6 +14127,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type UtilisationConsommableUpdateManyWithoutConsommableNestedInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutConsommableInput, UtilisationConsommableUncheckedCreateWithoutConsommableInput> | UtilisationConsommableCreateWithoutConsommableInput[] | UtilisationConsommableUncheckedCreateWithoutConsommableInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutConsommableInput | UtilisationConsommableCreateOrConnectWithoutConsommableInput[]
+    upsert?: UtilisationConsommableUpsertWithWhereUniqueWithoutConsommableInput | UtilisationConsommableUpsertWithWhereUniqueWithoutConsommableInput[]
+    createMany?: UtilisationConsommableCreateManyConsommableInputEnvelope
+    set?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    disconnect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    delete?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    update?: UtilisationConsommableUpdateWithWhereUniqueWithoutConsommableInput | UtilisationConsommableUpdateWithWhereUniqueWithoutConsommableInput[]
+    updateMany?: UtilisationConsommableUpdateManyWithWhereWithoutConsommableInput | UtilisationConsommableUpdateManyWithWhereWithoutConsommableInput[]
+    deleteMany?: UtilisationConsommableScalarWhereInput | UtilisationConsommableScalarWhereInput[]
+  }
+
   export type NotificationUncheckedUpdateManyWithoutConsommableNestedInput = {
     create?: XOR<NotificationCreateWithoutConsommableInput, NotificationUncheckedCreateWithoutConsommableInput> | NotificationCreateWithoutConsommableInput[] | NotificationUncheckedCreateWithoutConsommableInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutConsommableInput | NotificationCreateOrConnectWithoutConsommableInput[]
@@ -9811,6 +14153,48 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutConsommableInput | NotificationUpdateWithWhereUniqueWithoutConsommableInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutConsommableInput | NotificationUpdateManyWithWhereWithoutConsommableInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type UtilisationConsommableUncheckedUpdateManyWithoutConsommableNestedInput = {
+    create?: XOR<UtilisationConsommableCreateWithoutConsommableInput, UtilisationConsommableUncheckedCreateWithoutConsommableInput> | UtilisationConsommableCreateWithoutConsommableInput[] | UtilisationConsommableUncheckedCreateWithoutConsommableInput[]
+    connectOrCreate?: UtilisationConsommableCreateOrConnectWithoutConsommableInput | UtilisationConsommableCreateOrConnectWithoutConsommableInput[]
+    upsert?: UtilisationConsommableUpsertWithWhereUniqueWithoutConsommableInput | UtilisationConsommableUpsertWithWhereUniqueWithoutConsommableInput[]
+    createMany?: UtilisationConsommableCreateManyConsommableInputEnvelope
+    set?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    disconnect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    delete?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    connect?: UtilisationConsommableWhereUniqueInput | UtilisationConsommableWhereUniqueInput[]
+    update?: UtilisationConsommableUpdateWithWhereUniqueWithoutConsommableInput | UtilisationConsommableUpdateWithWhereUniqueWithoutConsommableInput[]
+    updateMany?: UtilisationConsommableUpdateManyWithWhereWithoutConsommableInput | UtilisationConsommableUpdateManyWithWhereWithoutConsommableInput[]
+    deleteMany?: UtilisationConsommableScalarWhereInput | UtilisationConsommableScalarWhereInput[]
+  }
+
+  export type UtilisateurCreateNestedOneWithoutUtilisationsConsommableInput = {
+    create?: XOR<UtilisateurCreateWithoutUtilisationsConsommableInput, UtilisateurUncheckedCreateWithoutUtilisationsConsommableInput>
+    connectOrCreate?: UtilisateurCreateOrConnectWithoutUtilisationsConsommableInput
+    connect?: UtilisateurWhereUniqueInput
+  }
+
+  export type ConsommableCreateNestedOneWithoutUtilisationsConsommableInput = {
+    create?: XOR<ConsommableCreateWithoutUtilisationsConsommableInput, ConsommableUncheckedCreateWithoutUtilisationsConsommableInput>
+    connectOrCreate?: ConsommableCreateOrConnectWithoutUtilisationsConsommableInput
+    connect?: ConsommableWhereUniqueInput
+  }
+
+  export type UtilisateurUpdateOneRequiredWithoutUtilisationsConsommableNestedInput = {
+    create?: XOR<UtilisateurCreateWithoutUtilisationsConsommableInput, UtilisateurUncheckedCreateWithoutUtilisationsConsommableInput>
+    connectOrCreate?: UtilisateurCreateOrConnectWithoutUtilisationsConsommableInput
+    upsert?: UtilisateurUpsertWithoutUtilisationsConsommableInput
+    connect?: UtilisateurWhereUniqueInput
+    update?: XOR<XOR<UtilisateurUpdateToOneWithWhereWithoutUtilisationsConsommableInput, UtilisateurUpdateWithoutUtilisationsConsommableInput>, UtilisateurUncheckedUpdateWithoutUtilisationsConsommableInput>
+  }
+
+  export type ConsommableUpdateOneRequiredWithoutUtilisationsConsommableNestedInput = {
+    create?: XOR<ConsommableCreateWithoutUtilisationsConsommableInput, ConsommableUncheckedCreateWithoutUtilisationsConsommableInput>
+    connectOrCreate?: ConsommableCreateOrConnectWithoutUtilisationsConsommableInput
+    upsert?: ConsommableUpsertWithoutUtilisationsConsommableInput
+    connect?: ConsommableWhereUniqueInput
+    update?: XOR<XOR<ConsommableUpdateToOneWithWhereWithoutUtilisationsConsommableInput, ConsommableUpdateWithoutUtilisationsConsommableInput>, ConsommableUncheckedUpdateWithoutUtilisationsConsommableInput>
   }
 
   export type EnumTypeRapportFieldUpdateOperationsInput = {
@@ -9846,6 +14230,13 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedEnumRoleUtilisateurFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleUtilisateurFilter<$PrismaModel> | $Enums.RoleUtilisateur
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -9855,13 +14246,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
-  export type NestedEnumRoleUtilisateurFilter<$PrismaModel = never> = {
-    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleUtilisateurFilter<$PrismaModel> | $Enums.RoleUtilisateur
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -9908,6 +14292,16 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type NestedEnumRoleUtilisateurWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleUtilisateurWithAggregatesFilter<$PrismaModel> | $Enums.RoleUtilisateur
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
+    _max?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -9920,16 +14314,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumRoleUtilisateurWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.RoleUtilisateur | EnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    in?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    notIn?: $Enums.RoleUtilisateur[] | ListEnumRoleUtilisateurFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleUtilisateurWithAggregatesFilter<$PrismaModel> | $Enums.RoleUtilisateur
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
-    _max?: NestedEnumRoleUtilisateurFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -9985,21 +14369,163 @@ export namespace Prisma {
     _max?: NestedEnumStatutFilter<$PrismaModel>
   }
 
-  export type NestedEnumEtatFilter<$PrismaModel = never> = {
-    equals?: $Enums.Etat | EnumEtatFieldRefInput<$PrismaModel>
-    in?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    not?: NestedEnumEtatFilter<$PrismaModel> | $Enums.Etat
+  export type NestedEnumStatutDemandeFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatutDemande | EnumStatutDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatutDemandeFilter<$PrismaModel> | $Enums.StatutDemande
   }
 
-  export type NestedEnumEtatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Etat | EnumEtatFieldRefInput<$PrismaModel>
-    in?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Etat[] | ListEnumEtatFieldRefInput<$PrismaModel>
-    not?: NestedEnumEtatWithAggregatesFilter<$PrismaModel> | $Enums.Etat
+  export type NestedEnumTypeDemandeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TypeDemande | EnumTypeDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTypeDemandeFilter<$PrismaModel> | $Enums.TypeDemande
+  }
+
+  export type NestedEnumStatutDemandeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StatutDemande | EnumStatutDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StatutDemande[] | ListEnumStatutDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatutDemandeWithAggregatesFilter<$PrismaModel> | $Enums.StatutDemande
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumEtatFilter<$PrismaModel>
-    _max?: NestedEnumEtatFilter<$PrismaModel>
+    _min?: NestedEnumStatutDemandeFilter<$PrismaModel>
+    _max?: NestedEnumStatutDemandeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTypeDemandeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TypeDemande | EnumTypeDemandeFieldRefInput<$PrismaModel>
+    in?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTypeDemandeWithAggregatesFilter<$PrismaModel> | $Enums.TypeDemande
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTypeDemandeFilter<$PrismaModel>
+    _max?: NestedEnumTypeDemandeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumDisponibiliteFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disponibilite | EnumDisponibiliteFieldRefInput<$PrismaModel>
+    in?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisponibiliteFilter<$PrismaModel> | $Enums.Disponibilite
+  }
+
+  export type NestedEnumEtatMaterielFilter<$PrismaModel = never> = {
+    equals?: $Enums.EtatMateriel | EnumEtatMaterielFieldRefInput<$PrismaModel>
+    in?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    not?: NestedEnumEtatMaterielFilter<$PrismaModel> | $Enums.EtatMateriel
+  }
+
+  export type NestedEnumObtentionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Obtention | EnumObtentionFieldRefInput<$PrismaModel>
+    in?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    not?: NestedEnumObtentionFilter<$PrismaModel> | $Enums.Obtention
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumDisponibiliteWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Disponibilite | EnumDisponibiliteFieldRefInput<$PrismaModel>
+    in?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
+    not?: NestedEnumDisponibiliteWithAggregatesFilter<$PrismaModel> | $Enums.Disponibilite
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumDisponibiliteFilter<$PrismaModel>
+    _max?: NestedEnumDisponibiliteFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEtatMaterielWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EtatMateriel | EnumEtatMaterielFieldRefInput<$PrismaModel>
+    in?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EtatMateriel[] | ListEnumEtatMaterielFieldRefInput<$PrismaModel>
+    not?: NestedEnumEtatMaterielWithAggregatesFilter<$PrismaModel> | $Enums.EtatMateriel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEtatMaterielFilter<$PrismaModel>
+    _max?: NestedEnumEtatMaterielFilter<$PrismaModel>
+  }
+
+  export type NestedEnumObtentionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Obtention | EnumObtentionFieldRefInput<$PrismaModel>
+    in?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Obtention[] | ListEnumObtentionFieldRefInput<$PrismaModel>
+    not?: NestedEnumObtentionWithAggregatesFilter<$PrismaModel> | $Enums.Obtention
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumObtentionFilter<$PrismaModel>
+    _max?: NestedEnumObtentionFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumTypeNotificationFilter<$PrismaModel = never> = {
@@ -10007,6 +14533,11 @@ export namespace Prisma {
     in?: $Enums.TypeNotification[] | ListEnumTypeNotificationFieldRefInput<$PrismaModel>
     notIn?: $Enums.TypeNotification[] | ListEnumTypeNotificationFieldRefInput<$PrismaModel>
     not?: NestedEnumTypeNotificationFilter<$PrismaModel> | $Enums.TypeNotification
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedEnumTypeNotificationWithAggregatesFilter<$PrismaModel = never> = {
@@ -10017,6 +14548,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTypeNotificationFilter<$PrismaModel>
     _max?: NestedEnumTypeNotificationFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumTypeRapportFilter<$PrismaModel = never> = {
@@ -10057,7 +14596,10 @@ export namespace Prisma {
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     equipement?: EquipementCreateNestedManyWithoutEmpruntInput
     notification?: NotificationCreateNestedManyWithoutEmpruntInput
   }
@@ -10067,7 +14609,10 @@ export namespace Prisma {
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     equipement?: EquipementUncheckedCreateNestedManyWithoutEmpruntInput
     notification?: NotificationUncheckedCreateNestedManyWithoutEmpruntInput
   }
@@ -10079,6 +14624,68 @@ export namespace Prisma {
 
   export type EmpruntCreateManyUtilisateurInputEnvelope = {
     data: EmpruntCreateManyUtilisateurInput | EmpruntCreateManyUtilisateurInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type DemandeEmpruntCreateWithoutUtilisateurInput = {
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    equipement: EquipementCreateNestedOneWithoutDemandeEmpruntInput
+  }
+
+  export type DemandeEmpruntUncheckedCreateWithoutUtilisateurInput = {
+    id?: number
+    equipementId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntCreateOrConnectWithoutUtilisateurInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    create: XOR<DemandeEmpruntCreateWithoutUtilisateurInput, DemandeEmpruntUncheckedCreateWithoutUtilisateurInput>
+  }
+
+  export type DemandeEmpruntCreateManyUtilisateurInputEnvelope = {
+    data: DemandeEmpruntCreateManyUtilisateurInput | DemandeEmpruntCreateManyUtilisateurInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UtilisationConsommableCreateWithoutUtilisateurInput = {
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consommable: ConsommableCreateNestedOneWithoutUtilisationsConsommableInput
+  }
+
+  export type UtilisationConsommableUncheckedCreateWithoutUtilisateurInput = {
+    id?: number
+    consommableId: number
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UtilisationConsommableCreateOrConnectWithoutUtilisateurInput = {
+    where: UtilisationConsommableWhereUniqueInput
+    create: XOR<UtilisationConsommableCreateWithoutUtilisateurInput, UtilisationConsommableUncheckedCreateWithoutUtilisateurInput>
+  }
+
+  export type UtilisationConsommableCreateManyUtilisateurInputEnvelope = {
+    data: UtilisationConsommableCreateManyUtilisateurInput | UtilisationConsommableCreateManyUtilisateurInput[]
     skipDuplicates?: boolean
   }
 
@@ -10103,20 +14710,88 @@ export namespace Prisma {
     OR?: EmpruntScalarWhereInput[]
     NOT?: EmpruntScalarWhereInput | EmpruntScalarWhereInput[]
     id?: IntFilter<"Emprunt"> | number
+    utilisateurId?: IntFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableFilter<"Emprunt"> | Date | string | null
-    utilisateurId?: IntFilter<"Emprunt"> | number
+    usage?: StringFilter<"Emprunt"> | string
     statut?: EnumStatutFilter<"Emprunt"> | $Enums.Statut
+    createdAt?: DateTimeFilter<"Emprunt"> | Date | string
+    updatedAt?: DateTimeFilter<"Emprunt"> | Date | string
+  }
+
+  export type DemandeEmpruntUpsertWithWhereUniqueWithoutUtilisateurInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    update: XOR<DemandeEmpruntUpdateWithoutUtilisateurInput, DemandeEmpruntUncheckedUpdateWithoutUtilisateurInput>
+    create: XOR<DemandeEmpruntCreateWithoutUtilisateurInput, DemandeEmpruntUncheckedCreateWithoutUtilisateurInput>
+  }
+
+  export type DemandeEmpruntUpdateWithWhereUniqueWithoutUtilisateurInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    data: XOR<DemandeEmpruntUpdateWithoutUtilisateurInput, DemandeEmpruntUncheckedUpdateWithoutUtilisateurInput>
+  }
+
+  export type DemandeEmpruntUpdateManyWithWhereWithoutUtilisateurInput = {
+    where: DemandeEmpruntScalarWhereInput
+    data: XOR<DemandeEmpruntUpdateManyMutationInput, DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurInput>
+  }
+
+  export type DemandeEmpruntScalarWhereInput = {
+    AND?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+    OR?: DemandeEmpruntScalarWhereInput[]
+    NOT?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+    id?: IntFilter<"DemandeEmprunt"> | number
+    utilisateurId?: IntFilter<"DemandeEmprunt"> | number
+    equipementId?: IntFilter<"DemandeEmprunt"> | number
+    dateDemande?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    dateRetourPrevu?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    usage?: StringFilter<"DemandeEmprunt"> | string
+    statut?: EnumStatutDemandeFilter<"DemandeEmprunt"> | $Enums.StatutDemande
+    type?: EnumTypeDemandeFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    createdAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+    updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
+  }
+
+  export type UtilisationConsommableUpsertWithWhereUniqueWithoutUtilisateurInput = {
+    where: UtilisationConsommableWhereUniqueInput
+    update: XOR<UtilisationConsommableUpdateWithoutUtilisateurInput, UtilisationConsommableUncheckedUpdateWithoutUtilisateurInput>
+    create: XOR<UtilisationConsommableCreateWithoutUtilisateurInput, UtilisationConsommableUncheckedCreateWithoutUtilisateurInput>
+  }
+
+  export type UtilisationConsommableUpdateWithWhereUniqueWithoutUtilisateurInput = {
+    where: UtilisationConsommableWhereUniqueInput
+    data: XOR<UtilisationConsommableUpdateWithoutUtilisateurInput, UtilisationConsommableUncheckedUpdateWithoutUtilisateurInput>
+  }
+
+  export type UtilisationConsommableUpdateManyWithWhereWithoutUtilisateurInput = {
+    where: UtilisationConsommableScalarWhereInput
+    data: XOR<UtilisationConsommableUpdateManyMutationInput, UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurInput>
+  }
+
+  export type UtilisationConsommableScalarWhereInput = {
+    AND?: UtilisationConsommableScalarWhereInput | UtilisationConsommableScalarWhereInput[]
+    OR?: UtilisationConsommableScalarWhereInput[]
+    NOT?: UtilisationConsommableScalarWhereInput | UtilisationConsommableScalarWhereInput[]
+    id?: IntFilter<"UtilisationConsommable"> | number
+    utilisateurId?: IntFilter<"UtilisationConsommable"> | number
+    consommableId?: IntFilter<"UtilisationConsommable"> | number
+    quantiteUtilise?: IntFilter<"UtilisationConsommable"> | number
+    dateUtilisation?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    description?: StringNullableFilter<"UtilisationConsommable"> | string | null
+    createdAt?: DateTimeFilter<"UtilisationConsommable"> | Date | string
+    updatedAt?: DateTimeFilter<"UtilisationConsommable"> | Date | string
   }
 
   export type UtilisateurCreateWithoutEmpruntsInput = {
     nom: string
     prenom: string
     email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
     createdAt?: Date | string
     updateAt?: Date | string
-    role?: $Enums.RoleUtilisateur
+    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutUtilisateurInput
+    utilisationsConsommable?: UtilisationConsommableCreateNestedManyWithoutUtilisateurInput
   }
 
   export type UtilisateurUncheckedCreateWithoutEmpruntsInput = {
@@ -10124,9 +14799,12 @@ export namespace Prisma {
     nom: string
     prenom: string
     email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
     createdAt?: Date | string
     updateAt?: Date | string
-    role?: $Enums.RoleUtilisateur
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutUtilisateurInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedCreateNestedManyWithoutUtilisateurInput
   }
 
   export type UtilisateurCreateOrConnectWithoutEmpruntsInput = {
@@ -10136,15 +14814,33 @@ export namespace Prisma {
 
   export type EquipementCreateWithoutEmpruntInput = {
     nom: string
-    type: string
-    etat?: $Enums.Etat
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutEquipementInput
   }
 
   export type EquipementUncheckedCreateWithoutEmpruntInput = {
     id?: number
     nom: string
-    type: string
-    etat?: $Enums.Etat
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput
   }
 
   export type EquipementCreateOrConnectWithoutEmpruntInput = {
@@ -10161,15 +14857,21 @@ export namespace Prisma {
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    consommable: ConsommableCreateNestedOneWithoutNotificationInput
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consommable?: ConsommableCreateNestedOneWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateWithoutEmpruntInput = {
     id?: number
+    consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    consommableId: number
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationCreateOrConnectWithoutEmpruntInput = {
@@ -10197,9 +14899,12 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     prenom?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
+    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutUtilisateurNestedInput
+    utilisationsConsommable?: UtilisationConsommableUpdateManyWithoutUtilisateurNestedInput
   }
 
   export type UtilisateurUncheckedUpdateWithoutEmpruntsInput = {
@@ -10207,9 +14912,12 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     prenom?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurNestedInput
   }
 
   export type EquipementUpsertWithWhereUniqueWithoutEmpruntInput = {
@@ -10233,10 +14941,18 @@ export namespace Prisma {
     OR?: EquipementScalarWhereInput[]
     NOT?: EquipementScalarWhereInput | EquipementScalarWhereInput[]
     id?: IntFilter<"Equipement"> | number
+    empruntId?: IntNullableFilter<"Equipement"> | number | null
     nom?: StringFilter<"Equipement"> | string
-    type?: StringFilter<"Equipement"> | string
-    etat?: EnumEtatFilter<"Equipement"> | $Enums.Etat
-    empruntId?: IntFilter<"Equipement"> | number
+    numeroDeSerie?: StringFilter<"Equipement"> | string
+    marque?: StringFilter<"Equipement"> | string
+    disponibilite?: EnumDisponibiliteFilter<"Equipement"> | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFilter<"Equipement"> | $Enums.EtatMateriel
+    obtention?: EnumObtentionFilter<"Equipement"> | $Enums.Obtention
+    prix?: FloatFilter<"Equipement"> | number
+    fournisseur?: StringNullableFilter<"Equipement"> | string | null
+    donateur?: StringNullableFilter<"Equipement"> | string | null
+    createdAt?: DateTimeFilter<"Equipement"> | Date | string
+    updatedAt?: DateTimeFilter<"Equipement"> | Date | string
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutEmpruntInput = {
@@ -10260,35 +14976,221 @@ export namespace Prisma {
     OR?: NotificationScalarWhereInput[]
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     id?: IntFilter<"Notification"> | number
+    empruntId?: IntNullableFilter<"Notification"> | number | null
+    consommableId?: IntNullableFilter<"Notification"> | number | null
     message?: StringFilter<"Notification"> | string
     DateEnvoi?: DateTimeFilter<"Notification"> | Date | string
     type?: EnumTypeNotificationFilter<"Notification"> | $Enums.TypeNotification
-    empruntId?: IntFilter<"Notification"> | number
-    consommableId?: IntFilter<"Notification"> | number
+    vu?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    updatedAt?: DateTimeFilter<"Notification"> | Date | string
+  }
+
+  export type UtilisateurCreateWithoutDemandeEmpruntInput = {
+    nom: string
+    prenom: string
+    email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
+    createdAt?: Date | string
+    updateAt?: Date | string
+    emprunts?: EmpruntCreateNestedManyWithoutUtilisateurInput
+    utilisationsConsommable?: UtilisationConsommableCreateNestedManyWithoutUtilisateurInput
+  }
+
+  export type UtilisateurUncheckedCreateWithoutDemandeEmpruntInput = {
+    id?: number
+    nom: string
+    prenom: string
+    email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
+    createdAt?: Date | string
+    updateAt?: Date | string
+    emprunts?: EmpruntUncheckedCreateNestedManyWithoutUtilisateurInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedCreateNestedManyWithoutUtilisateurInput
+  }
+
+  export type UtilisateurCreateOrConnectWithoutDemandeEmpruntInput = {
+    where: UtilisateurWhereUniqueInput
+    create: XOR<UtilisateurCreateWithoutDemandeEmpruntInput, UtilisateurUncheckedCreateWithoutDemandeEmpruntInput>
+  }
+
+  export type EquipementCreateWithoutDemandeEmpruntInput = {
+    nom: string
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emprunt?: EmpruntCreateNestedOneWithoutEquipementInput
+  }
+
+  export type EquipementUncheckedCreateWithoutDemandeEmpruntInput = {
+    id?: number
+    empruntId?: number | null
+    nom: string
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EquipementCreateOrConnectWithoutDemandeEmpruntInput = {
+    where: EquipementWhereUniqueInput
+    create: XOR<EquipementCreateWithoutDemandeEmpruntInput, EquipementUncheckedCreateWithoutDemandeEmpruntInput>
+  }
+
+  export type UtilisateurUpsertWithoutDemandeEmpruntInput = {
+    update: XOR<UtilisateurUpdateWithoutDemandeEmpruntInput, UtilisateurUncheckedUpdateWithoutDemandeEmpruntInput>
+    create: XOR<UtilisateurCreateWithoutDemandeEmpruntInput, UtilisateurUncheckedCreateWithoutDemandeEmpruntInput>
+    where?: UtilisateurWhereInput
+  }
+
+  export type UtilisateurUpdateToOneWithWhereWithoutDemandeEmpruntInput = {
+    where?: UtilisateurWhereInput
+    data: XOR<UtilisateurUpdateWithoutDemandeEmpruntInput, UtilisateurUncheckedUpdateWithoutDemandeEmpruntInput>
+  }
+
+  export type UtilisateurUpdateWithoutDemandeEmpruntInput = {
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunts?: EmpruntUpdateManyWithoutUtilisateurNestedInput
+    utilisationsConsommable?: UtilisationConsommableUpdateManyWithoutUtilisateurNestedInput
+  }
+
+  export type UtilisateurUncheckedUpdateWithoutDemandeEmpruntInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunts?: EmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput
+    utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurNestedInput
+  }
+
+  export type EquipementUpsertWithoutDemandeEmpruntInput = {
+    update: XOR<EquipementUpdateWithoutDemandeEmpruntInput, EquipementUncheckedUpdateWithoutDemandeEmpruntInput>
+    create: XOR<EquipementCreateWithoutDemandeEmpruntInput, EquipementUncheckedCreateWithoutDemandeEmpruntInput>
+    where?: EquipementWhereInput
+  }
+
+  export type EquipementUpdateToOneWithWhereWithoutDemandeEmpruntInput = {
+    where?: EquipementWhereInput
+    data: XOR<EquipementUpdateWithoutDemandeEmpruntInput, EquipementUncheckedUpdateWithoutDemandeEmpruntInput>
+  }
+
+  export type EquipementUpdateWithoutDemandeEmpruntInput = {
+    nom?: StringFieldUpdateOperationsInput | string
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUpdateOneWithoutEquipementNestedInput
+  }
+
+  export type EquipementUncheckedUpdateWithoutDemandeEmpruntInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    nom?: StringFieldUpdateOperationsInput | string
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmpruntCreateWithoutEquipementInput = {
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutEmpruntsInput
     notification?: NotificationCreateNestedManyWithoutEmpruntInput
   }
 
   export type EmpruntUncheckedCreateWithoutEquipementInput = {
     id?: number
+    utilisateurId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
-    utilisateurId: number
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutEmpruntInput
   }
 
   export type EmpruntCreateOrConnectWithoutEquipementInput = {
     where: EmpruntWhereUniqueInput
     create: XOR<EmpruntCreateWithoutEquipementInput, EmpruntUncheckedCreateWithoutEquipementInput>
+  }
+
+  export type DemandeEmpruntCreateWithoutEquipementInput = {
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
+  }
+
+  export type DemandeEmpruntUncheckedCreateWithoutEquipementInput = {
+    id?: number
+    utilisateurId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntCreateOrConnectWithoutEquipementInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    create: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+  }
+
+  export type DemandeEmpruntCreateManyEquipementInputEnvelope = {
+    data: DemandeEmpruntCreateManyEquipementInput | DemandeEmpruntCreateManyEquipementInput[]
+    skipDuplicates?: boolean
   }
 
   export type EmpruntUpsertWithoutEquipementInput = {
@@ -10306,37 +15208,65 @@ export namespace Prisma {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutEmpruntsNestedInput
     notification?: NotificationUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntUncheckedUpdateWithoutEquipementInput = {
     id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    utilisateurId?: IntFieldUpdateOperationsInput | number
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutEmpruntNestedInput
+  }
+
+  export type DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    update: XOR<DemandeEmpruntUpdateWithoutEquipementInput, DemandeEmpruntUncheckedUpdateWithoutEquipementInput>
+    create: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+  }
+
+  export type DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    data: XOR<DemandeEmpruntUpdateWithoutEquipementInput, DemandeEmpruntUncheckedUpdateWithoutEquipementInput>
+  }
+
+  export type DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput = {
+    where: DemandeEmpruntScalarWhereInput
+    data: XOR<DemandeEmpruntUpdateManyMutationInput, DemandeEmpruntUncheckedUpdateManyWithoutEquipementInput>
   }
 
   export type EmpruntCreateWithoutNotificationInput = {
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutEmpruntsInput
     equipement?: EquipementCreateNestedManyWithoutEmpruntInput
   }
 
   export type EmpruntUncheckedCreateWithoutNotificationInput = {
     id?: number
+    utilisateurId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
-    utilisateurId: number
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
     equipement?: EquipementUncheckedCreateNestedManyWithoutEmpruntInput
   }
 
@@ -10349,6 +15279,12 @@ export namespace Prisma {
     nom: string
     quantiteDisponible: number
     seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisationsConsommable?: UtilisationConsommableCreateNestedManyWithoutConsommableInput
   }
 
   export type ConsommableUncheckedCreateWithoutNotificationInput = {
@@ -10356,6 +15292,12 @@ export namespace Prisma {
     nom: string
     quantiteDisponible: number
     seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisationsConsommable?: UtilisationConsommableUncheckedCreateNestedManyWithoutConsommableInput
   }
 
   export type ConsommableCreateOrConnectWithoutNotificationInput = {
@@ -10378,18 +15320,24 @@ export namespace Prisma {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutEmpruntsNestedInput
     equipement?: EquipementUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntUncheckedUpdateWithoutNotificationInput = {
     id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    utilisateurId?: IntFieldUpdateOperationsInput | number
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     equipement?: EquipementUncheckedUpdateManyWithoutEmpruntNestedInput
   }
 
@@ -10408,6 +15356,12 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisationsConsommable?: UtilisationConsommableUpdateManyWithoutConsommableNestedInput
   }
 
   export type ConsommableUncheckedUpdateWithoutNotificationInput = {
@@ -10415,21 +15369,33 @@ export namespace Prisma {
     nom?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutConsommableNestedInput
   }
 
   export type NotificationCreateWithoutConsommableInput = {
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    emprunt: EmpruntCreateNestedOneWithoutNotificationInput
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emprunt?: EmpruntCreateNestedOneWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateWithoutConsommableInput = {
     id?: number
+    empruntId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    empruntId: number
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationCreateOrConnectWithoutConsommableInput = {
@@ -10439,6 +15405,35 @@ export namespace Prisma {
 
   export type NotificationCreateManyConsommableInputEnvelope = {
     data: NotificationCreateManyConsommableInput | NotificationCreateManyConsommableInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UtilisationConsommableCreateWithoutConsommableInput = {
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisateur: UtilisateurCreateNestedOneWithoutUtilisationsConsommableInput
+  }
+
+  export type UtilisationConsommableUncheckedCreateWithoutConsommableInput = {
+    id?: number
+    utilisateurId: number
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UtilisationConsommableCreateOrConnectWithoutConsommableInput = {
+    where: UtilisationConsommableWhereUniqueInput
+    create: XOR<UtilisationConsommableCreateWithoutConsommableInput, UtilisationConsommableUncheckedCreateWithoutConsommableInput>
+  }
+
+  export type UtilisationConsommableCreateManyConsommableInputEnvelope = {
+    data: UtilisationConsommableCreateManyConsommableInput | UtilisationConsommableCreateManyConsommableInput[]
     skipDuplicates?: boolean
   }
 
@@ -10458,19 +15453,195 @@ export namespace Prisma {
     data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutConsommableInput>
   }
 
+  export type UtilisationConsommableUpsertWithWhereUniqueWithoutConsommableInput = {
+    where: UtilisationConsommableWhereUniqueInput
+    update: XOR<UtilisationConsommableUpdateWithoutConsommableInput, UtilisationConsommableUncheckedUpdateWithoutConsommableInput>
+    create: XOR<UtilisationConsommableCreateWithoutConsommableInput, UtilisationConsommableUncheckedCreateWithoutConsommableInput>
+  }
+
+  export type UtilisationConsommableUpdateWithWhereUniqueWithoutConsommableInput = {
+    where: UtilisationConsommableWhereUniqueInput
+    data: XOR<UtilisationConsommableUpdateWithoutConsommableInput, UtilisationConsommableUncheckedUpdateWithoutConsommableInput>
+  }
+
+  export type UtilisationConsommableUpdateManyWithWhereWithoutConsommableInput = {
+    where: UtilisationConsommableScalarWhereInput
+    data: XOR<UtilisationConsommableUpdateManyMutationInput, UtilisationConsommableUncheckedUpdateManyWithoutConsommableInput>
+  }
+
+  export type UtilisateurCreateWithoutUtilisationsConsommableInput = {
+    nom: string
+    prenom: string
+    email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
+    createdAt?: Date | string
+    updateAt?: Date | string
+    emprunts?: EmpruntCreateNestedManyWithoutUtilisateurInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutUtilisateurInput
+  }
+
+  export type UtilisateurUncheckedCreateWithoutUtilisationsConsommableInput = {
+    id?: number
+    nom: string
+    prenom: string
+    email: string
+    motdepasse: string
+    role?: $Enums.RoleUtilisateur
+    createdAt?: Date | string
+    updateAt?: Date | string
+    emprunts?: EmpruntUncheckedCreateNestedManyWithoutUtilisateurInput
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutUtilisateurInput
+  }
+
+  export type UtilisateurCreateOrConnectWithoutUtilisationsConsommableInput = {
+    where: UtilisateurWhereUniqueInput
+    create: XOR<UtilisateurCreateWithoutUtilisationsConsommableInput, UtilisateurUncheckedCreateWithoutUtilisationsConsommableInput>
+  }
+
+  export type ConsommableCreateWithoutUtilisationsConsommableInput = {
+    nom: string
+    quantiteDisponible: number
+    seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    notification?: NotificationCreateNestedManyWithoutConsommableInput
+  }
+
+  export type ConsommableUncheckedCreateWithoutUtilisationsConsommableInput = {
+    id?: number
+    nom: string
+    quantiteDisponible: number
+    seuilCritique: number
+    obtention?: $Enums.Obtention
+    fournisseur?: string | null
+    donnateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    notification?: NotificationUncheckedCreateNestedManyWithoutConsommableInput
+  }
+
+  export type ConsommableCreateOrConnectWithoutUtilisationsConsommableInput = {
+    where: ConsommableWhereUniqueInput
+    create: XOR<ConsommableCreateWithoutUtilisationsConsommableInput, ConsommableUncheckedCreateWithoutUtilisationsConsommableInput>
+  }
+
+  export type UtilisateurUpsertWithoutUtilisationsConsommableInput = {
+    update: XOR<UtilisateurUpdateWithoutUtilisationsConsommableInput, UtilisateurUncheckedUpdateWithoutUtilisationsConsommableInput>
+    create: XOR<UtilisateurCreateWithoutUtilisationsConsommableInput, UtilisateurUncheckedCreateWithoutUtilisationsConsommableInput>
+    where?: UtilisateurWhereInput
+  }
+
+  export type UtilisateurUpdateToOneWithWhereWithoutUtilisationsConsommableInput = {
+    where?: UtilisateurWhereInput
+    data: XOR<UtilisateurUpdateWithoutUtilisationsConsommableInput, UtilisateurUncheckedUpdateWithoutUtilisationsConsommableInput>
+  }
+
+  export type UtilisateurUpdateWithoutUtilisationsConsommableInput = {
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunts?: EmpruntUpdateManyWithoutUtilisateurNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutUtilisateurNestedInput
+  }
+
+  export type UtilisateurUncheckedUpdateWithoutUtilisationsConsommableInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nom?: StringFieldUpdateOperationsInput | string
+    prenom?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    motdepasse?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleUtilisateurFieldUpdateOperationsInput | $Enums.RoleUtilisateur
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunts?: EmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurNestedInput
+  }
+
+  export type ConsommableUpsertWithoutUtilisationsConsommableInput = {
+    update: XOR<ConsommableUpdateWithoutUtilisationsConsommableInput, ConsommableUncheckedUpdateWithoutUtilisationsConsommableInput>
+    create: XOR<ConsommableCreateWithoutUtilisationsConsommableInput, ConsommableUncheckedCreateWithoutUtilisationsConsommableInput>
+    where?: ConsommableWhereInput
+  }
+
+  export type ConsommableUpdateToOneWithWhereWithoutUtilisationsConsommableInput = {
+    where?: ConsommableWhereInput
+    data: XOR<ConsommableUpdateWithoutUtilisationsConsommableInput, ConsommableUncheckedUpdateWithoutUtilisationsConsommableInput>
+  }
+
+  export type ConsommableUpdateWithoutUtilisationsConsommableInput = {
+    nom?: StringFieldUpdateOperationsInput | string
+    quantiteDisponible?: IntFieldUpdateOperationsInput | number
+    seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notification?: NotificationUpdateManyWithoutConsommableNestedInput
+  }
+
+  export type ConsommableUncheckedUpdateWithoutUtilisationsConsommableInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nom?: StringFieldUpdateOperationsInput | string
+    quantiteDisponible?: IntFieldUpdateOperationsInput | number
+    seuilCritique?: IntFieldUpdateOperationsInput | number
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notification?: NotificationUncheckedUpdateManyWithoutConsommableNestedInput
+  }
+
   export type EmpruntCreateManyUtilisateurInput = {
     id?: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
+    usage: string
     statut?: $Enums.Statut
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntCreateManyUtilisateurInput = {
+    id?: number
+    equipementId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UtilisationConsommableCreateManyUtilisateurInput = {
+    id?: number
+    consommableId: number
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EmpruntUpdateWithoutUtilisateurInput = {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     equipement?: EquipementUpdateManyWithoutEmpruntNestedInput
     notification?: NotificationUpdateManyWithoutEmpruntNestedInput
   }
@@ -10480,7 +15651,10 @@ export namespace Prisma {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     equipement?: EquipementUncheckedUpdateManyWithoutEmpruntNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutEmpruntNestedInput
   }
@@ -10490,96 +15664,307 @@ export namespace Prisma {
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntUpdateWithoutUtilisateurInput = {
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    equipement?: EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+  }
+
+  export type DemandeEmpruntUncheckedUpdateWithoutUtilisateurInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableUpdateWithoutUtilisateurInput = {
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consommable?: ConsommableUpdateOneRequiredWithoutUtilisationsConsommableNestedInput
+  }
+
+  export type UtilisationConsommableUncheckedUpdateWithoutUtilisateurInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    consommableId?: IntFieldUpdateOperationsInput | number
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    consommableId?: IntFieldUpdateOperationsInput | number
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EquipementCreateManyEmpruntInput = {
     id?: number
     nom: string
-    type: string
-    etat?: $Enums.Etat
+    numeroDeSerie: string
+    marque: string
+    disponibilite?: $Enums.Disponibilite
+    etatMateriel?: $Enums.EtatMateriel
+    obtention?: $Enums.Obtention
+    prix: number
+    fournisseur?: string | null
+    donateur?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationCreateManyEmpruntInput = {
     id?: number
+    consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    consommableId: number
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type EquipementUpdateWithoutEmpruntInput = {
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
   }
 
   export type EquipementUncheckedUpdateWithoutEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
   }
 
   export type EquipementUncheckedUpdateManyWithoutEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
     nom?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    etat?: EnumEtatFieldUpdateOperationsInput | $Enums.Etat
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUpdateWithoutEmpruntInput = {
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    consommable?: ConsommableUpdateOneRequiredWithoutNotificationNestedInput
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consommable?: ConsommableUpdateOneWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateWithoutEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
+    consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    consommableId?: IntFieldUpdateOperationsInput | number
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyWithoutEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
+    consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    consommableId?: IntFieldUpdateOperationsInput | number
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntCreateManyEquipementInput = {
+    id?: number
+    utilisateurId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntUpdateWithoutEquipementInput = {
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+  }
+
+  export type DemandeEmpruntUncheckedUpdateWithoutEquipementInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DemandeEmpruntUncheckedUpdateManyWithoutEquipementInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateManyConsommableInput = {
     id?: number
+    empruntId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
-    empruntId: number
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UtilisationConsommableCreateManyConsommableInput = {
+    id?: number
+    utilisateurId: number
+    quantiteUtilise: number
+    dateUtilisation?: Date | string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type NotificationUpdateWithoutConsommableInput = {
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    emprunt?: EmpruntUpdateOneRequiredWithoutNotificationNestedInput
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUpdateOneWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateWithoutConsommableInput = {
     id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    empruntId?: IntFieldUpdateOperationsInput | number
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUncheckedUpdateManyWithoutConsommableInput = {
     id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
-    empruntId?: IntFieldUpdateOperationsInput | number
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableUpdateWithoutConsommableInput = {
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisateur?: UtilisateurUpdateOneRequiredWithoutUtilisationsConsommableNestedInput
+  }
+
+  export type UtilisationConsommableUncheckedUpdateWithoutConsommableInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UtilisationConsommableUncheckedUpdateManyWithoutConsommableInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    quantiteUtilise?: IntFieldUpdateOperationsInput | number
+    dateUtilisation?: DateTimeFieldUpdateOperationsInput | Date | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

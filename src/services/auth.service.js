@@ -3,27 +3,27 @@
     const generateToken = require("../utils/jwt.util.js");
 
     class AuthService {
-        static async register({ nom, prenom, email, motDePasse, role }) {
+        static async register({ nom, prenom, email, motdepasse, role }) {
             // Vérifier si l'user est déjà exister
             const existing = await prisma.utilisateur.findUnique({ where: { email }});
             if (existing) throw new Error("Email déjà existant");
             
-            // console.log("Mot de passe reçu :", motDePasse);
+            // console.log("Mot de passe reçu :", motdepasse);
 
             // Validation de la mdp
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-            if (!passwordRegex.test(motDePasse)) {
+            if (!passwordRegex.test(motdepasse)) {
                 throw new Error("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.");
             }
 
-            const hashedPassword = await passwordUtils.hashPassword(motDePasse);
+            const hashedPassword = await passwordUtils.hashPassword(motdepasse);
 
             const user = await prisma.utilisateur.create({
                 data: {
                     nom,
                     prenom,
                     email,
-                    motDePasse: hashedPassword,
+                    motdepasse: hashedPassword,
                     role,
                 },
             });
@@ -35,13 +35,13 @@
             };
         }
 
-        static async login({ email, motDePasse }) {
+        static async login({ email, motdepasse }) {
             const user = await prisma.utilisateur.findUnique({ where: { email } });
             if (!user) throw new Error("Email ou mot de passe invalide");
 
             const isValid = await passwordUtils.verifyPassword(
-                motDePasse,
-                user.motDePasse,
+                motdepasse,
+                user.motdepasse,
             );
 
             if (!isValid) throw new Error("Email ou mot de passe invalide");
@@ -64,7 +64,7 @@
 
             const isValid = await passwordUtils.verifyPassword(
                 oldPassword,
-                user.motDePasse,
+                user.motdepasse,
             );
             if(!isValid) throw new Error("Mot de passe actuel invalide");
 
@@ -72,7 +72,7 @@
 
             await prisma.utilisateur.update({
                 where: { id: userId },
-                data: { motDePasse: hashedPassword },
+                data: { motdepasse: hashedPassword },
             });
 
             return { message: "Mot de passe modifié avec succès" }; 

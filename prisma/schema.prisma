@@ -4,24 +4,26 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
 
 model Utilisateur {
   id                      Int             @id @default(autoincrement())
   nom                     String          @db.VarChar(100)
   prenom                  String          @db.VarChar(100)
   email                   String          @unique @db.VarChar(100)
-  motDePasse              String
+  motdepasse              String
+  role                    RoleUtilisateur @default(personnelInterne)
   createdAt               DateTime        @default(now())
   updateAt                DateTime        @updatedAt
-  role                    RoleUtilisateur @default(personnelInterne)
         
   emprunts                Emprunt[]
   demandeEmprunt          DemandeEmprunt[]
@@ -30,16 +32,16 @@ model Utilisateur {
 
 model Emprunt {
   id                  Int             @id  @default(autoincrement())
+  utilisateurId       Int             
   dateEmprunt         DateTime        @default(now())
   dateRetourPrevu     DateTime
   dateRetourEffective DateTime?
   usage               String
-  utilisateur         Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
-  utilisateurId       Int             
   statut              Statut          @default(EnCours)
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
 
+  utilisateur         Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
   equipement          Equipement[]
   notification        Notification[]
 }
@@ -62,6 +64,7 @@ model DemandeEmprunt {
 
 model Equipement {
   id             Int              @id  @default(autoincrement())
+  empruntId      Int?         
   nom            String           @db.VarChar(30)
   numeroDeSerie  String           @db.VarChar(30)
   marque         String           @db.VarChar(30)
@@ -70,25 +73,25 @@ model Equipement {
   obtention      Obtention        @default(Achat)
   prix           Float
   fournisseur    String?
-  donateur      String?
+  donateur       String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
-  emprunt        Emprunt?         @relation(fields: [empruntId], references: [id], onDelete: Cascade)
-  empruntId      Int?         
 
+  emprunt        Emprunt?         @relation(fields: [empruntId], references: [id], onDelete: Cascade)
   demandeEmprunt DemandeEmprunt[]
 }
 
 model Notification {
   id             Int                @id  @default(autoincrement())
+  empruntId      Int?               
+  consommableId  Int?               
   message        String      
   DateEnvoi      DateTime           @default(now())
   type           TypeNotification   @default(AlerteStock)
   vu             Boolean            @default(false)
-  empruntId      Int?               
-  consommableId  Int?               
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
+
   emprunt        Emprunt?           @relation(fields: [empruntId], references: [id], onDelete: Cascade)
   consommable    Consommable?       @relation(fields: [consommableId], references: [id], onDelete: Cascade)
 }

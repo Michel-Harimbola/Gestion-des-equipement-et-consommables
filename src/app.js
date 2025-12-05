@@ -22,4 +22,9 @@ app.get('/', (req, res) => {
     res.send("API is running.");
 });
 
+app.post('/test', (req, res) => {
+  console.log("REQ BODY /test =>", req.body);
+  res.json(req.body);
+});
+
 module.exports = app;

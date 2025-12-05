@@ -2,18 +2,18 @@ const prisma = require("../lib/prisma.js");
 const PasswordUtils = require("../utils/password.util.js");
 
 class UserService {
-    static async createUser(nom, prenom, email, motDePasse, role) {
+    static async createUser(nom, prenom, email, motdepasse, role) {
         const existing = await prisma.utilisateur.findUnique({ where: { email } });
         if(existing) throw new Error("Utilisateur déjà exister");
 
-        const hashedPassword = await PasswordUtils.hashPassword(motDePasse);
+        const hashedPassword = await PasswordUtils.hashPassword(motdepasse);
 
         const user = await prisma.utilisateur.create({
             data:{
                 nom,
                 prenom,
                 email,
-                motDePasse: hashedPassword,
+                motdepasse: hashedPassword,
                 role,
             },
         });

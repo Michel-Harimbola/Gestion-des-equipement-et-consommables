@@ -32,14 +32,14 @@ class EmpruntService {
                     dateRetourPrevu: new Date(dateRetourPrevu),
                     usage: usage,
                     utilisateurId: userId,
+                    equipementId: equipId,
                 },
             });
             //mise à jour l'état de l'équipement
             await tx.equipement.update({
                 where: { id: equipId },
                 data: {
-                    disponibilite: "Emprunte",
-                    empruntId: emprunt.id,
+                    disponibilite: "Emprunte"
                 },
             });
 
@@ -118,7 +118,23 @@ class EmpruntService {
             }
         });
 
-        return emprunts
+        return emprunts;
+    }
+
+    static async getRecentEmprunts() {
+        const emprunts = await prisma.emprunt.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: 3,
+            include: {
+                utilisateur: {
+                    select: { nom: true, prenom: true, email: true }
+                },
+                equipement: {
+                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                }
+            }
+        });
+        return emprunts;
     }
 
     static async returnEmprunt (id, userId) {

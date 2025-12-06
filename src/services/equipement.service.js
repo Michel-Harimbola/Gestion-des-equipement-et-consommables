@@ -2,7 +2,7 @@ const prisma = require("../lib/prisma.js");
 
 class EquipementService {
     static async createEquipement(data) {
-        const {nom, numeroDeSerie, marque, disponibilite, etatMateriel, prix, fournisseur, donateur} = data;
+        const {nom, numeroDeSerie, marque, disponibilite, etatMateriel, obtention, prix, fournisseur, donateur} = data;
         const equipement = await prisma.equipement.create({
             data: {
                 nom: nom, 
@@ -10,6 +10,7 @@ class EquipementService {
                 marque: marque,
                 disponibilite: disponibilite,
                 etatMateriel: etatMateriel,
+                obtention: obtention,
                 prix: Number(prix),
                 fournisseur: fournisseur,
                 donateur: donateur,
@@ -32,6 +33,7 @@ class EquipementService {
                 marque: true,
                 disponibilite: true,
                 etatMateriel: true,
+                obtention: true,
                 prix: true,
                 fournisseur: true,
                 donateur: true,
@@ -51,6 +53,7 @@ class EquipementService {
                 marque: true,
                 disponibilite: true,
                 etatMateriel: true,
+                obtention: true,
                 prix: true,
                 fournisseur: true,
                 donateur: true,

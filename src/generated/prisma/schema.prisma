@@ -32,6 +32,7 @@ model Utilisateur {
 model Emprunt {
   id                  Int       @id @default(autoincrement())
   utilisateurId       Int
+  equipementId        Int       @unique
   dateEmprunt         DateTime  @default(now())
   dateRetourPrevu     DateTime
   dateRetourEffective DateTime?
@@ -41,7 +42,7 @@ model Emprunt {
   updatedAt           DateTime  @updatedAt
 
   utilisateur  Utilisateur    @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
-  equipement   Equipement[]
+  equipement   Equipement     @relation(fields: [equipementId], references: [id], onDelete: Cascade)
   notification Notification[]
 }
 
@@ -63,12 +64,11 @@ model DemandeEmprunt {
 
 model Equipement {
   id            Int           @id @default(autoincrement())
-  empruntId     Int?
   nom           String        @db.VarChar(30)
   numeroDeSerie String        @db.VarChar(30)
   marque        String        @db.VarChar(30)
   disponibilite Disponibilite @default(Disponible)
-  etatMateriel  EtatMateriel  @default(BonEtat)
+  etatMateriel  EtatMateriel  @default(Neuf)
   obtention     Obtention     @default(Achat)
   prix          Float
   fournisseur   String?
@@ -76,7 +76,7 @@ model Equipement {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
-  emprunt        Emprunt?         @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  emprunt        Emprunt?
   demandeEmprunt DemandeEmprunt[]
 }
 

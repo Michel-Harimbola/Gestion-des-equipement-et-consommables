@@ -1684,12 +1684,10 @@ export namespace Prisma {
    */
 
   export type EmpruntCountOutputType = {
-    equipement: number
     notification: number
   }
 
   export type EmpruntCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    equipement?: boolean | EmpruntCountOutputTypeCountEquipementArgs
     notification?: boolean | EmpruntCountOutputTypeCountNotificationArgs
   }
 
@@ -1702,13 +1700,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the EmpruntCountOutputType
      */
     select?: EmpruntCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * EmpruntCountOutputType without action
-   */
-  export type EmpruntCountOutputTypeCountEquipementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: EquipementWhereInput
   }
 
   /**
@@ -3008,16 +2999,19 @@ export namespace Prisma {
   export type EmpruntAvgAggregateOutputType = {
     id: number | null
     utilisateurId: number | null
+    equipementId: number | null
   }
 
   export type EmpruntSumAggregateOutputType = {
     id: number | null
     utilisateurId: number | null
+    equipementId: number | null
   }
 
   export type EmpruntMinAggregateOutputType = {
     id: number | null
     utilisateurId: number | null
+    equipementId: number | null
     dateEmprunt: Date | null
     dateRetourPrevu: Date | null
     dateRetourEffective: Date | null
@@ -3030,6 +3024,7 @@ export namespace Prisma {
   export type EmpruntMaxAggregateOutputType = {
     id: number | null
     utilisateurId: number | null
+    equipementId: number | null
     dateEmprunt: Date | null
     dateRetourPrevu: Date | null
     dateRetourEffective: Date | null
@@ -3042,6 +3037,7 @@ export namespace Prisma {
   export type EmpruntCountAggregateOutputType = {
     id: number
     utilisateurId: number
+    equipementId: number
     dateEmprunt: number
     dateRetourPrevu: number
     dateRetourEffective: number
@@ -3056,16 +3052,19 @@ export namespace Prisma {
   export type EmpruntAvgAggregateInputType = {
     id?: true
     utilisateurId?: true
+    equipementId?: true
   }
 
   export type EmpruntSumAggregateInputType = {
     id?: true
     utilisateurId?: true
+    equipementId?: true
   }
 
   export type EmpruntMinAggregateInputType = {
     id?: true
     utilisateurId?: true
+    equipementId?: true
     dateEmprunt?: true
     dateRetourPrevu?: true
     dateRetourEffective?: true
@@ -3078,6 +3077,7 @@ export namespace Prisma {
   export type EmpruntMaxAggregateInputType = {
     id?: true
     utilisateurId?: true
+    equipementId?: true
     dateEmprunt?: true
     dateRetourPrevu?: true
     dateRetourEffective?: true
@@ -3090,6 +3090,7 @@ export namespace Prisma {
   export type EmpruntCountAggregateInputType = {
     id?: true
     utilisateurId?: true
+    equipementId?: true
     dateEmprunt?: true
     dateRetourPrevu?: true
     dateRetourEffective?: true
@@ -3189,6 +3190,7 @@ export namespace Prisma {
   export type EmpruntGroupByOutputType = {
     id: number
     utilisateurId: number
+    equipementId: number
     dateEmprunt: Date
     dateRetourPrevu: Date
     dateRetourEffective: Date | null
@@ -3220,6 +3222,7 @@ export namespace Prisma {
   export type EmpruntSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     utilisateurId?: boolean
+    equipementId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
@@ -3228,7 +3231,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
-    equipement?: boolean | Emprunt$equipementArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
     notification?: boolean | Emprunt$notificationArgs<ExtArgs>
     _count?: boolean | EmpruntCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emprunt"]>
@@ -3236,6 +3239,7 @@ export namespace Prisma {
   export type EmpruntSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     utilisateurId?: boolean
+    equipementId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
@@ -3244,11 +3248,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emprunt"]>
 
   export type EmpruntSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     utilisateurId?: boolean
+    equipementId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
@@ -3257,11 +3263,13 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emprunt"]>
 
   export type EmpruntSelectScalar = {
     id?: boolean
     utilisateurId?: boolean
+    equipementId?: boolean
     dateEmprunt?: boolean
     dateRetourPrevu?: boolean
     dateRetourEffective?: boolean
@@ -3271,30 +3279,33 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "dateEmprunt" | "dateRetourPrevu" | "dateRetourEffective" | "usage" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["emprunt"]>
+  export type EmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "equipementId" | "dateEmprunt" | "dateRetourPrevu" | "dateRetourEffective" | "usage" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["emprunt"]>
   export type EmpruntInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
-    equipement?: boolean | Emprunt$equipementArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
     notification?: boolean | Emprunt$notificationArgs<ExtArgs>
     _count?: boolean | EmpruntCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EmpruntIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
   }
   export type EmpruntIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
+    equipement?: boolean | EquipementDefaultArgs<ExtArgs>
   }
 
   export type $EmpruntPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Emprunt"
     objects: {
       utilisateur: Prisma.$UtilisateurPayload<ExtArgs>
-      equipement: Prisma.$EquipementPayload<ExtArgs>[]
+      equipement: Prisma.$EquipementPayload<ExtArgs>
       notification: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       utilisateurId: number
+      equipementId: number
       dateEmprunt: Date
       dateRetourPrevu: Date
       dateRetourEffective: Date | null
@@ -3697,7 +3708,7 @@ export namespace Prisma {
   export interface Prisma__EmpruntClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     utilisateur<T extends UtilisateurDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UtilisateurDefaultArgs<ExtArgs>>): Prisma__UtilisateurClient<$Result.GetResult<Prisma.$UtilisateurPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    equipement<T extends Emprunt$equipementArgs<ExtArgs> = {}>(args?: Subset<T, Emprunt$equipementArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EquipementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    equipement<T extends EquipementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EquipementDefaultArgs<ExtArgs>>): Prisma__EquipementClient<$Result.GetResult<Prisma.$EquipementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     notification<T extends Emprunt$notificationArgs<ExtArgs> = {}>(args?: Subset<T, Emprunt$notificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3730,6 +3741,7 @@ export namespace Prisma {
   interface EmpruntFieldRefs {
     readonly id: FieldRef<"Emprunt", 'Int'>
     readonly utilisateurId: FieldRef<"Emprunt", 'Int'>
+    readonly equipementId: FieldRef<"Emprunt", 'Int'>
     readonly dateEmprunt: FieldRef<"Emprunt", 'DateTime'>
     readonly dateRetourPrevu: FieldRef<"Emprunt", 'DateTime'>
     readonly dateRetourEffective: FieldRef<"Emprunt", 'DateTime'>
@@ -4130,30 +4142,6 @@ export namespace Prisma {
      * Limit how many Emprunts to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Emprunt.equipement
-   */
-  export type Emprunt$equipementArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Equipement
-     */
-    select?: EquipementSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Equipement
-     */
-    omit?: EquipementOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EquipementInclude<ExtArgs> | null
-    where?: EquipementWhereInput
-    orderBy?: EquipementOrderByWithRelationInput | EquipementOrderByWithRelationInput[]
-    cursor?: EquipementWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: EquipementScalarFieldEnum | EquipementScalarFieldEnum[]
   }
 
   /**
@@ -5386,19 +5374,16 @@ export namespace Prisma {
 
   export type EquipementAvgAggregateOutputType = {
     id: number | null
-    empruntId: number | null
     prix: number | null
   }
 
   export type EquipementSumAggregateOutputType = {
     id: number | null
-    empruntId: number | null
     prix: number | null
   }
 
   export type EquipementMinAggregateOutputType = {
     id: number | null
-    empruntId: number | null
     nom: string | null
     numeroDeSerie: string | null
     marque: string | null
@@ -5414,7 +5399,6 @@ export namespace Prisma {
 
   export type EquipementMaxAggregateOutputType = {
     id: number | null
-    empruntId: number | null
     nom: string | null
     numeroDeSerie: string | null
     marque: string | null
@@ -5430,7 +5414,6 @@ export namespace Prisma {
 
   export type EquipementCountAggregateOutputType = {
     id: number
-    empruntId: number
     nom: number
     numeroDeSerie: number
     marque: number
@@ -5448,19 +5431,16 @@ export namespace Prisma {
 
   export type EquipementAvgAggregateInputType = {
     id?: true
-    empruntId?: true
     prix?: true
   }
 
   export type EquipementSumAggregateInputType = {
     id?: true
-    empruntId?: true
     prix?: true
   }
 
   export type EquipementMinAggregateInputType = {
     id?: true
-    empruntId?: true
     nom?: true
     numeroDeSerie?: true
     marque?: true
@@ -5476,7 +5456,6 @@ export namespace Prisma {
 
   export type EquipementMaxAggregateInputType = {
     id?: true
-    empruntId?: true
     nom?: true
     numeroDeSerie?: true
     marque?: true
@@ -5492,7 +5471,6 @@ export namespace Prisma {
 
   export type EquipementCountAggregateInputType = {
     id?: true
-    empruntId?: true
     nom?: true
     numeroDeSerie?: true
     marque?: true
@@ -5595,7 +5573,6 @@ export namespace Prisma {
 
   export type EquipementGroupByOutputType = {
     id: number
-    empruntId: number | null
     nom: string
     numeroDeSerie: string
     marque: string
@@ -5630,7 +5607,6 @@ export namespace Prisma {
 
   export type EquipementSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    empruntId?: boolean
     nom?: boolean
     numeroDeSerie?: boolean
     marque?: boolean
@@ -5649,7 +5625,6 @@ export namespace Prisma {
 
   export type EquipementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    empruntId?: boolean
     nom?: boolean
     numeroDeSerie?: boolean
     marque?: boolean
@@ -5661,12 +5636,10 @@ export namespace Prisma {
     donateur?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
   }, ExtArgs["result"]["equipement"]>
 
   export type EquipementSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    empruntId?: boolean
     nom?: boolean
     numeroDeSerie?: boolean
     marque?: boolean
@@ -5678,12 +5651,10 @@ export namespace Prisma {
     donateur?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
   }, ExtArgs["result"]["equipement"]>
 
   export type EquipementSelectScalar = {
     id?: boolean
-    empruntId?: boolean
     nom?: boolean
     numeroDeSerie?: boolean
     marque?: boolean
@@ -5697,18 +5668,14 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EquipementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "empruntId" | "nom" | "numeroDeSerie" | "marque" | "disponibilite" | "etatMateriel" | "obtention" | "prix" | "fournisseur" | "donateur" | "createdAt" | "updatedAt", ExtArgs["result"]["equipement"]>
+  export type EquipementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "numeroDeSerie" | "marque" | "disponibilite" | "etatMateriel" | "obtention" | "prix" | "fournisseur" | "donateur" | "createdAt" | "updatedAt", ExtArgs["result"]["equipement"]>
   export type EquipementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
     demandeEmprunt?: boolean | Equipement$demandeEmpruntArgs<ExtArgs>
     _count?: boolean | EquipementCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type EquipementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
-  }
-  export type EquipementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
-  }
+  export type EquipementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EquipementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $EquipementPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Equipement"
@@ -5718,7 +5685,6 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      empruntId: number | null
       nom: string
       numeroDeSerie: string
       marque: string
@@ -6156,7 +6122,6 @@ export namespace Prisma {
    */
   interface EquipementFieldRefs {
     readonly id: FieldRef<"Equipement", 'Int'>
-    readonly empruntId: FieldRef<"Equipement", 'Int'>
     readonly nom: FieldRef<"Equipement", 'String'>
     readonly numeroDeSerie: FieldRef<"Equipement", 'String'>
     readonly marque: FieldRef<"Equipement", 'String'>
@@ -6417,10 +6382,6 @@ export namespace Prisma {
      */
     data: EquipementCreateManyInput | EquipementCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EquipementIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6491,10 +6452,6 @@ export namespace Prisma {
      * Limit how many Equipements to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: EquipementIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11213,6 +11170,7 @@ export namespace Prisma {
   export const EmpruntScalarFieldEnum: {
     id: 'id',
     utilisateurId: 'utilisateurId',
+    equipementId: 'equipementId',
     dateEmprunt: 'dateEmprunt',
     dateRetourPrevu: 'dateRetourPrevu',
     dateRetourEffective: 'dateRetourEffective',
@@ -11243,7 +11201,6 @@ export namespace Prisma {
 
   export const EquipementScalarFieldEnum: {
     id: 'id',
-    empruntId: 'empruntId',
     nom: 'nom',
     numeroDeSerie: 'numeroDeSerie',
     marque: 'marque',
@@ -11633,6 +11590,7 @@ export namespace Prisma {
     NOT?: EmpruntWhereInput | EmpruntWhereInput[]
     id?: IntFilter<"Emprunt"> | number
     utilisateurId?: IntFilter<"Emprunt"> | number
+    equipementId?: IntFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableFilter<"Emprunt"> | Date | string | null
@@ -11641,13 +11599,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Emprunt"> | Date | string
     updatedAt?: DateTimeFilter<"Emprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
-    equipement?: EquipementListRelationFilter
+    equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
     notification?: NotificationListRelationFilter
   }
 
   export type EmpruntOrderByWithRelationInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrderInput | SortOrder
@@ -11656,12 +11615,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     utilisateur?: UtilisateurOrderByWithRelationInput
-    equipement?: EquipementOrderByRelationAggregateInput
+    equipement?: EquipementOrderByWithRelationInput
     notification?: NotificationOrderByRelationAggregateInput
   }
 
   export type EmpruntWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    equipementId?: number
     AND?: EmpruntWhereInput | EmpruntWhereInput[]
     OR?: EmpruntWhereInput[]
     NOT?: EmpruntWhereInput | EmpruntWhereInput[]
@@ -11674,13 +11634,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Emprunt"> | Date | string
     updatedAt?: DateTimeFilter<"Emprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
-    equipement?: EquipementListRelationFilter
+    equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
     notification?: NotificationListRelationFilter
-  }, "id">
+  }, "id" | "equipementId">
 
   export type EmpruntOrderByWithAggregationInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrderInput | SortOrder
@@ -11701,6 +11662,7 @@ export namespace Prisma {
     NOT?: EmpruntScalarWhereWithAggregatesInput | EmpruntScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Emprunt"> | number
     utilisateurId?: IntWithAggregatesFilter<"Emprunt"> | number
+    equipementId?: IntWithAggregatesFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeWithAggregatesFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeWithAggregatesFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableWithAggregatesFilter<"Emprunt"> | Date | string | null
@@ -11800,7 +11762,6 @@ export namespace Prisma {
     OR?: EquipementWhereInput[]
     NOT?: EquipementWhereInput | EquipementWhereInput[]
     id?: IntFilter<"Equipement"> | number
-    empruntId?: IntNullableFilter<"Equipement"> | number | null
     nom?: StringFilter<"Equipement"> | string
     numeroDeSerie?: StringFilter<"Equipement"> | string
     marque?: StringFilter<"Equipement"> | string
@@ -11818,7 +11779,6 @@ export namespace Prisma {
 
   export type EquipementOrderByWithRelationInput = {
     id?: SortOrder
-    empruntId?: SortOrderInput | SortOrder
     nom?: SortOrder
     numeroDeSerie?: SortOrder
     marque?: SortOrder
@@ -11839,7 +11799,6 @@ export namespace Prisma {
     AND?: EquipementWhereInput | EquipementWhereInput[]
     OR?: EquipementWhereInput[]
     NOT?: EquipementWhereInput | EquipementWhereInput[]
-    empruntId?: IntNullableFilter<"Equipement"> | number | null
     nom?: StringFilter<"Equipement"> | string
     numeroDeSerie?: StringFilter<"Equipement"> | string
     marque?: StringFilter<"Equipement"> | string
@@ -11857,7 +11816,6 @@ export namespace Prisma {
 
   export type EquipementOrderByWithAggregationInput = {
     id?: SortOrder
-    empruntId?: SortOrderInput | SortOrder
     nom?: SortOrder
     numeroDeSerie?: SortOrder
     marque?: SortOrder
@@ -11881,7 +11839,6 @@ export namespace Prisma {
     OR?: EquipementScalarWhereWithAggregatesInput[]
     NOT?: EquipementScalarWhereWithAggregatesInput | EquipementScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Equipement"> | number
-    empruntId?: IntNullableWithAggregatesFilter<"Equipement"> | number | null
     nom?: StringWithAggregatesFilter<"Equipement"> | string
     numeroDeSerie?: StringWithAggregatesFilter<"Equipement"> | string
     marque?: StringWithAggregatesFilter<"Equipement"> | string
@@ -12274,13 +12231,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutEmpruntsInput
-    equipement?: EquipementCreateNestedManyWithoutEmpruntInput
+    equipement: EquipementCreateNestedOneWithoutEmpruntInput
     notification?: NotificationCreateNestedManyWithoutEmpruntInput
   }
 
   export type EmpruntUncheckedCreateInput = {
     id?: number
     utilisateurId: number
+    equipementId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
@@ -12288,7 +12246,6 @@ export namespace Prisma {
     statut?: $Enums.Statut
     createdAt?: Date | string
     updatedAt?: Date | string
-    equipement?: EquipementUncheckedCreateNestedManyWithoutEmpruntInput
     notification?: NotificationUncheckedCreateNestedManyWithoutEmpruntInput
   }
 
@@ -12301,13 +12258,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutEmpruntsNestedInput
-    equipement?: EquipementUpdateManyWithoutEmpruntNestedInput
+    equipement?: EquipementUpdateOneRequiredWithoutEmpruntNestedInput
     notification?: NotificationUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     utilisateurId?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12315,13 +12273,13 @@ export namespace Prisma {
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    equipement?: EquipementUncheckedUpdateManyWithoutEmpruntNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntCreateManyInput = {
     id?: number
     utilisateurId: number
+    equipementId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
@@ -12344,6 +12302,7 @@ export namespace Prisma {
   export type EmpruntUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     utilisateurId?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12457,7 +12416,6 @@ export namespace Prisma {
 
   export type EquipementUncheckedCreateInput = {
     id?: number
-    empruntId?: number | null
     nom: string
     numeroDeSerie: string
     marque: string
@@ -12469,6 +12427,7 @@ export namespace Prisma {
     donateur?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    emprunt?: EmpruntUncheckedCreateNestedOneWithoutEquipementInput
     demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput
   }
 
@@ -12490,7 +12449,6 @@ export namespace Prisma {
 
   export type EquipementUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     nom?: StringFieldUpdateOperationsInput | string
     numeroDeSerie?: StringFieldUpdateOperationsInput | string
     marque?: StringFieldUpdateOperationsInput | string
@@ -12502,12 +12460,12 @@ export namespace Prisma {
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUncheckedUpdateOneWithoutEquipementNestedInput
     demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
   }
 
   export type EquipementCreateManyInput = {
     id?: number
-    empruntId?: number | null
     nom: string
     numeroDeSerie: string
     marque: string
@@ -12537,7 +12495,6 @@ export namespace Prisma {
 
   export type EquipementUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     nom?: StringFieldUpdateOperationsInput | string
     numeroDeSerie?: StringFieldUpdateOperationsInput | string
     marque?: StringFieldUpdateOperationsInput | string
@@ -13033,10 +12990,9 @@ export namespace Prisma {
     isNot?: UtilisateurWhereInput
   }
 
-  export type EquipementListRelationFilter = {
-    every?: EquipementWhereInput
-    some?: EquipementWhereInput
-    none?: EquipementWhereInput
+  export type EquipementScalarRelationFilter = {
+    is?: EquipementWhereInput
+    isNot?: EquipementWhereInput
   }
 
   export type NotificationListRelationFilter = {
@@ -13050,10 +13006,6 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type EquipementOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -13061,6 +13013,7 @@ export namespace Prisma {
   export type EmpruntCountOrderByAggregateInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrder
@@ -13073,11 +13026,13 @@ export namespace Prisma {
   export type EmpruntAvgOrderByAggregateInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
   }
 
   export type EmpruntMaxOrderByAggregateInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrder
@@ -13090,6 +13045,7 @@ export namespace Prisma {
   export type EmpruntMinOrderByAggregateInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
     dateEmprunt?: SortOrder
     dateRetourPrevu?: SortOrder
     dateRetourEffective?: SortOrder
@@ -13102,6 +13058,7 @@ export namespace Prisma {
   export type EmpruntSumOrderByAggregateInput = {
     id?: SortOrder
     utilisateurId?: SortOrder
+    equipementId?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13140,11 +13097,6 @@ export namespace Prisma {
     in?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
     notIn?: $Enums.TypeDemande[] | ListEnumTypeDemandeFieldRefInput<$PrismaModel>
     not?: NestedEnumTypeDemandeFilter<$PrismaModel> | $Enums.TypeDemande
-  }
-
-  export type EquipementScalarRelationFilter = {
-    is?: EquipementWhereInput
-    isNot?: EquipementWhereInput
   }
 
   export type DemandeEmpruntCountOrderByAggregateInput = {
@@ -13218,17 +13170,6 @@ export namespace Prisma {
     _max?: NestedEnumTypeDemandeFilter<$PrismaModel>
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type EnumDisponibiliteFilter<$PrismaModel = never> = {
     equals?: $Enums.Disponibilite | EnumDisponibiliteFieldRefInput<$PrismaModel>
     in?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
@@ -13283,7 +13224,6 @@ export namespace Prisma {
 
   export type EquipementCountOrderByAggregateInput = {
     id?: SortOrder
-    empruntId?: SortOrder
     nom?: SortOrder
     numeroDeSerie?: SortOrder
     marque?: SortOrder
@@ -13299,13 +13239,11 @@ export namespace Prisma {
 
   export type EquipementAvgOrderByAggregateInput = {
     id?: SortOrder
-    empruntId?: SortOrder
     prix?: SortOrder
   }
 
   export type EquipementMaxOrderByAggregateInput = {
     id?: SortOrder
-    empruntId?: SortOrder
     nom?: SortOrder
     numeroDeSerie?: SortOrder
     marque?: SortOrder
@@ -13321,7 +13259,6 @@ export namespace Prisma {
 
   export type EquipementMinOrderByAggregateInput = {
     id?: SortOrder
-    empruntId?: SortOrder
     nom?: SortOrder
     numeroDeSerie?: SortOrder
     marque?: SortOrder
@@ -13337,24 +13274,7 @@ export namespace Prisma {
 
   export type EquipementSumOrderByAggregateInput = {
     id?: SortOrder
-    empruntId?: SortOrder
     prix?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumDisponibiliteWithAggregatesFilter<$PrismaModel = never> = {
@@ -13421,6 +13341,17 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type EnumTypeNotificationFilter<$PrismaModel = never> = {
     equals?: $Enums.TypeNotification | EnumTypeNotificationFieldRefInput<$PrismaModel>
     in?: $Enums.TypeNotification[] | ListEnumTypeNotificationFieldRefInput<$PrismaModel>
@@ -13484,6 +13415,22 @@ export namespace Prisma {
     id?: SortOrder
     empruntId?: SortOrder
     consommableId?: SortOrder
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type EnumTypeNotificationWithAggregatesFilter<$PrismaModel = never> = {
@@ -13819,11 +13766,10 @@ export namespace Prisma {
     connect?: UtilisateurWhereUniqueInput
   }
 
-  export type EquipementCreateNestedManyWithoutEmpruntInput = {
-    create?: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput> | EquipementCreateWithoutEmpruntInput[] | EquipementUncheckedCreateWithoutEmpruntInput[]
-    connectOrCreate?: EquipementCreateOrConnectWithoutEmpruntInput | EquipementCreateOrConnectWithoutEmpruntInput[]
-    createMany?: EquipementCreateManyEmpruntInputEnvelope
-    connect?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
+  export type EquipementCreateNestedOneWithoutEmpruntInput = {
+    create?: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput>
+    connectOrCreate?: EquipementCreateOrConnectWithoutEmpruntInput
+    connect?: EquipementWhereUniqueInput
   }
 
   export type NotificationCreateNestedManyWithoutEmpruntInput = {
@@ -13831,13 +13777,6 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutEmpruntInput | NotificationCreateOrConnectWithoutEmpruntInput[]
     createMany?: NotificationCreateManyEmpruntInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
-  }
-
-  export type EquipementUncheckedCreateNestedManyWithoutEmpruntInput = {
-    create?: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput> | EquipementCreateWithoutEmpruntInput[] | EquipementUncheckedCreateWithoutEmpruntInput[]
-    connectOrCreate?: EquipementCreateOrConnectWithoutEmpruntInput | EquipementCreateOrConnectWithoutEmpruntInput[]
-    createMany?: EquipementCreateManyEmpruntInputEnvelope
-    connect?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
   }
 
   export type NotificationUncheckedCreateNestedManyWithoutEmpruntInput = {
@@ -13863,18 +13802,12 @@ export namespace Prisma {
     update?: XOR<XOR<UtilisateurUpdateToOneWithWhereWithoutEmpruntsInput, UtilisateurUpdateWithoutEmpruntsInput>, UtilisateurUncheckedUpdateWithoutEmpruntsInput>
   }
 
-  export type EquipementUpdateManyWithoutEmpruntNestedInput = {
-    create?: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput> | EquipementCreateWithoutEmpruntInput[] | EquipementUncheckedCreateWithoutEmpruntInput[]
-    connectOrCreate?: EquipementCreateOrConnectWithoutEmpruntInput | EquipementCreateOrConnectWithoutEmpruntInput[]
-    upsert?: EquipementUpsertWithWhereUniqueWithoutEmpruntInput | EquipementUpsertWithWhereUniqueWithoutEmpruntInput[]
-    createMany?: EquipementCreateManyEmpruntInputEnvelope
-    set?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    disconnect?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    delete?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    connect?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    update?: EquipementUpdateWithWhereUniqueWithoutEmpruntInput | EquipementUpdateWithWhereUniqueWithoutEmpruntInput[]
-    updateMany?: EquipementUpdateManyWithWhereWithoutEmpruntInput | EquipementUpdateManyWithWhereWithoutEmpruntInput[]
-    deleteMany?: EquipementScalarWhereInput | EquipementScalarWhereInput[]
+  export type EquipementUpdateOneRequiredWithoutEmpruntNestedInput = {
+    create?: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput>
+    connectOrCreate?: EquipementCreateOrConnectWithoutEmpruntInput
+    upsert?: EquipementUpsertWithoutEmpruntInput
+    connect?: EquipementWhereUniqueInput
+    update?: XOR<XOR<EquipementUpdateToOneWithWhereWithoutEmpruntInput, EquipementUpdateWithoutEmpruntInput>, EquipementUncheckedUpdateWithoutEmpruntInput>
   }
 
   export type NotificationUpdateManyWithoutEmpruntNestedInput = {
@@ -13889,20 +13822,6 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutEmpruntInput | NotificationUpdateWithWhereUniqueWithoutEmpruntInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutEmpruntInput | NotificationUpdateManyWithWhereWithoutEmpruntInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
-  }
-
-  export type EquipementUncheckedUpdateManyWithoutEmpruntNestedInput = {
-    create?: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput> | EquipementCreateWithoutEmpruntInput[] | EquipementUncheckedCreateWithoutEmpruntInput[]
-    connectOrCreate?: EquipementCreateOrConnectWithoutEmpruntInput | EquipementCreateOrConnectWithoutEmpruntInput[]
-    upsert?: EquipementUpsertWithWhereUniqueWithoutEmpruntInput | EquipementUpsertWithWhereUniqueWithoutEmpruntInput[]
-    createMany?: EquipementCreateManyEmpruntInputEnvelope
-    set?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    disconnect?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    delete?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    connect?: EquipementWhereUniqueInput | EquipementWhereUniqueInput[]
-    update?: EquipementUpdateWithWhereUniqueWithoutEmpruntInput | EquipementUpdateWithWhereUniqueWithoutEmpruntInput[]
-    updateMany?: EquipementUpdateManyWithWhereWithoutEmpruntInput | EquipementUpdateManyWithWhereWithoutEmpruntInput[]
-    deleteMany?: EquipementScalarWhereInput | EquipementScalarWhereInput[]
   }
 
   export type NotificationUncheckedUpdateManyWithoutEmpruntNestedInput = {
@@ -13968,6 +13887,12 @@ export namespace Prisma {
     connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
   }
 
+  export type EmpruntUncheckedCreateNestedOneWithoutEquipementInput = {
+    create?: XOR<EmpruntCreateWithoutEquipementInput, EmpruntUncheckedCreateWithoutEquipementInput>
+    connectOrCreate?: EmpruntCreateOrConnectWithoutEquipementInput
+    connect?: EmpruntWhereUniqueInput
+  }
+
   export type DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput = {
     create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
     connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
@@ -14023,12 +13948,14 @@ export namespace Prisma {
     deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type EmpruntUncheckedUpdateOneWithoutEquipementNestedInput = {
+    create?: XOR<EmpruntCreateWithoutEquipementInput, EmpruntUncheckedCreateWithoutEquipementInput>
+    connectOrCreate?: EmpruntCreateOrConnectWithoutEquipementInput
+    upsert?: EmpruntUpsertWithoutEquipementInput
+    disconnect?: EmpruntWhereInput | boolean
+    delete?: EmpruntWhereInput | boolean
+    connect?: EmpruntWhereUniqueInput
+    update?: XOR<XOR<EmpruntUpdateToOneWithWhereWithoutEquipementInput, EmpruntUpdateWithoutEquipementInput>, EmpruntUncheckedUpdateWithoutEquipementInput>
   }
 
   export type DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput = {
@@ -14083,6 +14010,14 @@ export namespace Prisma {
     delete?: ConsommableWhereInput | boolean
     connect?: ConsommableWhereUniqueInput
     update?: XOR<XOR<ConsommableUpdateToOneWithWhereWithoutNotificationInput, ConsommableUpdateWithoutNotificationInput>, ConsommableUncheckedUpdateWithoutNotificationInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NotificationCreateNestedManyWithoutConsommableInput = {
@@ -14438,33 +14373,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedEnumDisponibiliteWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.Disponibilite | EnumDisponibiliteFieldRefInput<$PrismaModel>
     in?: $Enums.Disponibilite[] | ListEnumDisponibiliteFieldRefInput<$PrismaModel>
@@ -14540,6 +14448,33 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumTypeNotificationWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TypeNotification | EnumTypeNotificationFieldRefInput<$PrismaModel>
     in?: $Enums.TypeNotification[] | ListEnumTypeNotificationFieldRefInput<$PrismaModel>
@@ -14600,12 +14535,13 @@ export namespace Prisma {
     statut?: $Enums.Statut
     createdAt?: Date | string
     updatedAt?: Date | string
-    equipement?: EquipementCreateNestedManyWithoutEmpruntInput
+    equipement: EquipementCreateNestedOneWithoutEmpruntInput
     notification?: NotificationCreateNestedManyWithoutEmpruntInput
   }
 
   export type EmpruntUncheckedCreateWithoutUtilisateurInput = {
     id?: number
+    equipementId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
@@ -14613,7 +14549,6 @@ export namespace Prisma {
     statut?: $Enums.Statut
     createdAt?: Date | string
     updatedAt?: Date | string
-    equipement?: EquipementUncheckedCreateNestedManyWithoutEmpruntInput
     notification?: NotificationUncheckedCreateNestedManyWithoutEmpruntInput
   }
 
@@ -14711,6 +14646,7 @@ export namespace Prisma {
     NOT?: EmpruntScalarWhereInput | EmpruntScalarWhereInput[]
     id?: IntFilter<"Emprunt"> | number
     utilisateurId?: IntFilter<"Emprunt"> | number
+    equipementId?: IntFilter<"Emprunt"> | number
     dateEmprunt?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourPrevu?: DateTimeFilter<"Emprunt"> | Date | string
     dateRetourEffective?: DateTimeNullableFilter<"Emprunt"> | Date | string | null
@@ -14848,11 +14784,6 @@ export namespace Prisma {
     create: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput>
   }
 
-  export type EquipementCreateManyEmpruntInputEnvelope = {
-    data: EquipementCreateManyEmpruntInput | EquipementCreateManyEmpruntInput[]
-    skipDuplicates?: boolean
-  }
-
   export type NotificationCreateWithoutEmpruntInput = {
     message: string
     DateEnvoi?: Date | string
@@ -14920,39 +14851,46 @@ export namespace Prisma {
     utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutUtilisateurNestedInput
   }
 
-  export type EquipementUpsertWithWhereUniqueWithoutEmpruntInput = {
-    where: EquipementWhereUniqueInput
+  export type EquipementUpsertWithoutEmpruntInput = {
     update: XOR<EquipementUpdateWithoutEmpruntInput, EquipementUncheckedUpdateWithoutEmpruntInput>
     create: XOR<EquipementCreateWithoutEmpruntInput, EquipementUncheckedCreateWithoutEmpruntInput>
+    where?: EquipementWhereInput
   }
 
-  export type EquipementUpdateWithWhereUniqueWithoutEmpruntInput = {
-    where: EquipementWhereUniqueInput
+  export type EquipementUpdateToOneWithWhereWithoutEmpruntInput = {
+    where?: EquipementWhereInput
     data: XOR<EquipementUpdateWithoutEmpruntInput, EquipementUncheckedUpdateWithoutEmpruntInput>
   }
 
-  export type EquipementUpdateManyWithWhereWithoutEmpruntInput = {
-    where: EquipementScalarWhereInput
-    data: XOR<EquipementUpdateManyMutationInput, EquipementUncheckedUpdateManyWithoutEmpruntInput>
+  export type EquipementUpdateWithoutEmpruntInput = {
+    nom?: StringFieldUpdateOperationsInput | string
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
   }
 
-  export type EquipementScalarWhereInput = {
-    AND?: EquipementScalarWhereInput | EquipementScalarWhereInput[]
-    OR?: EquipementScalarWhereInput[]
-    NOT?: EquipementScalarWhereInput | EquipementScalarWhereInput[]
-    id?: IntFilter<"Equipement"> | number
-    empruntId?: IntNullableFilter<"Equipement"> | number | null
-    nom?: StringFilter<"Equipement"> | string
-    numeroDeSerie?: StringFilter<"Equipement"> | string
-    marque?: StringFilter<"Equipement"> | string
-    disponibilite?: EnumDisponibiliteFilter<"Equipement"> | $Enums.Disponibilite
-    etatMateriel?: EnumEtatMaterielFilter<"Equipement"> | $Enums.EtatMateriel
-    obtention?: EnumObtentionFilter<"Equipement"> | $Enums.Obtention
-    prix?: FloatFilter<"Equipement"> | number
-    fournisseur?: StringNullableFilter<"Equipement"> | string | null
-    donateur?: StringNullableFilter<"Equipement"> | string | null
-    createdAt?: DateTimeFilter<"Equipement"> | Date | string
-    updatedAt?: DateTimeFilter<"Equipement"> | Date | string
+  export type EquipementUncheckedUpdateWithoutEmpruntInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    nom?: StringFieldUpdateOperationsInput | string
+    numeroDeSerie?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
+    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
+    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
+    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
+    prix?: FloatFieldUpdateOperationsInput | number
+    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
+    donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutEmpruntInput = {
@@ -15033,7 +14971,6 @@ export namespace Prisma {
 
   export type EquipementUncheckedCreateWithoutDemandeEmpruntInput = {
     id?: number
-    empruntId?: number | null
     nom: string
     numeroDeSerie: string
     marque: string
@@ -15045,6 +14982,7 @@ export namespace Prisma {
     donateur?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    emprunt?: EmpruntUncheckedCreateNestedOneWithoutEquipementInput
   }
 
   export type EquipementCreateOrConnectWithoutDemandeEmpruntInput = {
@@ -15116,7 +15054,6 @@ export namespace Prisma {
 
   export type EquipementUncheckedUpdateWithoutDemandeEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
-    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     nom?: StringFieldUpdateOperationsInput | string
     numeroDeSerie?: StringFieldUpdateOperationsInput | string
     marque?: StringFieldUpdateOperationsInput | string
@@ -15128,6 +15065,7 @@ export namespace Prisma {
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUncheckedUpdateOneWithoutEquipementNestedInput
   }
 
   export type EmpruntCreateWithoutEquipementInput = {
@@ -15254,12 +15192,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutEmpruntsInput
-    equipement?: EquipementCreateNestedManyWithoutEmpruntInput
+    equipement: EquipementCreateNestedOneWithoutEmpruntInput
   }
 
   export type EmpruntUncheckedCreateWithoutNotificationInput = {
     id?: number
     utilisateurId: number
+    equipementId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
@@ -15267,7 +15206,6 @@ export namespace Prisma {
     statut?: $Enums.Statut
     createdAt?: Date | string
     updatedAt?: Date | string
-    equipement?: EquipementUncheckedCreateNestedManyWithoutEmpruntInput
   }
 
   export type EmpruntCreateOrConnectWithoutNotificationInput = {
@@ -15325,12 +15263,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutEmpruntsNestedInput
-    equipement?: EquipementUpdateManyWithoutEmpruntNestedInput
+    equipement?: EquipementUpdateOneRequiredWithoutEmpruntNestedInput
   }
 
   export type EmpruntUncheckedUpdateWithoutNotificationInput = {
     id?: IntFieldUpdateOperationsInput | number
     utilisateurId?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15338,7 +15277,6 @@ export namespace Prisma {
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    equipement?: EquipementUncheckedUpdateManyWithoutEmpruntNestedInput
   }
 
   export type ConsommableUpsertWithoutNotificationInput = {
@@ -15603,6 +15541,7 @@ export namespace Prisma {
 
   export type EmpruntCreateManyUtilisateurInput = {
     id?: number
+    equipementId: number
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
     dateRetourEffective?: Date | string | null
@@ -15642,12 +15581,13 @@ export namespace Prisma {
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    equipement?: EquipementUpdateManyWithoutEmpruntNestedInput
+    equipement?: EquipementUpdateOneRequiredWithoutEmpruntNestedInput
     notification?: NotificationUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntUncheckedUpdateWithoutUtilisateurInput = {
     id?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15655,12 +15595,12 @@ export namespace Prisma {
     statut?: EnumStatutFieldUpdateOperationsInput | $Enums.Statut
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    equipement?: EquipementUncheckedUpdateManyWithoutEmpruntNestedInput
     notification?: NotificationUncheckedUpdateManyWithoutEmpruntNestedInput
   }
 
   export type EmpruntUncheckedUpdateManyWithoutUtilisateurInput = {
     id?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
     dateEmprunt?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
     dateRetourEffective?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15734,21 +15674,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type EquipementCreateManyEmpruntInput = {
-    id?: number
-    nom: string
-    numeroDeSerie: string
-    marque: string
-    disponibilite?: $Enums.Disponibilite
-    etatMateriel?: $Enums.EtatMateriel
-    obtention?: $Enums.Obtention
-    prix: number
-    fournisseur?: string | null
-    donateur?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type NotificationCreateManyEmpruntInput = {
     id?: number
     consommableId?: number | null
@@ -15758,52 +15683,6 @@ export namespace Prisma {
     vu?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type EquipementUpdateWithoutEmpruntInput = {
-    nom?: StringFieldUpdateOperationsInput | string
-    numeroDeSerie?: StringFieldUpdateOperationsInput | string
-    marque?: StringFieldUpdateOperationsInput | string
-    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
-    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
-    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
-    prix?: FloatFieldUpdateOperationsInput | number
-    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
-    donateur?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
-  }
-
-  export type EquipementUncheckedUpdateWithoutEmpruntInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nom?: StringFieldUpdateOperationsInput | string
-    numeroDeSerie?: StringFieldUpdateOperationsInput | string
-    marque?: StringFieldUpdateOperationsInput | string
-    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
-    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
-    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
-    prix?: FloatFieldUpdateOperationsInput | number
-    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
-    donateur?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
-  }
-
-  export type EquipementUncheckedUpdateManyWithoutEmpruntInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    nom?: StringFieldUpdateOperationsInput | string
-    numeroDeSerie?: StringFieldUpdateOperationsInput | string
-    marque?: StringFieldUpdateOperationsInput | string
-    disponibilite?: EnumDisponibiliteFieldUpdateOperationsInput | $Enums.Disponibilite
-    etatMateriel?: EnumEtatMaterielFieldUpdateOperationsInput | $Enums.EtatMateriel
-    obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
-    prix?: FloatFieldUpdateOperationsInput | number
-    fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
-    donateur?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationUpdateWithoutEmpruntInput = {

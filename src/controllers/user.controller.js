@@ -12,7 +12,7 @@ exports.createUser = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
     try {
-        const user = await UserService.getUserById(req.params.id);
+        const user = await UserService.getUserById(req.user.id);
         if(!user) throw new Error("Utilisateur non trouvé");
         res.status(200).json(user);
     } catch (error) {

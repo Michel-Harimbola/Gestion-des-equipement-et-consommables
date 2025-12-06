@@ -135,6 +135,7 @@ exports.Prisma.UtilisateurScalarFieldEnum = {
 exports.Prisma.EmpruntScalarFieldEnum = {
   id: 'id',
   utilisateurId: 'utilisateurId',
+  equipementId: 'equipementId',
   dateEmprunt: 'dateEmprunt',
   dateRetourPrevu: 'dateRetourPrevu',
   dateRetourEffective: 'dateRetourEffective',
@@ -159,7 +160,6 @@ exports.Prisma.DemandeEmpruntScalarFieldEnum = {
 
 exports.Prisma.EquipementScalarFieldEnum = {
   id: 'id',
-  empruntId: 'empruntId',
   nom: 'nom',
   numeroDeSerie: 'numeroDeSerie',
   marque: 'marque',

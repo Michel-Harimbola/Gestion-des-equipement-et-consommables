@@ -43,14 +43,14 @@ model Emprunt {
   updatedAt           DateTime        @updatedAt
 
   utilisateur         Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
-  equipement          Equipement  @relation(fields: [equipementId], references: [id], onDelete: Cascade)
+  equipement          Equipement      @relation(fields: [equipementId], references: [id], onDelete: Cascade)
   notification        Notification[]
 }
 
 model DemandeEmprunt {
   id                Int             @id  @default(autoincrement())
   utilisateurId     Int           
-  equipementId      Int 
+  equipementId      Int             @unique
   dateDemande       DateTime        @default(now())
   dateRetourPrevu   DateTime  
   usage             String
@@ -78,7 +78,7 @@ model Equipement {
   updatedAt      DateTime         @updatedAt
 
   emprunt        Emprunt?         
-  demandeEmprunt DemandeEmprunt[]
+  demandeEmprunt DemandeEmprunt?
 }
 
 model Notification {

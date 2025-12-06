@@ -1711,37 +1711,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type EquipementCountOutputType
-   */
-
-  export type EquipementCountOutputType = {
-    demandeEmprunt: number
-  }
-
-  export type EquipementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    demandeEmprunt?: boolean | EquipementCountOutputTypeCountDemandeEmpruntArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * EquipementCountOutputType without action
-   */
-  export type EquipementCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the EquipementCountOutputType
-     */
-    select?: EquipementCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * EquipementCountOutputType without action
-   */
-  export type EquipementCountOutputTypeCountDemandeEmpruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DemandeEmpruntWhereInput
-  }
-
-
-  /**
    * Count Type ConsommableCountOutputType
    */
 
@@ -5620,7 +5589,6 @@ export namespace Prisma {
     updatedAt?: boolean
     emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
     demandeEmprunt?: boolean | Equipement$demandeEmpruntArgs<ExtArgs>
-    _count?: boolean | EquipementCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["equipement"]>
 
   export type EquipementSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5672,7 +5640,6 @@ export namespace Prisma {
   export type EquipementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
     demandeEmprunt?: boolean | Equipement$demandeEmpruntArgs<ExtArgs>
-    _count?: boolean | EquipementCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EquipementIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
   export type EquipementIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5681,7 +5648,7 @@ export namespace Prisma {
     name: "Equipement"
     objects: {
       emprunt: Prisma.$EmpruntPayload<ExtArgs> | null
-      demandeEmprunt: Prisma.$DemandeEmpruntPayload<ExtArgs>[]
+      demandeEmprunt: Prisma.$DemandeEmpruntPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6091,7 +6058,7 @@ export namespace Prisma {
   export interface Prisma__EquipementClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     emprunt<T extends Equipement$empruntArgs<ExtArgs> = {}>(args?: Subset<T, Equipement$empruntArgs<ExtArgs>>): Prisma__EmpruntClient<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    demandeEmprunt<T extends Equipement$demandeEmpruntArgs<ExtArgs> = {}>(args?: Subset<T, Equipement$demandeEmpruntArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    demandeEmprunt<T extends Equipement$demandeEmpruntArgs<ExtArgs> = {}>(args?: Subset<T, Equipement$demandeEmpruntArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6556,11 +6523,6 @@ export namespace Prisma {
      */
     include?: DemandeEmpruntInclude<ExtArgs> | null
     where?: DemandeEmpruntWhereInput
-    orderBy?: DemandeEmpruntOrderByWithRelationInput | DemandeEmpruntOrderByWithRelationInput[]
-    cursor?: DemandeEmpruntWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DemandeEmpruntScalarFieldEnum | DemandeEmpruntScalarFieldEnum[]
   }
 
   /**
@@ -11707,11 +11669,11 @@ export namespace Prisma {
 
   export type DemandeEmpruntWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    equipementId?: number
     AND?: DemandeEmpruntWhereInput | DemandeEmpruntWhereInput[]
     OR?: DemandeEmpruntWhereInput[]
     NOT?: DemandeEmpruntWhereInput | DemandeEmpruntWhereInput[]
     utilisateurId?: IntFilter<"DemandeEmprunt"> | number
-    equipementId?: IntFilter<"DemandeEmprunt"> | number
     dateDemande?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     dateRetourPrevu?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     usage?: StringFilter<"DemandeEmprunt"> | string
@@ -11721,7 +11683,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
     equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
-  }, "id">
+  }, "id" | "equipementId">
 
   export type DemandeEmpruntOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11774,7 +11736,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Equipement"> | Date | string
     updatedAt?: DateTimeFilter<"Equipement"> | Date | string
     emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
-    demandeEmprunt?: DemandeEmpruntListRelationFilter
+    demandeEmprunt?: XOR<DemandeEmpruntNullableScalarRelationFilter, DemandeEmpruntWhereInput> | null
   }
 
   export type EquipementOrderByWithRelationInput = {
@@ -11791,7 +11753,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     emprunt?: EmpruntOrderByWithRelationInput
-    demandeEmprunt?: DemandeEmpruntOrderByRelationAggregateInput
+    demandeEmprunt?: DemandeEmpruntOrderByWithRelationInput
   }
 
   export type EquipementWhereUniqueInput = Prisma.AtLeast<{
@@ -11811,7 +11773,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Equipement"> | Date | string
     updatedAt?: DateTimeFilter<"Equipement"> | Date | string
     emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
-    demandeEmprunt?: DemandeEmpruntListRelationFilter
+    demandeEmprunt?: XOR<DemandeEmpruntNullableScalarRelationFilter, DemandeEmpruntWhereInput> | null
   }, "id">
 
   export type EquipementOrderByWithAggregationInput = {
@@ -12411,7 +12373,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntCreateNestedOneWithoutEquipementInput
-    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutEquipementInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedOneWithoutEquipementInput
   }
 
   export type EquipementUncheckedCreateInput = {
@@ -12428,7 +12390,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntUncheckedCreateNestedOneWithoutEquipementInput
-    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedOneWithoutEquipementInput
   }
 
   export type EquipementUpdateInput = {
@@ -12444,7 +12406,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUpdateOneWithoutEquipementNestedInput
-    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateOneWithoutEquipementNestedInput
   }
 
   export type EquipementUncheckedUpdateInput = {
@@ -12461,7 +12423,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUncheckedUpdateOneWithoutEquipementNestedInput
-    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateOneWithoutEquipementNestedInput
   }
 
   export type EquipementCreateManyInput = {
@@ -13222,6 +13184,11 @@ export namespace Prisma {
     isNot?: EmpruntWhereInput | null
   }
 
+  export type DemandeEmpruntNullableScalarRelationFilter = {
+    is?: DemandeEmpruntWhereInput | null
+    isNot?: DemandeEmpruntWhereInput | null
+  }
+
   export type EquipementCountOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
@@ -13880,11 +13847,10 @@ export namespace Prisma {
     connect?: EmpruntWhereUniqueInput
   }
 
-  export type DemandeEmpruntCreateNestedManyWithoutEquipementInput = {
-    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
-    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
-    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
-    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+  export type DemandeEmpruntCreateNestedOneWithoutEquipementInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput
+    connect?: DemandeEmpruntWhereUniqueInput
   }
 
   export type EmpruntUncheckedCreateNestedOneWithoutEquipementInput = {
@@ -13893,11 +13859,10 @@ export namespace Prisma {
     connect?: EmpruntWhereUniqueInput
   }
 
-  export type DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput = {
-    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
-    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
-    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
-    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
+  export type DemandeEmpruntUncheckedCreateNestedOneWithoutEquipementInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput
+    connect?: DemandeEmpruntWhereUniqueInput
   }
 
   export type EnumDisponibiliteFieldUpdateOperationsInput = {
@@ -13934,18 +13899,14 @@ export namespace Prisma {
     update?: XOR<XOR<EmpruntUpdateToOneWithWhereWithoutEquipementInput, EmpruntUpdateWithoutEquipementInput>, EmpruntUncheckedUpdateWithoutEquipementInput>
   }
 
-  export type DemandeEmpruntUpdateManyWithoutEquipementNestedInput = {
-    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
-    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
-    upsert?: DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput[]
-    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
-    set?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    disconnect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    delete?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    update?: DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput[]
-    updateMany?: DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput | DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput[]
-    deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+  export type DemandeEmpruntUpdateOneWithoutEquipementNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput
+    upsert?: DemandeEmpruntUpsertWithoutEquipementInput
+    disconnect?: DemandeEmpruntWhereInput | boolean
+    delete?: DemandeEmpruntWhereInput | boolean
+    connect?: DemandeEmpruntWhereUniqueInput
+    update?: XOR<XOR<DemandeEmpruntUpdateToOneWithWhereWithoutEquipementInput, DemandeEmpruntUpdateWithoutEquipementInput>, DemandeEmpruntUncheckedUpdateWithoutEquipementInput>
   }
 
   export type EmpruntUncheckedUpdateOneWithoutEquipementNestedInput = {
@@ -13958,18 +13919,14 @@ export namespace Prisma {
     update?: XOR<XOR<EmpruntUpdateToOneWithWhereWithoutEquipementInput, EmpruntUpdateWithoutEquipementInput>, EmpruntUncheckedUpdateWithoutEquipementInput>
   }
 
-  export type DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput = {
-    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput> | DemandeEmpruntCreateWithoutEquipementInput[] | DemandeEmpruntUncheckedCreateWithoutEquipementInput[]
-    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput | DemandeEmpruntCreateOrConnectWithoutEquipementInput[]
-    upsert?: DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput[]
-    createMany?: DemandeEmpruntCreateManyEquipementInputEnvelope
-    set?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    disconnect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    delete?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    connect?: DemandeEmpruntWhereUniqueInput | DemandeEmpruntWhereUniqueInput[]
-    update?: DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput | DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput[]
-    updateMany?: DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput | DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput[]
-    deleteMany?: DemandeEmpruntScalarWhereInput | DemandeEmpruntScalarWhereInput[]
+  export type DemandeEmpruntUncheckedUpdateOneWithoutEquipementNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutEquipementInput
+    upsert?: DemandeEmpruntUpsertWithoutEquipementInput
+    disconnect?: DemandeEmpruntWhereInput | boolean
+    delete?: DemandeEmpruntWhereInput | boolean
+    connect?: DemandeEmpruntWhereUniqueInput
+    update?: XOR<XOR<DemandeEmpruntUpdateToOneWithWhereWithoutEquipementInput, DemandeEmpruntUpdateWithoutEquipementInput>, DemandeEmpruntUncheckedUpdateWithoutEquipementInput>
   }
 
   export type EmpruntCreateNestedOneWithoutNotificationInput = {
@@ -14760,7 +14717,7 @@ export namespace Prisma {
     donateur?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutEquipementInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedOneWithoutEquipementInput
   }
 
   export type EquipementUncheckedCreateWithoutEmpruntInput = {
@@ -14776,7 +14733,7 @@ export namespace Prisma {
     donateur?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput
+    demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedOneWithoutEquipementInput
   }
 
   export type EquipementCreateOrConnectWithoutEmpruntInput = {
@@ -14874,7 +14831,7 @@ export namespace Prisma {
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateOneWithoutEquipementNestedInput
   }
 
   export type EquipementUncheckedUpdateWithoutEmpruntInput = {
@@ -14890,7 +14847,7 @@ export namespace Prisma {
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
+    demandeEmprunt?: DemandeEmpruntUncheckedUpdateOneWithoutEquipementNestedInput
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutEmpruntInput = {
@@ -15126,11 +15083,6 @@ export namespace Prisma {
     create: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
   }
 
-  export type DemandeEmpruntCreateManyEquipementInputEnvelope = {
-    data: DemandeEmpruntCreateManyEquipementInput | DemandeEmpruntCreateManyEquipementInput[]
-    skipDuplicates?: boolean
-  }
-
   export type EmpruntUpsertWithoutEquipementInput = {
     update: XOR<EmpruntUpdateWithoutEquipementInput, EmpruntUncheckedUpdateWithoutEquipementInput>
     create: XOR<EmpruntCreateWithoutEquipementInput, EmpruntUncheckedCreateWithoutEquipementInput>
@@ -15167,20 +15119,38 @@ export namespace Prisma {
     notification?: NotificationUncheckedUpdateManyWithoutEmpruntNestedInput
   }
 
-  export type DemandeEmpruntUpsertWithWhereUniqueWithoutEquipementInput = {
-    where: DemandeEmpruntWhereUniqueInput
+  export type DemandeEmpruntUpsertWithoutEquipementInput = {
     update: XOR<DemandeEmpruntUpdateWithoutEquipementInput, DemandeEmpruntUncheckedUpdateWithoutEquipementInput>
     create: XOR<DemandeEmpruntCreateWithoutEquipementInput, DemandeEmpruntUncheckedCreateWithoutEquipementInput>
+    where?: DemandeEmpruntWhereInput
   }
 
-  export type DemandeEmpruntUpdateWithWhereUniqueWithoutEquipementInput = {
-    where: DemandeEmpruntWhereUniqueInput
+  export type DemandeEmpruntUpdateToOneWithWhereWithoutEquipementInput = {
+    where?: DemandeEmpruntWhereInput
     data: XOR<DemandeEmpruntUpdateWithoutEquipementInput, DemandeEmpruntUncheckedUpdateWithoutEquipementInput>
   }
 
-  export type DemandeEmpruntUpdateManyWithWhereWithoutEquipementInput = {
-    where: DemandeEmpruntScalarWhereInput
-    data: XOR<DemandeEmpruntUpdateManyMutationInput, DemandeEmpruntUncheckedUpdateManyWithoutEquipementInput>
+  export type DemandeEmpruntUpdateWithoutEquipementInput = {
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+  }
+
+  export type DemandeEmpruntUncheckedUpdateWithoutEquipementInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmpruntCreateWithoutNotificationInput = {
@@ -15713,53 +15683,6 @@ export namespace Prisma {
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
     vu?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DemandeEmpruntCreateManyEquipementInput = {
-    id?: number
-    utilisateurId: number
-    dateDemande?: Date | string
-    dateRetourPrevu: Date | string
-    usage: string
-    statut?: $Enums.StatutDemande
-    type?: $Enums.TypeDemande
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DemandeEmpruntUpdateWithoutEquipementInput = {
-    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
-    usage?: StringFieldUpdateOperationsInput | string
-    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
-    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
-  }
-
-  export type DemandeEmpruntUncheckedUpdateWithoutEquipementInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    utilisateurId?: IntFieldUpdateOperationsInput | number
-    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
-    usage?: StringFieldUpdateOperationsInput | string
-    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
-    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DemandeEmpruntUncheckedUpdateManyWithoutEquipementInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    utilisateurId?: IntFieldUpdateOperationsInput | number
-    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
-    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
-    usage?: StringFieldUpdateOperationsInput | string
-    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
-    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

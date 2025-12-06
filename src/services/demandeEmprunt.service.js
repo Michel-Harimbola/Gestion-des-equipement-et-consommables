@@ -58,9 +58,7 @@ class DemandeEmpruntService {
         id: empruntIdInt,
         utilisateurId: utilisateurIdInt,
         statut: { in: ["EnCours", "EnRetard"] },
-        equipement: {
-          some: { id: equipementIdInt },
-        },
+        equipement: { id: equipementIdInt },
       },
       include: { equipement: true },
     });

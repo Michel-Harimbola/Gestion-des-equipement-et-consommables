@@ -33,7 +33,7 @@ model Utilisateur {
 model Emprunt {
   id                  Int             @id  @default(autoincrement())
   utilisateurId       Int      
-  equipementId        Int             @unique
+  equipementId        Int             
   dateEmprunt         DateTime        @default(now())
   dateRetourPrevu     DateTime
   dateRetourEffective DateTime?
@@ -50,7 +50,7 @@ model Emprunt {
 model DemandeEmprunt {
   id                Int             @id  @default(autoincrement())
   utilisateurId     Int           
-  equipementId      Int             @unique
+  equipementId      Int             
   dateDemande       DateTime        @default(now())
   dateRetourPrevu   DateTime  
   usage             String
@@ -77,8 +77,8 @@ model Equipement {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 
-  emprunt        Emprunt?         
-  demandeEmprunt DemandeEmprunt?
+  emprunt        Emprunt[]
+  demandeEmprunt DemandeEmprunt[]
 }
 
 model Notification {

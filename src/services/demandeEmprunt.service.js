@@ -183,7 +183,7 @@ class DemandeEmpruntService {
       const emprunt = await prisma.emprunt.findFirst({
         where: {
           utilisateurId: demande.utilisateurId,
-          equipement: { some: { id: demande.equipementId } },
+          equipementId: demande.equipementId,
           statut: { in: ["EnCours", "EnRetard"] },
         },
       });
@@ -225,7 +225,7 @@ class DemandeEmpruntService {
     } else if (demande.type === "RETOUR") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
-        data: { disponibilite: "Emprunter" },
+        data: { disponibilite: "Emprunte" },
       });
     }
 
@@ -254,7 +254,7 @@ class DemandeEmpruntService {
     if (demande.type === "RETOUR") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
-        data: { disponibilite: "Emprunter" },
+        data: { disponibilite: "Emprunte" },
       });
     }
   }

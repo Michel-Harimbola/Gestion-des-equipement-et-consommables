@@ -160,10 +160,9 @@ class EmpruntService {
 
         const updateResult = await prisma.$transaction(async (tx) => {
             await tx.equipement.updateMany({
-                where: { id: { in: equipementId } },
+                where: { id: equipementId },
                 data: {
                     disponibilite: "Disponible",
-                    empruntId: null,
                 } 
             });
 

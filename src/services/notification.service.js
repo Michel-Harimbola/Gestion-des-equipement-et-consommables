@@ -8,12 +8,24 @@ class NotificationService {
   }
 
   static async getAllStockNotifications() {
-    return prisma.notification.findMany({
+    const notifications = await prisma.notification.findMany({
       orderBy: { DateEnvoi: "desc" },
       include: {
-        consommable: { select: { id: true, nom: true } },
-        emprunt: { select: { id: true } },
+        consommable: { select: { id: true, nom: true, quantiteDisponible: true, seuilCritique: true } },
+        emprunt: { select: { id: true, dateRetourEffective: true } }
       },
+    });
+
+    return notifications.filter((notif) => {
+      if (notif.emprunt) {
+        return notif.emprunt.dateRetourEffective === null;
+      }
+
+      if (notif.consommable) {
+        return notif.consommable.quantiteDisponible <= notif.consommable.seuilCritique;
+      }
+
+      return false;
     });
   }
 

@@ -123,6 +123,7 @@ class EmpruntService {
 
     static async getRecentEmprunts() {
         const emprunts = await prisma.emprunt.findMany({
+            where: { statut: {in: ["EnCours", "EnRetard"]} },
             orderBy: { createdAt: 'desc' },
             take: 3,
             include: {
@@ -192,6 +193,7 @@ class EmpruntService {
                 utilisateur: { 
                     select: { nom: true, prenom: true, email: true },
                  },
+                equipement: true,
             },
         });
 

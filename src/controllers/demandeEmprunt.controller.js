@@ -2,8 +2,8 @@ const DemandeEmpruntService = require("../services/demandeEmprunt.service");
 
 exports.createDemande = async (req, res) => {
   try {
-    const demande = await DemandeEmpruntService.createDemande(req.user.id, req.body);
-    res.status(201).json(demande);
+    const result = await DemandeEmpruntService.createDemande(req.user.id, req.body);
+    res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -11,8 +11,8 @@ exports.createDemande = async (req, res) => {
 
 exports.demandeRetour = async (req, res) => {
   try {
-    const demande = await DemandeEmpruntService.demandeRetour(req.user.id, req.body);
-    res.status(201).json(demande);
+    const result = await DemandeEmpruntService.demandeRetour(req.user.id, req.body);
+    res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -20,8 +20,10 @@ exports.demandeRetour = async (req, res) => {
 
 exports.getAllDemandes = async (req, res) => {
   try {
-    const demandes = await DemandeEmpruntService.getAllDemandes();
-    res.status(200).json(demandes);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const result = await DemandeEmpruntService.getAllDemandes({ page, limit });
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -29,8 +31,8 @@ exports.getAllDemandes = async (req, res) => {
 
 exports.getUserDemandes = async (req, res) => {
   try {
-    const demandes = await DemandeEmpruntService.getUserDemandes(req.user.id);
-    res.status(200).json(demandes);
+    const result = await DemandeEmpruntService.getUserDemandes(req.user.id);
+    res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -106,16 +106,23 @@ class DemandeEmpruntService {
     });
   }
 
-  static async getAllDemandes() {
-    const res = await prisma.demandeEmprunt.findMany({
-      include: {
-        utilisateur: { select: { nom: true, prenom: true, email: true } },
-        equipement: { select: { nom: true, numeroDeSerie: true, marque: true , etatMateriel: true } },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+  static async getAllDemandes({ page = 1, limit = 12 }) {
+    const skip = (page - 1) * limit;
 
-    return res;
+    const [demandes, total] = await Promise.all([
+      prisma.demandeEmprunt.findMany({
+        include: {
+          utilisateur: { select: { nom: true, prenom: true, email: true } },
+          equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.demandeEmprunt.count()
+    ]);
+
+  return { demandes, total, page, limit };
   }
 
   static async getUserDemandes (userId) {

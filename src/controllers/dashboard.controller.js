@@ -18,3 +18,12 @@ exports.getEmpruntsParMois = async (req, res) => {
     res.status(500).json({ error: "Impossible de récupérer les emprunts par mois." });
   }
 };
+
+exports.getEquipementsStatus = async (req, res) => {
+    try {
+        const status = await DashboardService.getEquipementsStatus();
+        return res.json(status);
+    } catch (err) {
+        return res.status(500).json({ message: err.message });
+    }
+}

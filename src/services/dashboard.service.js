@@ -57,6 +57,26 @@ class DashboardService {
 
     return { months, emprunts: empruntsParMois };
   }
+
+  static async getEquipementsStatus() {
+    const disponibles = await prisma.equipement.count({
+        where: { disponibilite: "Disponible" }
+    });
+
+    const empruntes = await prisma.equipement.count({
+        where: { disponibilite: "Emprunte" }
+    });
+
+    const maintenance = await prisma.equipement.count({
+        where: { disponibilite: "EnMaintenance" }
+    });
+
+    return {
+        disponibles,
+        empruntes,
+        maintenance,
+    };
+  }
 }
 
 module.exports = DashboardService;

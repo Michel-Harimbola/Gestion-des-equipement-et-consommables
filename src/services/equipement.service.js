@@ -44,27 +44,35 @@ class EquipementService {
         return equipement;
     }
 
-    static async getAllEquipements() {
-        const equipements = await prisma.equipement.findMany({
-            select: {
-                id: true,
-                nom: true,
-                numeroDeSerie: true,
-                marque: true,
-                disponibilite: true,
-                etatMateriel: true,
-                obtention: true,
-                prix: true,
-                fournisseur: true,
-                donateur: true,
-            },
-        });
+    static async getAllEquipements({ page = 1, limit = 12 }) {
+        const skip = (page - 1) * limit;
+
+        const [equipements, total] = await Promise.all([
+            prisma.equipement.findMany({
+                select: {
+                    id: true,
+                    nom: true,
+                    numeroDeSerie: true,
+                    marque: true,
+                    disponibilite: true,
+                    etatMateriel: true,
+                    obtention: true,
+                    prix: true,
+                    fournisseur: true,
+                    donateur: true,
+                },
+                skip,
+                take: limit,
+            }),
+            prisma.equipement.count()
+        ]);
+
         const ordreDisponibilite = ["Disponible", "EnMaintenance", "Emprunte", "Indisponible"];
         equipements.sort((a, b) => {
             return ordreDisponibilite.indexOf(a.disponibilite) - ordreDisponibilite.indexOf(b.disponibilite);
         })
 
-        return equipements;
+        return { equipements, total, page, limit };
     }
 
     static async updateEquipement(id, data) {

@@ -46,20 +46,28 @@ class UserService {
         return user;
     }
 
-    static async getAllUsers() {
-        const users = await prisma.utilisateur.findMany({
-            select: {
-                id: true,
-                nom: true,
-                prenom: true,
-                email: true,
-                role: true,
-                createdAt: true,
-                updateAt: true,
-            },
-        });
+    static async getAllUsers({ page = 1, limit = 12 }) {
+        const skip = (page - 1) * limit;
+        
+        const [users, total] = await Promise.all([
+            prisma.utilisateur.findMany({
+                select: {
+                    id: true,
+                    nom: true,
+                    prenom: true,
+                    email: true,
+                    role: true,
+                    createdAt: true,
+                    updateAt: true,
+                },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: limit,
+            }),
+            prisma.utilisateur.count()
+        ]);
 
-        return users;
+        return { users, total, page, limit };
     }
 
     static async updateUser(id, data) {

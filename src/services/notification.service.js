@@ -45,6 +45,21 @@ class NotificationService {
     });
   }
 
+  static async getAllNotifications({ page = 1, limit = 12 }) {
+    const skip = (page - 1) * limit;
+
+    const [notifications, total] = await Promise.all([
+      prisma.notification.findMany({
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.notification.count()
+    ]);
+
+  return { notifications, total, page, limit };
+  }
+
   static async markAllAsRead(userId) {
     return prisma.notification.updateMany({
       where: {

@@ -75,34 +75,48 @@ class EmpruntService {
         return emprunt;
     }
 
-    static async getAllEmprunts () {
-        const emprunts = await prisma.emprunt.findMany({
-            orderBy: { dateEmprunt: "desc" },
-            include: {
-                utilisateur: {
-                    select: { nom: true, prenom: true, email: true }
-                },
-                equipement: {
-                    select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
-                },
-            },
-        });
+    static async getAllEmprunts ({ page = 1, limit = 12 }) {
+        const skip = (page - 1) * limit;
 
-        return emprunts
+        const [emprunts, total] = await Promise.all([
+            prisma.emprunt.findMany({
+                orderBy: { dateEmprunt: "desc" },
+                skip,
+                take: limit,
+                include: {
+                    utilisateur: {
+                        select: { nom: true, prenom: true, email: true }
+                    },
+                    equipement: {
+                        select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
+                    },
+                },
+            }),
+            prisma.emprunt.count()
+        ]);
+
+        return { emprunts, total, page, limit };
     }
 
-    static async getUserEmprunts (userId) {
-        const emprunts = await prisma.emprunt.findMany({
-            where: { utilisateurId: userId },
-            orderBy: { dateEmprunt: "desc" },
-            include: {
-                equipement: { 
-                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
-                }
-            }
-        });
+    static async getUserEmprunts (userId, { page = 1, limit = 12 }) {
+        const skip = (page - 1) * limit;
 
-        return emprunts;
+        const [emprunts, total] = await Promise.all([   
+            prisma.emprunt.findMany({
+                where: { utilisateurId: userId },
+                orderBy: { dateEmprunt: "desc" },
+                skip,
+                take: limit,
+                include: {
+                    equipement: { 
+                        select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                    }
+                }
+            }),
+            prisma.emprunt.count()
+        ]);
+
+        return { emprunts, total, page, limit };
     }
 
     static async getUserEmpruntsInProgress(userId) {

@@ -51,14 +51,23 @@ class UtilisationConsommableService {
     return utilisation;
   }
 
-  static async getAll() {
-    return prisma.utilisationConsommable.findMany({
-      include: {
-        utilisateur: { select: { id: true, nom: true } },
-        consommable: { select: { id: true, nom: true } },
-      },
-      orderBy: { dateUtilisation: "desc" },
-    });
+  static async getAll({ page = 1, limit = 12 }) {
+    const skip = (page - 1) * limit;
+
+    const [UseCons, total] = await Promise.all([
+      prisma.utilisationConsommable.findMany({
+        include: {
+          utilisateur: { select: { id: true, nom: true } },
+          consommable: { select: { id: true, nom: true } },
+        },
+        orderBy: { dateUtilisation: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.utilisationConsommable.count()
+    ]);
+
+  return { UseCons, total, page, limit };
   }
 
   static async getById(id) {

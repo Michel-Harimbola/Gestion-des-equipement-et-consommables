@@ -30,20 +30,28 @@ class ConsommableService {
         return consommable;
     }
 
-    static async getAllConsommables() {
-        const consommables = await prisma.consommable.findMany({
-            select: {
-                id: true,
-                nom: true,
-                quantiteDisponible: true,
-                seuilCritique: true,
-                obtention: true,
-                fournisseur: true,
-                donnateur: true,
-            },
-        });
+    static async getAllConsommables({ page = 1, limit = 12 }) {
+        const skip = (page - 1) * limit;
 
-        return consommables;
+        const [consommables, total] = await Promise.all([
+            prisma.consommable.findMany({
+                select: {
+                    id: true,
+                    nom: true,
+                    quantiteDisponible: true,
+                    seuilCritique: true,
+                    obtention: true,
+                    fournisseur: true,
+                    donnateur: true,
+                },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: limit,
+            }),
+            prisma.consommable.count()
+        ]);
+
+        return { consommables, total, page, limit };
     }
 
     static async updateConsommable(id, data) {

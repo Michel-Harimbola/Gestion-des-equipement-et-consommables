@@ -122,7 +122,27 @@ class DemandeEmpruntService {
       prisma.demandeEmprunt.count()
     ]);
 
-  return { demandes, total, page, limit };
+    return { demandes, total, page, limit };
+  }
+
+  static async getDemandesEnAttente({ page = 1, limit = 3 }) {
+    const skip = (page - 1) * limit;
+
+    const [demandes, total] = await Promise.all([
+      prisma.demandeEmprunt.findMany({
+        where: { statut: "enAttente" },
+        include: {
+          utilisateur: { select: { nom: true, prenom: true, email: true } },
+          equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.demandeEmprunt.count()
+    ]);
+
+    return { demandes, total, page, limit };
   }
 
   static async getUserDemandes (userId) {

@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/emprunt", auth, DemandeEmpruntController.createDemande);
 router.post("/retour", auth, DemandeEmpruntController.demandeRetour);
 router.get("/", auth, DemandeEmpruntController.getAllDemandes);
+router.get("/demandesEnAttente", auth, DemandeEmpruntController.getDemandesEnAttente);
 router.get("/userDemandes", auth, DemandeEmpruntController.getUserDemandes);
 router.put("/:id", auth, DemandeEmpruntController.updateDemande);
 router.put("/:id/approuver", auth, DemandeEmpruntController.approuverDemande);

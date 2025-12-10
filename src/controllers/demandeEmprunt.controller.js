@@ -29,6 +29,17 @@ exports.getAllDemandes = async (req, res) => {
   }
 };
 
+exports.getDemandesEnAttente = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 3;
+    const result = await DemandeEmpruntService.getDemandesEnAttente({ page, limit });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getUserDemandes = async (req, res) => {
   try {
     const result = await DemandeEmpruntService.getUserDemandes(req.user.id);

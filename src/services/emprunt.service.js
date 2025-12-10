@@ -1,4 +1,6 @@
 const prisma = require("../lib/prisma.js");
+const { sendEmail } = require("./email.service.js");
+const { generateRetardEmailHTML } = require("../utils/emailTemplate.js");
 
 class EmpruntService {
     static async createEmprunt(data, userId) {
@@ -265,7 +267,6 @@ class EmpruntService {
     static async checkRetardAndNotify() {
         const now = new Date();
 
-        // Trouver tous les emprunts en retard
         const empruntsEnRetard = await prisma.emprunt.findMany({
             where: {
                 statut: "EnCours",
@@ -273,7 +274,7 @@ class EmpruntService {
             },
             include: {
                 utilisateur: {
-                    select: { nom: true },
+                    select: { nom: true, email: true },
                 },
                 equipement: {
                     select: { nom: true }
@@ -288,13 +289,11 @@ class EmpruntService {
 
         for (const emprunt of empruntsEnRetard) {
 
-            // Mettre à jour le statut
             await prisma.emprunt.update({
                 where: { id: emprunt.id },
                 data: { statut: "EnRetard" }
             });
 
-            // Créer la notification
             const notif = await prisma.notification.create({
                 data: {
                     message: `L'équipement "${emprunt.equipement.nom}" doit être retourné.`,
@@ -303,8 +302,14 @@ class EmpruntService {
                 }
             });
 
-            // Émettre l’événement Socket.io
             io.emit("notif_retard", notif);
+            // EMAIL
+            const subject = "⚠️ Rappel : Emprunt en retard";
+            const html = generateRetardEmailHTML(emprunt.utilisateur.nom, emprunt.equipement.nom);
+    
+            if (emprunt.utilisateur.email) {
+                await sendEmail(emprunt.utilisateur.email, subject, html);
+            }
         }
     }
 }

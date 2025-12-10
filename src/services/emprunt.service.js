@@ -307,7 +307,6 @@ class EmpruntService {
             io.emit("notif_retard", notif);
         }
     }
-
 }
 
 module.exports = EmpruntService;

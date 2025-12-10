@@ -31,6 +31,17 @@ exports.getAllUsers = async (req, res) => {
     }
 }
 
+exports.searchUsers = async(req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const resultat = await UserService.searchUsers(q, page, limit);
+        res.json(resultat);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur lors de la recherche" });
+    }
+}
+
 exports.updateUser = async (req, res) => {
     try {
         const result = await UserService.updateUser(req.params.id, req.body);

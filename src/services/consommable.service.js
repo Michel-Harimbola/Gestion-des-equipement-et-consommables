@@ -54,6 +54,39 @@ class ConsommableService {
         return { consommables, total, page, limit };
     }
 
+    static async searchConsommables(q, page = 1, limit = 12) {
+        page = parseInt(page, 10) || 1;
+        limit = parseInt(limit, 10) || 12;
+        const skip = (page - 1) * limit;
+
+        const where = {
+            OR: [
+                { nom: { contains: q, mode: "insensitive" } },
+            ]
+        };
+
+        const [consommables, total] = await Promise.all([
+            prisma.consommable.findMany({
+                where,
+                select: {
+                    id: true,
+                    nom: true,
+                    quantiteDisponible: true,
+                    seuilCritique: true,
+                    obtention: true,
+                    fournisseur: true,
+                    donnateur: true,
+                },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: limit,
+            }),
+            prisma.consommable.count()
+        ]);
+
+        return { consommables, total, page, limit };
+    }
+
     static async updateConsommable(id, data) {
         const consommableId = parseInt(id, 10);
         if(isNaN(consommableId)) throw new Error("ID invalide");

@@ -19,6 +19,14 @@ exports.markAllAsRead = async (req, res) => {
   }
 };
 
+exports.getAllStockNotifications = async (req, res) => {
+  try {
+    const result = await NotificationService.getAllStockNotifications(req.user.id);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 exports.getAllNotifications = async (req, res) => {
   try {

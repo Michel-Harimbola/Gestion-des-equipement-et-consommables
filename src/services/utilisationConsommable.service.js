@@ -80,6 +80,37 @@ class UtilisationConsommableService {
     });
   }
 
+  static async searchUtilisation(q, page = 1, limit = 12) {
+    page = parseInt(page, 10) || 1;
+    limit = parseInt(limit, 10) || 12;
+    const skip = (page - 1) * limit;
+
+    const where = {
+        OR: [
+            { utilisateur: { nom: { contains: q, mode: "insensitive" } } },
+            { utilisateur: { prenom: { contains: q, mode: "insensitive" } } },
+
+            { consommable: { nom: { contains: q, mode: "insensitive" } } },
+        ]
+    };
+
+    const [UseCons, total] = await Promise.all([
+        prisma.utilisationConsommable.findMany({
+            where,
+            skip,
+            take: limit,
+            orderBy: { dateUtilisation: "desc" },
+            include: {
+                utilisateur: { select: { id: true, nom: true } },
+                consommable: { select: { id: true, nom: true } },
+            }
+        }),
+        prisma.utilisationConsommable.count({ where })
+    ]);
+
+    return { UseCons, total, page, limit };
+  }
+
   static async update(id, data) {
     return prisma.utilisationConsommable.update({
       where: { id: parseInt(id) },

@@ -30,6 +30,17 @@ exports.getById = async (req, res) => {
   }
 }
 
+exports.searchUtilisation = async (req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const result = await UtilisationConsommableService.searchUtilisation(q, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (err) {
+        console.error("Erreur recherche utilisation consommable:", err);
+        res.status(500).json({ error: "Erreur interne serveur" });
+    }
+};
+
 exports.update = async (req, res) => { 
   try {
     const result = await UtilisationConsommableService.update(req.params.id, req.body);

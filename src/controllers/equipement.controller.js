@@ -30,6 +30,17 @@ exports.getAllEquipements = async (req, res) => {
     }
 }
 
+exports.searchEquipements = async(req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const resultat = await EquipementService.searchEquipements(q, page, limit);
+        res.json(resultat);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur lors de la recherche" });
+    }
+}
+
 exports.updateEquipement = async (req, res) => {
     try {
         const result = await EquipementService.updateEquipement(req.params.id, req.body);

@@ -29,6 +29,17 @@ exports.getAllDemandes = async (req, res) => {
   }
 };
 
+exports.searchDemandeEmprunts = async (req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const result = await DemandeEmpruntService.searchDemandeEmprunts(q, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (err) {
+        console.error("Erreur recherche demande d'emprunt:", err);
+        res.status(500).json({ error: "Erreur interne serveur" });
+    }
+};
+
 exports.getDemandesEnAttente = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;

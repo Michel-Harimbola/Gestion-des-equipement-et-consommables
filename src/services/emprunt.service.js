@@ -98,6 +98,43 @@ class EmpruntService {
         return { emprunts, total, page, limit };
     }
 
+    static async searchEmprunts(q, page = 1, limit = 12) {
+        page = parseInt(page, 10) || 1;
+        limit = parseInt(limit, 10) || 12;
+        const skip = (page - 1) * limit;
+
+        const where = {
+            OR: [
+                { utilisateur: { nom: { contains: q, mode: "insensitive" } } },
+                { utilisateur: { prenom: { contains: q, mode: "insensitive" } } },
+
+                { equipement: { nom: { contains: q, mode: "insensitive" } } },
+                { equipement: { marque: { contains: q, mode: "insensitive" } } },
+                { equipement: { numeroDeSerie: { contains: q, mode: "insensitive" } } },
+            ]
+        };
+
+        const [emprunts, total] = await Promise.all([
+            prisma.emprunt.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { dateEmprunt: "desc" },
+                include: {
+                    utilisateur: {
+                        select: { nom: true, prenom: true, email: true }
+                    },
+                    equipement: {
+                        select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                    }
+                }
+            }),
+            prisma.emprunt.count({ where })
+        ]);
+
+        return { emprunts, total, page, limit };
+    }
+
     static async getUserEmprunts (userId, { page = 1, limit = 12 }) {
         const skip = (page - 1) * limit;
 
@@ -113,7 +150,9 @@ class EmpruntService {
                     }
                 }
             }),
-            prisma.emprunt.count()
+            prisma.emprunt.count({
+                where: { utilisateurId: userId },
+            })
         ]);
 
         return { emprunts, total, page, limit };

@@ -30,6 +30,17 @@ exports.getAllConsommables = async (req, res) => {
     }
 }
 
+exports.searchConsommables = async(req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const resultat = await ConsommableService.searchConsommables(q, page, limit);
+        res.json(resultat);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Erreur lors de la recherche" });
+    }
+}
+
 exports.updateConsommable = async (req, res) => {
     try {
         const result = await ConsommableService.updateConsommable(req.params.id, req.body);

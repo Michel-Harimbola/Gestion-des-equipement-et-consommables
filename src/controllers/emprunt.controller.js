@@ -30,6 +30,17 @@ exports.getAllEmprunts = async (req, res) => {
     }
 }
 
+exports.searchEmprunts = async (req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const result = await empruntService.searchEmprunts(q, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (err) {
+        console.error("Erreur recherche emprunts:", err);
+        res.status(500).json({ error: "Erreur interne serveur" });
+    }
+};
+
 exports.getUserEmprunts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;

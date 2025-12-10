@@ -70,6 +70,41 @@ class UserService {
         return { users, total, page, limit };
     }
 
+    static async searchUsers(q, page = 1, limit = 12 ) {
+        page = parseInt(page, 10) || 1;
+        limit = parseInt(limit, 10) || 12;
+        const skip = (page - 1) * limit;
+
+        const where = {
+            OR: [
+                { nom: { contains: q, mode: "insensitive" } },
+                { prenom: { contains: q, mode: "insensitive" } },
+                { email: { contains: q, mode: "insensitive" } }
+            ]
+        };
+        
+        const [users, total] = await Promise.all([
+            prisma.utilisateur.findMany({
+                where,
+                select: {
+                    id: true,
+                    nom: true,
+                    prenom: true,
+                    email: true,
+                    role: true,
+                    createdAt: true,
+                    updateAt: true,
+                },
+                orderBy: { createdAt: "desc" },
+                skip,
+                take: limit,
+            }),
+            prisma.utilisateur.count({ where })
+        ]);
+
+        return { users, total, page, limit };
+    }
+
     static async updateUser(id, data) {
         const userId = parseInt(id, 10);
         if(isNaN(userId)) throw new Error("ID invalide");

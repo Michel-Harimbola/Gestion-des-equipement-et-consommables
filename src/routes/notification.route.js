@@ -5,6 +5,7 @@ const auth = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 
 router.get("/", auth, NotificationController.getAllNotifications);
+router.get("/actif", auth, NotificationController.getAllStockNotifications);
 router.get("/userNotification", auth, NotificationController.getUserNotification);
 router.patch("/read-all", auth, NotificationController.markAllAsRead);
 

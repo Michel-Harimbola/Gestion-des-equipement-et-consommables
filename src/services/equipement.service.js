@@ -75,6 +75,32 @@ class EquipementService {
         return { equipements, total, page, limit };
     }
 
+    static async searchEquipements(q, page = 1, limit = 12) {
+        page = parseInt(page, 10) || 1;
+        limit = parseInt(limit, 10) || 12;
+        const skip = (page - 1) * limit;
+
+        const where = {
+            OR: [
+                { nom: { contains: q, mode: "insensitive" } },
+                { marque: { contains: q, mode: "insensitive" } },
+                { numeroDeSerie: { contains: q, mode: "insensitive" } }
+            ]
+        };
+
+        const [equipements, total] = await Promise.all([
+            prisma.equipement.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { createdAt: "desc" }
+            }),
+            prisma.equipement.count({ where })
+        ]);
+
+        return { equipements, total, page, limit };
+    }
+
     static async updateEquipement(id, data) {
         const equipementId = parseInt(id, 10);
         if(isNaN(equipementId)) throw new Error("ID invalide");

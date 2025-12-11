@@ -30,17 +30,6 @@ exports.getAllEmprunts = async (req, res) => {
     }
 }
 
-exports.searchEmprunts = async (req, res) => {
-    try {
-        const { q = "", page = 1, limit = 12 } = req.query;
-        const result = await empruntService.searchEmprunts(q, parseInt(page), parseInt(limit));
-        res.json(result);
-    } catch (err) {
-        console.error("Erreur recherche emprunts:", err);
-        res.status(500).json({ error: "Erreur interne serveur" });
-    }
-};
-
 exports.getUserEmprunts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
@@ -51,6 +40,26 @@ exports.getUserEmprunts = async (req, res) => {
         res.status(404).json({ error: error.message });
     }
 }
+
+exports.searchEmprunts = async (req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const result = await empruntService.searchEmprunts(q, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.searchUserEmprunts = async (req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const result = await empruntService.searchUserEmprunts(req.user.id, q, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 exports.getUserEmpruntsInProgress = async (req, res) => {
     try {

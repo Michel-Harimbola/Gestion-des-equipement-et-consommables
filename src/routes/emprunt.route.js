@@ -5,7 +5,8 @@ const auth = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 
 router.post("/create", auth, empruntController.createEmprunt);
-router.get("/search", empruntController.searchEmprunts);
+router.get("/search", auth, empruntController.searchEmprunts);
+router.get("/searchUserEmprunt", auth, empruntController.searchUserEmprunts);
 router.get("/userEmprunts", auth, empruntController.getUserEmprunts);
 router.get("/userEmpruntsInProgress", auth, empruntController.getUserEmpruntsInProgress);
 router.get("/recent", auth, empruntController.getRecentEmprunts);

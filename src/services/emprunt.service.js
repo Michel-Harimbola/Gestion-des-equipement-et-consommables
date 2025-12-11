@@ -99,7 +99,30 @@ class EmpruntService {
 
         return { emprunts, total, page, limit };
     }
-
+    
+    static async getUserEmprunts (userId, { page = 1, limit = 12 }) {
+        const skip = (page - 1) * limit;
+        
+        const [emprunts, total] = await Promise.all([   
+            prisma.emprunt.findMany({
+                where: { utilisateurId: userId },
+                orderBy: { dateEmprunt: "desc" },
+                skip,
+                take: limit,
+                include: {
+                    equipement: { 
+                        select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                    }
+                }
+            }),
+            prisma.emprunt.count({
+                where: { utilisateurId: userId },
+            })
+        ]);
+        
+        return { emprunts, total, page, limit };
+    }
+    
     static async searchEmprunts(q, page = 1, limit = 12) {
         page = parseInt(page, 10) || 1;
         limit = parseInt(limit, 10) || 12;
@@ -137,12 +160,25 @@ class EmpruntService {
         return { emprunts, total, page, limit };
     }
 
-    static async getUserEmprunts (userId, { page = 1, limit = 12 }) {
+    static async searchUserEmprunts (userId, q, page = 1, limit = 10) {
+        page = parseInt(page, 10) || 1;
+        limit = parseInt(limit, 10) || 12;
         const skip = (page - 1) * limit;
 
+        const where = {
+            OR: [
+                { equipement: { nom: { contains: q, mode: "insensitive" } } },
+                { equipement: { marque: { contains: q, mode: "insensitive" } } },
+                { equipement: { numeroDeSerie: { contains: q, mode: "insensitive" } } },
+            ]
+        };
+        
         const [emprunts, total] = await Promise.all([   
             prisma.emprunt.findMany({
-                where: { utilisateurId: userId },
+                where: { 
+                    utilisateurId: userId,
+                    ...where 
+                },
                 orderBy: { dateEmprunt: "desc" },
                 skip,
                 take: limit,
@@ -153,10 +189,13 @@ class EmpruntService {
                 }
             }),
             prisma.emprunt.count({
-                where: { utilisateurId: userId },
+                where: { 
+                    utilisateurId: userId,
+                    ...where
+                },
             })
         ]);
-
+        
         return { emprunts, total, page, limit };
     }
 

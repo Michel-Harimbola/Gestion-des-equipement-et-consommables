@@ -5,7 +5,7 @@ const auth = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 
 router.post("/create", auth, UtilisationConsommableController.create);
-router.get("/search", UtilisationConsommableController.searchUtilisation);
+router.get("/search", auth,  UtilisationConsommableController.searchUtilisation);
 router.get("/", auth, UtilisationConsommableController.getAll);
 router.get("/:id", auth, UtilisationConsommableController.getById);
 router.put("/:id", auth, UtilisationConsommableController.update);

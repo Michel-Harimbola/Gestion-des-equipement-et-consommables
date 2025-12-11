@@ -125,10 +125,11 @@ model UtilisationConsommable {
 }
 
 model Rapport {
-  id      Int         @id @default(autoincrement())
-  contenu String
-  type    TypeRapport @default(Stock)
-  periode Periode     @default(Mensuel)
+  id        Int      @id @default(autoincrement())
+  contenu   String
+  periode   Periode  @default(Mensuel)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Obtention {
@@ -141,12 +142,6 @@ enum Periode {
   Hebdo
 }
 
-enum TypeRapport {
-  Stock
-  Consommation
-  UtilisationEquipement
-}
-
 enum TypeNotification {
   AlerteStock
   RappelRetour
@@ -156,6 +151,7 @@ enum Statut {
   EnCours
   EnRetard
   Retourner
+  EnAttente
 }
 
 enum Disponibilite {

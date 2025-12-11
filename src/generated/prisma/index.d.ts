@@ -74,15 +74,6 @@ export const Periode: {
 export type Periode = (typeof Periode)[keyof typeof Periode]
 
 
-export const TypeRapport: {
-  Stock: 'Stock',
-  Consommation: 'Consommation',
-  UtilisationEquipement: 'UtilisationEquipement'
-};
-
-export type TypeRapport = (typeof TypeRapport)[keyof typeof TypeRapport]
-
-
 export const TypeNotification: {
   AlerteStock: 'AlerteStock',
   RappelRetour: 'RappelRetour'
@@ -94,7 +85,8 @@ export type TypeNotification = (typeof TypeNotification)[keyof typeof TypeNotifi
 export const Statut: {
   EnCours: 'EnCours',
   EnRetard: 'EnRetard',
-  Retourner: 'Retourner'
+  Retourner: 'Retourner',
+  EnAttente: 'EnAttente'
 };
 
 export type Statut = (typeof Statut)[keyof typeof Statut]
@@ -158,10 +150,6 @@ export const Obtention: typeof $Enums.Obtention
 export type Periode = $Enums.Periode
 
 export const Periode: typeof $Enums.Periode
-
-export type TypeRapport = $Enums.TypeRapport
-
-export const TypeRapport: typeof $Enums.TypeRapport
 
 export type TypeNotification = $Enums.TypeNotification
 
@@ -10160,22 +10148,25 @@ export namespace Prisma {
   export type RapportMinAggregateOutputType = {
     id: number | null
     contenu: string | null
-    type: $Enums.TypeRapport | null
     periode: $Enums.Periode | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type RapportMaxAggregateOutputType = {
     id: number | null
     contenu: string | null
-    type: $Enums.TypeRapport | null
     periode: $Enums.Periode | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type RapportCountAggregateOutputType = {
     id: number
     contenu: number
-    type: number
     periode: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -10191,22 +10182,25 @@ export namespace Prisma {
   export type RapportMinAggregateInputType = {
     id?: true
     contenu?: true
-    type?: true
     periode?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type RapportMaxAggregateInputType = {
     id?: true
     contenu?: true
-    type?: true
     periode?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type RapportCountAggregateInputType = {
     id?: true
     contenu?: true
-    type?: true
     periode?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -10299,8 +10293,9 @@ export namespace Prisma {
   export type RapportGroupByOutputType = {
     id: number
     contenu: string
-    type: $Enums.TypeRapport
     periode: $Enums.Periode
+    createdAt: Date
+    updatedAt: Date
     _count: RapportCountAggregateOutputType | null
     _avg: RapportAvgAggregateOutputType | null
     _sum: RapportSumAggregateOutputType | null
@@ -10325,32 +10320,36 @@ export namespace Prisma {
   export type RapportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contenu?: boolean
-    type?: boolean
     periode?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["rapport"]>
 
   export type RapportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contenu?: boolean
-    type?: boolean
     periode?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["rapport"]>
 
   export type RapportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     contenu?: boolean
-    type?: boolean
     periode?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["rapport"]>
 
   export type RapportSelectScalar = {
     id?: boolean
     contenu?: boolean
-    type?: boolean
     periode?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type RapportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contenu" | "type" | "periode", ExtArgs["result"]["rapport"]>
+  export type RapportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "contenu" | "periode" | "createdAt" | "updatedAt", ExtArgs["result"]["rapport"]>
 
   export type $RapportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Rapport"
@@ -10358,8 +10357,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       contenu: string
-      type: $Enums.TypeRapport
       periode: $Enums.Periode
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["rapport"]>
     composites: {}
   }
@@ -10785,8 +10785,9 @@ export namespace Prisma {
   interface RapportFieldRefs {
     readonly id: FieldRef<"Rapport", 'Int'>
     readonly contenu: FieldRef<"Rapport", 'String'>
-    readonly type: FieldRef<"Rapport", 'TypeRapport'>
     readonly periode: FieldRef<"Rapport", 'Periode'>
+    readonly createdAt: FieldRef<"Rapport", 'DateTime'>
+    readonly updatedAt: FieldRef<"Rapport", 'DateTime'>
   }
     
 
@@ -11278,8 +11279,9 @@ export namespace Prisma {
   export const RapportScalarFieldEnum: {
     id: 'id',
     contenu: 'contenu',
-    type: 'type',
-    periode: 'periode'
+    periode: 'periode',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type RapportScalarFieldEnum = (typeof RapportScalarFieldEnum)[keyof typeof RapportScalarFieldEnum]
@@ -11486,20 +11488,6 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
-   * Reference to a field of type 'TypeRapport'
-   */
-  export type EnumTypeRapportFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeRapport'>
-    
-
-
-  /**
-   * Reference to a field of type 'TypeRapport[]'
-   */
-  export type ListEnumTypeRapportFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeRapport[]'>
     
 
 
@@ -12107,15 +12095,17 @@ export namespace Prisma {
     NOT?: RapportWhereInput | RapportWhereInput[]
     id?: IntFilter<"Rapport"> | number
     contenu?: StringFilter<"Rapport"> | string
-    type?: EnumTypeRapportFilter<"Rapport"> | $Enums.TypeRapport
     periode?: EnumPeriodeFilter<"Rapport"> | $Enums.Periode
+    createdAt?: DateTimeFilter<"Rapport"> | Date | string
+    updatedAt?: DateTimeFilter<"Rapport"> | Date | string
   }
 
   export type RapportOrderByWithRelationInput = {
     id?: SortOrder
     contenu?: SortOrder
-    type?: SortOrder
     periode?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type RapportWhereUniqueInput = Prisma.AtLeast<{
@@ -12124,15 +12114,17 @@ export namespace Prisma {
     OR?: RapportWhereInput[]
     NOT?: RapportWhereInput | RapportWhereInput[]
     contenu?: StringFilter<"Rapport"> | string
-    type?: EnumTypeRapportFilter<"Rapport"> | $Enums.TypeRapport
     periode?: EnumPeriodeFilter<"Rapport"> | $Enums.Periode
+    createdAt?: DateTimeFilter<"Rapport"> | Date | string
+    updatedAt?: DateTimeFilter<"Rapport"> | Date | string
   }, "id">
 
   export type RapportOrderByWithAggregationInput = {
     id?: SortOrder
     contenu?: SortOrder
-    type?: SortOrder
     periode?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: RapportCountOrderByAggregateInput
     _avg?: RapportAvgOrderByAggregateInput
     _max?: RapportMaxOrderByAggregateInput
@@ -12146,8 +12138,9 @@ export namespace Prisma {
     NOT?: RapportScalarWhereWithAggregatesInput | RapportScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Rapport"> | number
     contenu?: StringWithAggregatesFilter<"Rapport"> | string
-    type?: EnumTypeRapportWithAggregatesFilter<"Rapport"> | $Enums.TypeRapport
     periode?: EnumPeriodeWithAggregatesFilter<"Rapport"> | $Enums.Periode
+    createdAt?: DateTimeWithAggregatesFilter<"Rapport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Rapport"> | Date | string
   }
 
   export type UtilisateurCreateInput = {
@@ -12764,48 +12757,55 @@ export namespace Prisma {
 
   export type RapportCreateInput = {
     contenu: string
-    type?: $Enums.TypeRapport
     periode?: $Enums.Periode
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RapportUncheckedCreateInput = {
     id?: number
     contenu: string
-    type?: $Enums.TypeRapport
     periode?: $Enums.Periode
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RapportUpdateInput = {
     contenu?: StringFieldUpdateOperationsInput | string
-    type?: EnumTypeRapportFieldUpdateOperationsInput | $Enums.TypeRapport
     periode?: EnumPeriodeFieldUpdateOperationsInput | $Enums.Periode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RapportUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     contenu?: StringFieldUpdateOperationsInput | string
-    type?: EnumTypeRapportFieldUpdateOperationsInput | $Enums.TypeRapport
     periode?: EnumPeriodeFieldUpdateOperationsInput | $Enums.Periode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RapportCreateManyInput = {
     id?: number
     contenu: string
-    type?: $Enums.TypeRapport
     periode?: $Enums.Periode
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type RapportUpdateManyMutationInput = {
     contenu?: StringFieldUpdateOperationsInput | string
-    type?: EnumTypeRapportFieldUpdateOperationsInput | $Enums.TypeRapport
     periode?: EnumPeriodeFieldUpdateOperationsInput | $Enums.Periode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RapportUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     contenu?: StringFieldUpdateOperationsInput | string
-    type?: EnumTypeRapportFieldUpdateOperationsInput | $Enums.TypeRapport
     periode?: EnumPeriodeFieldUpdateOperationsInput | $Enums.Periode
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -13565,13 +13565,6 @@ export namespace Prisma {
     quantiteUtilise?: SortOrder
   }
 
-  export type EnumTypeRapportFilter<$PrismaModel = never> = {
-    equals?: $Enums.TypeRapport | EnumTypeRapportFieldRefInput<$PrismaModel>
-    in?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    not?: NestedEnumTypeRapportFilter<$PrismaModel> | $Enums.TypeRapport
-  }
-
   export type EnumPeriodeFilter<$PrismaModel = never> = {
     equals?: $Enums.Periode | EnumPeriodeFieldRefInput<$PrismaModel>
     in?: $Enums.Periode[] | ListEnumPeriodeFieldRefInput<$PrismaModel>
@@ -13582,8 +13575,9 @@ export namespace Prisma {
   export type RapportCountOrderByAggregateInput = {
     id?: SortOrder
     contenu?: SortOrder
-    type?: SortOrder
     periode?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type RapportAvgOrderByAggregateInput = {
@@ -13593,29 +13587,21 @@ export namespace Prisma {
   export type RapportMaxOrderByAggregateInput = {
     id?: SortOrder
     contenu?: SortOrder
-    type?: SortOrder
     periode?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type RapportMinOrderByAggregateInput = {
     id?: SortOrder
     contenu?: SortOrder
-    type?: SortOrder
     periode?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type RapportSumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type EnumTypeRapportWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TypeRapport | EnumTypeRapportFieldRefInput<$PrismaModel>
-    in?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    not?: NestedEnumTypeRapportWithAggregatesFilter<$PrismaModel> | $Enums.TypeRapport
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTypeRapportFilter<$PrismaModel>
-    _max?: NestedEnumTypeRapportFilter<$PrismaModel>
   }
 
   export type EnumPeriodeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14156,10 +14142,6 @@ export namespace Prisma {
     update?: XOR<XOR<ConsommableUpdateToOneWithWhereWithoutUtilisationsConsommableInput, ConsommableUpdateWithoutUtilisationsConsommableInput>, ConsommableUncheckedUpdateWithoutUtilisationsConsommableInput>
   }
 
-  export type EnumTypeRapportFieldUpdateOperationsInput = {
-    set?: $Enums.TypeRapport
-  }
-
   export type EnumPeriodeFieldUpdateOperationsInput = {
     set?: $Enums.Periode
   }
@@ -14517,28 +14499,11 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedEnumTypeRapportFilter<$PrismaModel = never> = {
-    equals?: $Enums.TypeRapport | EnumTypeRapportFieldRefInput<$PrismaModel>
-    in?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    not?: NestedEnumTypeRapportFilter<$PrismaModel> | $Enums.TypeRapport
-  }
-
   export type NestedEnumPeriodeFilter<$PrismaModel = never> = {
     equals?: $Enums.Periode | EnumPeriodeFieldRefInput<$PrismaModel>
     in?: $Enums.Periode[] | ListEnumPeriodeFieldRefInput<$PrismaModel>
     notIn?: $Enums.Periode[] | ListEnumPeriodeFieldRefInput<$PrismaModel>
     not?: NestedEnumPeriodeFilter<$PrismaModel> | $Enums.Periode
-  }
-
-  export type NestedEnumTypeRapportWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TypeRapport | EnumTypeRapportFieldRefInput<$PrismaModel>
-    in?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TypeRapport[] | ListEnumTypeRapportFieldRefInput<$PrismaModel>
-    not?: NestedEnumTypeRapportWithAggregatesFilter<$PrismaModel> | $Enums.TypeRapport
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTypeRapportFilter<$PrismaModel>
-    _max?: NestedEnumTypeRapportFilter<$PrismaModel>
   }
 
   export type NestedEnumPeriodeWithAggregatesFilter<$PrismaModel = never> = {

@@ -64,7 +64,7 @@ class DemandeEmpruntService {
     });
 
     if (!emprunt) {
-      throw new Error("Aucun emprunt en cours ou ren retard pour cet équipement.");
+      throw new Error("Aucun emprunt en cours ou en retard pour cet équipement.");
     }
 
     // Vérifie qu’il n’y a pas déjà une demande de retour pour ce matériel
@@ -95,6 +95,11 @@ class DemandeEmpruntService {
     await prisma.equipement.update({
       where: { id: equipementIdInt },
       data: { disponibilite: "EnMaintenance" },
+    });
+
+    await prisma.emprunt.update({
+      where: { id: empruntIdInt },
+      data: { statut: "EnAttente" },
     });
 
     return prisma.demandeEmprunt.findUnique({
@@ -250,7 +255,7 @@ class DemandeEmpruntService {
         where: {
           utilisateurId: demande.utilisateurId,
           equipementId: demande.equipementId,
-          statut: { in: ["EnCours", "EnRetard"] },
+          statut: { in: ["EnCours", "EnRetard", "EnAttente"] },
         },
       });
 
@@ -293,12 +298,31 @@ class DemandeEmpruntService {
         where: { id: demande.equipementId },
         data: { disponibilite: "Emprunte" },
       });
+
+      const emprunt = await prisma.emprunt.findFirst({
+        where: {
+          utilisateurId: demande.utilisateurId,
+          equipementId: demande.equipementId,
+          statut: "EnAttente", // car tu as mis EnAttente lors de la demande retour
+        },
+      });
+
+      if (emprunt) {
+        const now = new Date();
+        const dateRetourPrevu = new Date(emprunt.dateRetourPrevu);
+
+        const newStatus = now > dateRetourPrevu ? "EnRetard" : "EnCours";
+
+        await prisma.emprunt.update({
+          where: { id: emprunt.id },
+          data: { statut: newStatus },
+        });
+      }
     }
 
     return { message: "Demande refusée avec succès." };
   }
 
-  // Annuler une demande (par utilisateur)
   static async annulerDemande(id) {
     const demandeId = parseInt(id, 10);
     const demande = await prisma.demandeEmprunt.findUnique({ where: { id: demandeId } });
@@ -308,7 +332,6 @@ class DemandeEmpruntService {
       where: { id: demandeId }
     });
 
-    // Libérer le matériel
     if (demande.type === "EMPRUNT") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
@@ -316,12 +339,31 @@ class DemandeEmpruntService {
       });
     }
 
-    // Garder l'état en "Emprunter"
     if (demande.type === "RETOUR") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
         data: { disponibilite: "Emprunte" },
       });
+
+      const emprunt = await prisma.emprunt.findFirst({
+        where: {
+          utilisateurId: demande.utilisateurId,
+          equipementId: demande.equipementId,
+          statut: "EnAttente",
+        },
+      });
+
+      if (emprunt) {
+        const now = new Date();
+        const dateRetourPrevu = new Date(emprunt.dateRetourPrevu);
+
+        const newStatus = now > dateRetourPrevu ? "EnRetard" : "EnCours";
+
+        await prisma.emprunt.update({
+          where: { id: emprunt.id },
+          data: { statut: newStatus },
+        });
+      }
     }
   }
 }

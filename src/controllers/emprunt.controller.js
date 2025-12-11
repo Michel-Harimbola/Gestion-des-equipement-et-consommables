@@ -53,7 +53,7 @@ exports.searchEmprunts = async (req, res) => {
 
 exports.searchUserEmprunts = async (req, res) => {
     try {
-        const { q = "", page = 1, limit = 12 } = req.query;
+        const { q = "", page = 1, limit = 10 } = req.query;
         const result = await empruntService.searchUserEmprunts(req.user.id, q, parseInt(page), parseInt(limit));
         res.json(result);
     } catch (error) {

@@ -16,6 +16,7 @@ app.use('/api/notification', require("./routes/notification.route.js"));
 app.use('/api/demande', require("./routes/demandeEmprunt.route.js"));
 app.use('/api/utilisation', require("./routes/utilisationConsommable.route.js"));
 app.use('/api/dashboard', require('./routes/dashboard.route.js'));
+app.use('/api/rapport', require('./routes/rapport.route.js'));
 
 
 // Route de base(pour le test)

@@ -211,8 +211,9 @@ exports.Prisma.UtilisationConsommableScalarFieldEnum = {
 exports.Prisma.RapportScalarFieldEnum = {
   id: 'id',
   contenu: 'contenu',
-  type: 'type',
-  periode: 'periode'
+  periode: 'periode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -240,7 +241,8 @@ exports.RoleUtilisateur = exports.$Enums.RoleUtilisateur = {
 exports.Statut = exports.$Enums.Statut = {
   EnCours: 'EnCours',
   EnRetard: 'EnRetard',
-  Retourner: 'Retourner'
+  Retourner: 'Retourner',
+  EnAttente: 'EnAttente'
 };
 
 exports.StatutDemande = exports.$Enums.StatutDemande = {
@@ -278,12 +280,6 @@ exports.Obtention = exports.$Enums.Obtention = {
 exports.TypeNotification = exports.$Enums.TypeNotification = {
   AlerteStock: 'AlerteStock',
   RappelRetour: 'RappelRetour'
-};
-
-exports.TypeRapport = exports.$Enums.TypeRapport = {
-  Stock: 'Stock',
-  Consommation: 'Consommation',
-  UtilisationEquipement: 'UtilisationEquipement'
 };
 
 exports.Periode = exports.$Enums.Periode = {

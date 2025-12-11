@@ -23,8 +23,8 @@ module.exports.sendEmail = async (to, subject, html) => {
             html,
             attachments: [
                 {
-                    filename: 'YouthComputing.svg',
-                    path: path.join(__dirname, '../assets/YouthComputing.svg'),
+                    filename: 'YouthComputing.png',
+                    path: path.join(__dirname, '../assets/YouthComputing.png'),
                     cid: 'YouthComputing'
                 }
             ]

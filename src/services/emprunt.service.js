@@ -162,7 +162,7 @@ class EmpruntService {
 
     static async searchUserEmprunts (userId, q, page = 1, limit = 10) {
         page = parseInt(page, 10) || 1;
-        limit = parseInt(limit, 10) || 12;
+        limit = parseInt(limit, 10) || 10;
         const skip = (page - 1) * limit;
 
         const where = {

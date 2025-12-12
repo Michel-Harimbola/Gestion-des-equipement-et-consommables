@@ -61,6 +61,7 @@ model DemandeEmprunt {
 
   utilisateur       Utilisateur     @relation(fields: [utilisateurId], references: [id], onDelete: Cascade)
   equipement        Equipement      @relation(fields: [equipementId], references: [id], onDelete: Cascade)
+  notification      Notification[]
 }
 
 model Equipement {
@@ -82,18 +83,20 @@ model Equipement {
 }
 
 model Notification {
-  id             Int                @id  @default(autoincrement())
-  empruntId      Int?               
-  consommableId  Int?               
-  message        String      
-  DateEnvoi      DateTime           @default(now())
-  type           TypeNotification   @default(AlerteStock)
-  vu             Boolean            @default(false)
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  id                Int                @id  @default(autoincrement())
+  empruntId         Int?     
+  demandeEmpruntId  Int?            
+  consommableId     Int?               
+  message           String      
+  DateEnvoi         DateTime           @default(now())
+  type              TypeNotification   @default(AlerteStock)
+  vu                Boolean            @default(false)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 
-  emprunt        Emprunt?           @relation(fields: [empruntId], references: [id], onDelete: Cascade)
-  consommable    Consommable?       @relation(fields: [consommableId], references: [id], onDelete: Cascade)
+  emprunt           Emprunt?           @relation(fields: [empruntId], references: [id], onDelete: Cascade)
+  demandeEmprunt    DemandeEmprunt?    @relation(fields: [demandeEmpruntId], references: [id])
+  consommable       Consommable?       @relation(fields: [consommableId], references: [id], onDelete: Cascade)
 }
 
 model Consommable {
@@ -147,6 +150,8 @@ enum Periode {
 enum TypeNotification {
   AlerteStock
   RappelRetour
+  Acceptation
+  Refus
 }
 
 enum Statut {

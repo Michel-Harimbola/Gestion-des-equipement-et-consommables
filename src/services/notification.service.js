@@ -32,14 +32,16 @@ class NotificationService {
   static async getUserRetardNotifications(userId) {
     return prisma.notification.findMany({
       where: { 
-        type: "RappelRetour",
-        emprunt: {
-          utilisateurId: userId
-        }
+        type: { in: ["RappelRetour", "Acceptation", "Refus"] },
+        OR: [
+          { emprunt: { utilisateurId: userId } },
+          { demandeEmprunt: { utilisateurId: userId } }
+        ]
       },
       orderBy: { DateEnvoi: "desc" },
       include: {
         consommable: { select: { id: true, nom: true } },
+        demandeEmprunt: { select: { id: true, type: true, statut: true }},
         emprunt: { select: { id: true, usage: true, dateRetourPrevu: true } },
       }
     });

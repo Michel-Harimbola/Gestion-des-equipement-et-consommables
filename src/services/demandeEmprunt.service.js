@@ -1,14 +1,13 @@
 const prisma = require("../lib/prisma");
 const EmpruntService = require('./emprunt.service');
+const { getIO } = require("../socket.js");
 
 class DemandeEmpruntService {
-  // demande d'emprunt
   static async createDemande (utilisateurId, data) {
     const { dateRetourPrevu, usage, equipementId } = data;
     const equipementIdInt = parseInt(equipementId, 10);
     const utilisateurIdInt = parseInt(utilisateurId, 10);
     
-    // Vérifier si équipement existe et dispo
     const equipement = await prisma.equipement.findUnique({ where: { id: equipementIdInt } });
     if (!equipement) throw new Error("Équipement introuvable");
     if (equipement.disponibilite !== "Disponible") throw new Error("Équipement non disponible");
@@ -17,7 +16,6 @@ class DemandeEmpruntService {
         throw new Error("La date de retour prévue doit être future.");
     }
     
-    // Créer la demande
     const demande = await prisma.demandeEmprunt.create({
       data: { 
         utilisateur: { connect: { id: utilisateurIdInt } },
@@ -33,7 +31,6 @@ class DemandeEmpruntService {
       },
       });
 
-    // Changer temporairement l'état à EnMaintenance
     await prisma.equipement.update({
       where: { id: equipementIdInt },
       data: { disponibilite: "EnMaintenance" },
@@ -45,7 +42,6 @@ class DemandeEmpruntService {
     });;
   }
 
-   // Demande de retour
   static async demandeRetour(utilisateurId, data) {
     const { equipementId, empruntId } = data;
     const utilisateurIdInt = parseInt(utilisateurId, 10);
@@ -67,7 +63,6 @@ class DemandeEmpruntService {
       throw new Error("Aucun emprunt en cours ou en retard pour cet équipement.");
     }
 
-    // Vérifie qu’il n’y a pas déjà une demande de retour pour ce matériel
     const demandeExistante = await prisma.demandeEmprunt.findFirst({
       where: {
         utilisateurId: utilisateurIdInt,
@@ -80,7 +75,6 @@ class DemandeEmpruntService {
     if (demandeExistante)
       throw new Error("Une demande de retour est déjà en attente pour cet équipement.");
 
-    // Crée la demande de retour
     const demandeRetour = await prisma.demandeEmprunt.create({
       data: {
         utilisateurId: utilisateurIdInt,
@@ -222,18 +216,21 @@ class DemandeEmpruntService {
     return demande;
   }
 
-  // Approuver une demande (emprunt ou retour)
   static async approuverDemande(id) {
     const demandeId = parseInt(id, 10);
+    const io = getIO();
+
     const demande = await prisma.demandeEmprunt.findUnique({ where: { id: demandeId } });
     if (!demande) throw new Error("Demande introuvable");
 
+    await prisma.demandeEmprunt.update({
+      where: { id: demandeId },
+      data: { statut: "approuver" },
+    });
+
+    let messageNotif = "";
+
     if (demande.type === "EMPRUNT") {
-      
-      await prisma.demandeEmprunt.update({
-        where: { id: demandeId },
-        data: { statut: "approuver" },
-      });
 
       const emprunt = await EmpruntService.createEmprunt(
         {
@@ -244,6 +241,18 @@ class DemandeEmpruntService {
         demande.utilisateurId
       );
 
+      messageNotif = `Votre demande d'emprunt pour l'équipement "${emprunt.equipement.nom}" a été approuvée.`;
+
+      const notif = await prisma.notification.create({
+          data: {
+              message: messageNotif,
+              type: "Acceptation", 
+              empruntId: emprunt.id,
+              demandeEmpruntId: demandeId,
+          },
+      });
+
+      io.emit("notif_demande", notif);
 
       return {
         message: "Demande d'emprunt approuvée et emprunt créé.",
@@ -261,14 +270,20 @@ class DemandeEmpruntService {
 
       if (!emprunt) throw new Error("Aucun emprunt en cours pour ce matériel.");
 
-      // Marquer comme retourné
       await EmpruntService.returnEmprunt(emprunt.id, demande.utilisateurId);
 
-      // Mettre la demande à approuvée
-      await prisma.demandeEmprunt.update({
-        where: { id: demandeId },
-        data: { statut: "approuver" },
+      messageNotif = `Votre demande de retour pour l'équipement "${emprunt.equipement.nom}" a été approuvée.`;
+
+      const notif = await prisma.notification.create({
+          data: { 
+            message: messageNotif, 
+            type: "RappelRetour", 
+            empruntId: emprunt.id,
+            demandeEmpruntId: demandeId,
+          },
       });
+
+      io.emit("notif_demande", notif);
 
       return {
         message: "Demande de retour approuvée. Équipement marqué comme retourné.",
@@ -276,10 +291,19 @@ class DemandeEmpruntService {
     }
   }
 
-  // Refuser une demande (emprunt ou retour)
+
   static async refuserDemande(id) {
     const demandeId = parseInt(id, 10);
-    const demande = await prisma.demandeEmprunt.findUnique({ where: { id: demandeId } });
+    const io = getIO();
+
+    const demande = await prisma.demandeEmprunt.findUnique({ 
+      where: { id: demandeId },
+      include: {
+        equipement: {
+          select : { nom: true},
+        }
+      }
+    });
     if (!demande) throw new Error("Demande introuvable");
 
     await prisma.demandeEmprunt.update({
@@ -287,11 +311,15 @@ class DemandeEmpruntService {
       data: { statut: "refuser" },
     });
 
+    let messageNotif = "";
+
     if (demande.type === "EMPRUNT") {
       await prisma.equipement.update({
         where: { id: demande.equipementId },
         data: { disponibilite: "Disponible" },
       });
+
+      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.nom}" a été refusée.`;
 
     } else if (demande.type === "RETOUR") {
       await prisma.equipement.update({
@@ -303,7 +331,7 @@ class DemandeEmpruntService {
         where: {
           utilisateurId: demande.utilisateurId,
           equipementId: demande.equipementId,
-          statut: "EnAttente", // car tu as mis EnAttente lors de la demande retour
+          statut: "EnAttente", 
         },
       });
 
@@ -318,7 +346,19 @@ class DemandeEmpruntService {
           data: { statut: newStatus },
         });
       }
+
+      messageNotif = `Votre demande de retour pour l'équipement "${demande.equipement.nom}" a été refusée.`;
     }
+
+    const notif = await prisma.notification.create({
+        data: { 
+          message: messageNotif,
+          type: "Refus",
+          demandeEmpruntId: demandeId,
+        },
+    });
+
+    io.emit("notif_demande", notif);
 
     return { message: "Demande refusée avec succès." };
   }

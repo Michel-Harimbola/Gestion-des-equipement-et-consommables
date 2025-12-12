@@ -76,7 +76,9 @@ export type Periode = (typeof Periode)[keyof typeof Periode]
 
 export const TypeNotification: {
   AlerteStock: 'AlerteStock',
-  RappelRetour: 'RappelRetour'
+  RappelRetour: 'RappelRetour',
+  Acceptation: 'Acceptation',
+  Refus: 'Refus'
 };
 
 export type TypeNotification = (typeof TypeNotification)[keyof typeof TypeNotification]
@@ -1694,6 +1696,37 @@ export namespace Prisma {
    * EmpruntCountOutputType without action
    */
   export type EmpruntCountOutputTypeCountNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+  }
+
+
+  /**
+   * Count Type DemandeEmpruntCountOutputType
+   */
+
+  export type DemandeEmpruntCountOutputType = {
+    notification: number
+  }
+
+  export type DemandeEmpruntCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    notification?: boolean | DemandeEmpruntCountOutputTypeCountNotificationArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DemandeEmpruntCountOutputType without action
+   */
+  export type DemandeEmpruntCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmpruntCountOutputType
+     */
+    select?: DemandeEmpruntCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DemandeEmpruntCountOutputType without action
+   */
+  export type DemandeEmpruntCountOutputTypeCountNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
   }
 
@@ -4432,6 +4465,8 @@ export namespace Prisma {
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
     equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+    notification?: boolean | DemandeEmprunt$notificationArgs<ExtArgs>
+    _count?: boolean | DemandeEmpruntCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["demandeEmprunt"]>
 
   export type DemandeEmpruntSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4481,6 +4516,8 @@ export namespace Prisma {
   export type DemandeEmpruntInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
     equipement?: boolean | EquipementDefaultArgs<ExtArgs>
+    notification?: boolean | DemandeEmprunt$notificationArgs<ExtArgs>
+    _count?: boolean | DemandeEmpruntCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DemandeEmpruntIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
@@ -4496,6 +4533,7 @@ export namespace Prisma {
     objects: {
       utilisateur: Prisma.$UtilisateurPayload<ExtArgs>
       equipement: Prisma.$EquipementPayload<ExtArgs>
+      notification: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -4904,6 +4942,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     utilisateur<T extends UtilisateurDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UtilisateurDefaultArgs<ExtArgs>>): Prisma__UtilisateurClient<$Result.GetResult<Prisma.$UtilisateurPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     equipement<T extends EquipementDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EquipementDefaultArgs<ExtArgs>>): Prisma__EquipementClient<$Result.GetResult<Prisma.$EquipementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    notification<T extends DemandeEmprunt$notificationArgs<ExtArgs> = {}>(args?: Subset<T, DemandeEmprunt$notificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5336,6 +5375,30 @@ export namespace Prisma {
      * Limit how many DemandeEmprunts to delete.
      */
     limit?: number
+  }
+
+  /**
+   * DemandeEmprunt.notification
+   */
+  export type DemandeEmprunt$notificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -6599,18 +6662,21 @@ export namespace Prisma {
   export type NotificationAvgAggregateOutputType = {
     id: number | null
     empruntId: number | null
+    demandeEmpruntId: number | null
     consommableId: number | null
   }
 
   export type NotificationSumAggregateOutputType = {
     id: number | null
     empruntId: number | null
+    demandeEmpruntId: number | null
     consommableId: number | null
   }
 
   export type NotificationMinAggregateOutputType = {
     id: number | null
     empruntId: number | null
+    demandeEmpruntId: number | null
     consommableId: number | null
     message: string | null
     DateEnvoi: Date | null
@@ -6623,6 +6689,7 @@ export namespace Prisma {
   export type NotificationMaxAggregateOutputType = {
     id: number | null
     empruntId: number | null
+    demandeEmpruntId: number | null
     consommableId: number | null
     message: string | null
     DateEnvoi: Date | null
@@ -6635,6 +6702,7 @@ export namespace Prisma {
   export type NotificationCountAggregateOutputType = {
     id: number
     empruntId: number
+    demandeEmpruntId: number
     consommableId: number
     message: number
     DateEnvoi: number
@@ -6649,18 +6717,21 @@ export namespace Prisma {
   export type NotificationAvgAggregateInputType = {
     id?: true
     empruntId?: true
+    demandeEmpruntId?: true
     consommableId?: true
   }
 
   export type NotificationSumAggregateInputType = {
     id?: true
     empruntId?: true
+    demandeEmpruntId?: true
     consommableId?: true
   }
 
   export type NotificationMinAggregateInputType = {
     id?: true
     empruntId?: true
+    demandeEmpruntId?: true
     consommableId?: true
     message?: true
     DateEnvoi?: true
@@ -6673,6 +6744,7 @@ export namespace Prisma {
   export type NotificationMaxAggregateInputType = {
     id?: true
     empruntId?: true
+    demandeEmpruntId?: true
     consommableId?: true
     message?: true
     DateEnvoi?: true
@@ -6685,6 +6757,7 @@ export namespace Prisma {
   export type NotificationCountAggregateInputType = {
     id?: true
     empruntId?: true
+    demandeEmpruntId?: true
     consommableId?: true
     message?: true
     DateEnvoi?: true
@@ -6784,6 +6857,7 @@ export namespace Prisma {
   export type NotificationGroupByOutputType = {
     id: number
     empruntId: number | null
+    demandeEmpruntId: number | null
     consommableId: number | null
     message: string
     DateEnvoi: Date
@@ -6815,6 +6889,7 @@ export namespace Prisma {
   export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     empruntId?: boolean
+    demandeEmpruntId?: boolean
     consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
@@ -6823,12 +6898,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Notification$demandeEmpruntArgs<ExtArgs>
     consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     empruntId?: boolean
+    demandeEmpruntId?: boolean
     consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
@@ -6837,12 +6914,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Notification$demandeEmpruntArgs<ExtArgs>
     consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     empruntId?: boolean
+    demandeEmpruntId?: boolean
     consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
@@ -6851,12 +6930,14 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Notification$demandeEmpruntArgs<ExtArgs>
     consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }, ExtArgs["result"]["notification"]>
 
   export type NotificationSelectScalar = {
     id?: boolean
     empruntId?: boolean
+    demandeEmpruntId?: boolean
     consommableId?: boolean
     message?: boolean
     DateEnvoi?: boolean
@@ -6866,17 +6947,20 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "empruntId" | "consommableId" | "message" | "DateEnvoi" | "type" | "vu" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "empruntId" | "demandeEmpruntId" | "consommableId" | "message" | "DateEnvoi" | "type" | "vu" | "createdAt" | "updatedAt", ExtArgs["result"]["notification"]>
   export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Notification$demandeEmpruntArgs<ExtArgs>
     consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }
   export type NotificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Notification$demandeEmpruntArgs<ExtArgs>
     consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }
   export type NotificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunt?: boolean | Notification$empruntArgs<ExtArgs>
+    demandeEmprunt?: boolean | Notification$demandeEmpruntArgs<ExtArgs>
     consommable?: boolean | Notification$consommableArgs<ExtArgs>
   }
 
@@ -6884,11 +6968,13 @@ export namespace Prisma {
     name: "Notification"
     objects: {
       emprunt: Prisma.$EmpruntPayload<ExtArgs> | null
+      demandeEmprunt: Prisma.$DemandeEmpruntPayload<ExtArgs> | null
       consommable: Prisma.$ConsommablePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       empruntId: number | null
+      demandeEmpruntId: number | null
       consommableId: number | null
       message: string
       DateEnvoi: Date
@@ -7291,6 +7377,7 @@ export namespace Prisma {
   export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     emprunt<T extends Notification$empruntArgs<ExtArgs> = {}>(args?: Subset<T, Notification$empruntArgs<ExtArgs>>): Prisma__EmpruntClient<$Result.GetResult<Prisma.$EmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    demandeEmprunt<T extends Notification$demandeEmpruntArgs<ExtArgs> = {}>(args?: Subset<T, Notification$demandeEmpruntArgs<ExtArgs>>): Prisma__DemandeEmpruntClient<$Result.GetResult<Prisma.$DemandeEmpruntPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     consommable<T extends Notification$consommableArgs<ExtArgs> = {}>(args?: Subset<T, Notification$consommableArgs<ExtArgs>>): Prisma__ConsommableClient<$Result.GetResult<Prisma.$ConsommablePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -7323,6 +7410,7 @@ export namespace Prisma {
   interface NotificationFieldRefs {
     readonly id: FieldRef<"Notification", 'Int'>
     readonly empruntId: FieldRef<"Notification", 'Int'>
+    readonly demandeEmpruntId: FieldRef<"Notification", 'Int'>
     readonly consommableId: FieldRef<"Notification", 'Int'>
     readonly message: FieldRef<"Notification", 'String'>
     readonly DateEnvoi: FieldRef<"Notification", 'DateTime'>
@@ -7742,6 +7830,25 @@ export namespace Prisma {
      */
     include?: EmpruntInclude<ExtArgs> | null
     where?: EmpruntWhereInput
+  }
+
+  /**
+   * Notification.demandeEmprunt
+   */
+  export type Notification$demandeEmpruntArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DemandeEmprunt
+     */
+    select?: DemandeEmpruntSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DemandeEmprunt
+     */
+    omit?: DemandeEmpruntOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DemandeEmpruntInclude<ExtArgs> | null
+    where?: DemandeEmpruntWhereInput
   }
 
   /**
@@ -11235,6 +11342,7 @@ export namespace Prisma {
   export const NotificationScalarFieldEnum: {
     id: 'id',
     empruntId: 'empruntId',
+    demandeEmpruntId: 'demandeEmpruntId',
     consommableId: 'consommableId',
     message: 'message',
     DateEnvoi: 'DateEnvoi',
@@ -11690,6 +11798,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
     equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
+    notification?: NotificationListRelationFilter
   }
 
   export type DemandeEmpruntOrderByWithRelationInput = {
@@ -11705,6 +11814,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     utilisateur?: UtilisateurOrderByWithRelationInput
     equipement?: EquipementOrderByWithRelationInput
+    notification?: NotificationOrderByRelationAggregateInput
   }
 
   export type DemandeEmpruntWhereUniqueInput = Prisma.AtLeast<{
@@ -11723,6 +11833,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
     equipement?: XOR<EquipementScalarRelationFilter, EquipementWhereInput>
+    notification?: NotificationListRelationFilter
   }, "id">
 
   export type DemandeEmpruntOrderByWithAggregationInput = {
@@ -11860,6 +11971,7 @@ export namespace Prisma {
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     id?: IntFilter<"Notification"> | number
     empruntId?: IntNullableFilter<"Notification"> | number | null
+    demandeEmpruntId?: IntNullableFilter<"Notification"> | number | null
     consommableId?: IntNullableFilter<"Notification"> | number | null
     message?: StringFilter<"Notification"> | string
     DateEnvoi?: DateTimeFilter<"Notification"> | Date | string
@@ -11868,12 +11980,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
     emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
+    demandeEmprunt?: XOR<DemandeEmpruntNullableScalarRelationFilter, DemandeEmpruntWhereInput> | null
     consommable?: XOR<ConsommableNullableScalarRelationFilter, ConsommableWhereInput> | null
   }
 
   export type NotificationOrderByWithRelationInput = {
     id?: SortOrder
     empruntId?: SortOrderInput | SortOrder
+    demandeEmpruntId?: SortOrderInput | SortOrder
     consommableId?: SortOrderInput | SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
@@ -11882,6 +11996,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     emprunt?: EmpruntOrderByWithRelationInput
+    demandeEmprunt?: DemandeEmpruntOrderByWithRelationInput
     consommable?: ConsommableOrderByWithRelationInput
   }
 
@@ -11891,6 +12006,7 @@ export namespace Prisma {
     OR?: NotificationWhereInput[]
     NOT?: NotificationWhereInput | NotificationWhereInput[]
     empruntId?: IntNullableFilter<"Notification"> | number | null
+    demandeEmpruntId?: IntNullableFilter<"Notification"> | number | null
     consommableId?: IntNullableFilter<"Notification"> | number | null
     message?: StringFilter<"Notification"> | string
     DateEnvoi?: DateTimeFilter<"Notification"> | Date | string
@@ -11899,12 +12015,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Notification"> | Date | string
     updatedAt?: DateTimeFilter<"Notification"> | Date | string
     emprunt?: XOR<EmpruntNullableScalarRelationFilter, EmpruntWhereInput> | null
+    demandeEmprunt?: XOR<DemandeEmpruntNullableScalarRelationFilter, DemandeEmpruntWhereInput> | null
     consommable?: XOR<ConsommableNullableScalarRelationFilter, ConsommableWhereInput> | null
   }, "id">
 
   export type NotificationOrderByWithAggregationInput = {
     id?: SortOrder
     empruntId?: SortOrderInput | SortOrder
+    demandeEmpruntId?: SortOrderInput | SortOrder
     consommableId?: SortOrderInput | SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
@@ -11925,6 +12043,7 @@ export namespace Prisma {
     NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Notification"> | number
     empruntId?: IntNullableWithAggregatesFilter<"Notification"> | number | null
+    demandeEmpruntId?: IntNullableWithAggregatesFilter<"Notification"> | number | null
     consommableId?: IntNullableWithAggregatesFilter<"Notification"> | number | null
     message?: StringWithAggregatesFilter<"Notification"> | string
     DateEnvoi?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
@@ -12329,6 +12448,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
     equipement: EquipementCreateNestedOneWithoutDemandeEmpruntInput
+    notification?: NotificationCreateNestedManyWithoutDemandeEmpruntInput
   }
 
   export type DemandeEmpruntUncheckedCreateInput = {
@@ -12342,6 +12462,7 @@ export namespace Prisma {
     type?: $Enums.TypeDemande
     createdAt?: Date | string
     updatedAt?: Date | string
+    notification?: NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput
   }
 
   export type DemandeEmpruntUpdateInput = {
@@ -12354,6 +12475,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
     equipement?: EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+    notification?: NotificationUpdateManyWithoutDemandeEmpruntNestedInput
   }
 
   export type DemandeEmpruntUncheckedUpdateInput = {
@@ -12367,6 +12489,7 @@ export namespace Prisma {
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notification?: NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput
   }
 
   export type DemandeEmpruntCreateManyInput = {
@@ -12523,12 +12646,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntCreateNestedOneWithoutNotificationInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedOneWithoutNotificationInput
     consommable?: ConsommableCreateNestedOneWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateInput = {
     id?: number
     empruntId?: number | null
+    demandeEmpruntId?: number | null
     consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
@@ -12546,12 +12671,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUpdateOneWithoutNotificationNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateOneWithoutNotificationNestedInput
     consommable?: ConsommableUpdateOneWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    demandeEmpruntId?: NullableIntFieldUpdateOperationsInput | number | null
     consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12564,6 +12691,7 @@ export namespace Prisma {
   export type NotificationCreateManyInput = {
     id?: number
     empruntId?: number | null
+    demandeEmpruntId?: number | null
     consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
@@ -12585,6 +12713,7 @@ export namespace Prisma {
   export type NotificationUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    demandeEmpruntId?: NullableIntFieldUpdateOperationsInput | number | null
     consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13378,6 +13507,11 @@ export namespace Prisma {
     isNot?: EmpruntWhereInput | null
   }
 
+  export type DemandeEmpruntNullableScalarRelationFilter = {
+    is?: DemandeEmpruntWhereInput | null
+    isNot?: DemandeEmpruntWhereInput | null
+  }
+
   export type ConsommableNullableScalarRelationFilter = {
     is?: ConsommableWhereInput | null
     isNot?: ConsommableWhereInput | null
@@ -13386,6 +13520,7 @@ export namespace Prisma {
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    demandeEmpruntId?: SortOrder
     consommableId?: SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
@@ -13398,12 +13533,14 @@ export namespace Prisma {
   export type NotificationAvgOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    demandeEmpruntId?: SortOrder
     consommableId?: SortOrder
   }
 
   export type NotificationMaxOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    demandeEmpruntId?: SortOrder
     consommableId?: SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
@@ -13416,6 +13553,7 @@ export namespace Prisma {
   export type NotificationMinOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    demandeEmpruntId?: SortOrder
     consommableId?: SortOrder
     message?: SortOrder
     DateEnvoi?: SortOrder
@@ -13428,6 +13566,7 @@ export namespace Prisma {
   export type NotificationSumOrderByAggregateInput = {
     id?: SortOrder
     empruntId?: SortOrder
+    demandeEmpruntId?: SortOrder
     consommableId?: SortOrder
   }
 
@@ -13850,6 +13989,20 @@ export namespace Prisma {
     connect?: EquipementWhereUniqueInput
   }
 
+  export type NotificationCreateNestedManyWithoutDemandeEmpruntInput = {
+    create?: XOR<NotificationCreateWithoutDemandeEmpruntInput, NotificationUncheckedCreateWithoutDemandeEmpruntInput> | NotificationCreateWithoutDemandeEmpruntInput[] | NotificationUncheckedCreateWithoutDemandeEmpruntInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutDemandeEmpruntInput | NotificationCreateOrConnectWithoutDemandeEmpruntInput[]
+    createMany?: NotificationCreateManyDemandeEmpruntInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput = {
+    create?: XOR<NotificationCreateWithoutDemandeEmpruntInput, NotificationUncheckedCreateWithoutDemandeEmpruntInput> | NotificationCreateWithoutDemandeEmpruntInput[] | NotificationUncheckedCreateWithoutDemandeEmpruntInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutDemandeEmpruntInput | NotificationCreateOrConnectWithoutDemandeEmpruntInput[]
+    createMany?: NotificationCreateManyDemandeEmpruntInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type EnumStatutDemandeFieldUpdateOperationsInput = {
     set?: $Enums.StatutDemande
   }
@@ -13872,6 +14025,34 @@ export namespace Prisma {
     upsert?: EquipementUpsertWithoutDemandeEmpruntInput
     connect?: EquipementWhereUniqueInput
     update?: XOR<XOR<EquipementUpdateToOneWithWhereWithoutDemandeEmpruntInput, EquipementUpdateWithoutDemandeEmpruntInput>, EquipementUncheckedUpdateWithoutDemandeEmpruntInput>
+  }
+
+  export type NotificationUpdateManyWithoutDemandeEmpruntNestedInput = {
+    create?: XOR<NotificationCreateWithoutDemandeEmpruntInput, NotificationUncheckedCreateWithoutDemandeEmpruntInput> | NotificationCreateWithoutDemandeEmpruntInput[] | NotificationUncheckedCreateWithoutDemandeEmpruntInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutDemandeEmpruntInput | NotificationCreateOrConnectWithoutDemandeEmpruntInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutDemandeEmpruntInput | NotificationUpsertWithWhereUniqueWithoutDemandeEmpruntInput[]
+    createMany?: NotificationCreateManyDemandeEmpruntInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutDemandeEmpruntInput | NotificationUpdateWithWhereUniqueWithoutDemandeEmpruntInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutDemandeEmpruntInput | NotificationUpdateManyWithWhereWithoutDemandeEmpruntInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput = {
+    create?: XOR<NotificationCreateWithoutDemandeEmpruntInput, NotificationUncheckedCreateWithoutDemandeEmpruntInput> | NotificationCreateWithoutDemandeEmpruntInput[] | NotificationUncheckedCreateWithoutDemandeEmpruntInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutDemandeEmpruntInput | NotificationCreateOrConnectWithoutDemandeEmpruntInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutDemandeEmpruntInput | NotificationUpsertWithWhereUniqueWithoutDemandeEmpruntInput[]
+    createMany?: NotificationCreateManyDemandeEmpruntInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutDemandeEmpruntInput | NotificationUpdateWithWhereUniqueWithoutDemandeEmpruntInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutDemandeEmpruntInput | NotificationUpdateManyWithWhereWithoutDemandeEmpruntInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type EmpruntCreateNestedManyWithoutEquipementInput = {
@@ -13988,6 +14169,12 @@ export namespace Prisma {
     connect?: EmpruntWhereUniqueInput
   }
 
+  export type DemandeEmpruntCreateNestedOneWithoutNotificationInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutNotificationInput, DemandeEmpruntUncheckedCreateWithoutNotificationInput>
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutNotificationInput
+    connect?: DemandeEmpruntWhereUniqueInput
+  }
+
   export type ConsommableCreateNestedOneWithoutNotificationInput = {
     create?: XOR<ConsommableCreateWithoutNotificationInput, ConsommableUncheckedCreateWithoutNotificationInput>
     connectOrCreate?: ConsommableCreateOrConnectWithoutNotificationInput
@@ -14010,6 +14197,16 @@ export namespace Prisma {
     delete?: EmpruntWhereInput | boolean
     connect?: EmpruntWhereUniqueInput
     update?: XOR<XOR<EmpruntUpdateToOneWithWhereWithoutNotificationInput, EmpruntUpdateWithoutNotificationInput>, EmpruntUncheckedUpdateWithoutNotificationInput>
+  }
+
+  export type DemandeEmpruntUpdateOneWithoutNotificationNestedInput = {
+    create?: XOR<DemandeEmpruntCreateWithoutNotificationInput, DemandeEmpruntUncheckedCreateWithoutNotificationInput>
+    connectOrCreate?: DemandeEmpruntCreateOrConnectWithoutNotificationInput
+    upsert?: DemandeEmpruntUpsertWithoutNotificationInput
+    disconnect?: DemandeEmpruntWhereInput | boolean
+    delete?: DemandeEmpruntWhereInput | boolean
+    connect?: DemandeEmpruntWhereUniqueInput
+    update?: XOR<XOR<DemandeEmpruntUpdateToOneWithWhereWithoutNotificationInput, DemandeEmpruntUpdateWithoutNotificationInput>, DemandeEmpruntUncheckedUpdateWithoutNotificationInput>
   }
 
   export type ConsommableUpdateOneWithoutNotificationNestedInput = {
@@ -14560,6 +14757,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     equipement: EquipementCreateNestedOneWithoutDemandeEmpruntInput
+    notification?: NotificationCreateNestedManyWithoutDemandeEmpruntInput
   }
 
   export type DemandeEmpruntUncheckedCreateWithoutUtilisateurInput = {
@@ -14572,6 +14770,7 @@ export namespace Prisma {
     type?: $Enums.TypeDemande
     createdAt?: Date | string
     updatedAt?: Date | string
+    notification?: NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput
   }
 
   export type DemandeEmpruntCreateOrConnectWithoutUtilisateurInput = {
@@ -14780,11 +14979,13 @@ export namespace Prisma {
     vu?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    demandeEmprunt?: DemandeEmpruntCreateNestedOneWithoutNotificationInput
     consommable?: ConsommableCreateNestedOneWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateWithoutEmpruntInput = {
     id?: number
+    demandeEmpruntId?: number | null
     consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
@@ -14904,6 +15105,7 @@ export namespace Prisma {
     NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
     id?: IntFilter<"Notification"> | number
     empruntId?: IntNullableFilter<"Notification"> | number | null
+    demandeEmpruntId?: IntNullableFilter<"Notification"> | number | null
     consommableId?: IntNullableFilter<"Notification"> | number | null
     message?: StringFilter<"Notification"> | string
     DateEnvoi?: DateTimeFilter<"Notification"> | Date | string
@@ -14977,6 +15179,39 @@ export namespace Prisma {
   export type EquipementCreateOrConnectWithoutDemandeEmpruntInput = {
     where: EquipementWhereUniqueInput
     create: XOR<EquipementCreateWithoutDemandeEmpruntInput, EquipementUncheckedCreateWithoutDemandeEmpruntInput>
+  }
+
+  export type NotificationCreateWithoutDemandeEmpruntInput = {
+    message: string
+    DateEnvoi?: Date | string
+    type?: $Enums.TypeNotification
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    emprunt?: EmpruntCreateNestedOneWithoutNotificationInput
+    consommable?: ConsommableCreateNestedOneWithoutNotificationInput
+  }
+
+  export type NotificationUncheckedCreateWithoutDemandeEmpruntInput = {
+    id?: number
+    empruntId?: number | null
+    consommableId?: number | null
+    message: string
+    DateEnvoi?: Date | string
+    type?: $Enums.TypeNotification
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationCreateOrConnectWithoutDemandeEmpruntInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutDemandeEmpruntInput, NotificationUncheckedCreateWithoutDemandeEmpruntInput>
+  }
+
+  export type NotificationCreateManyDemandeEmpruntInputEnvelope = {
+    data: NotificationCreateManyDemandeEmpruntInput | NotificationCreateManyDemandeEmpruntInput[]
+    skipDuplicates?: boolean
   }
 
   export type UtilisateurUpsertWithoutDemandeEmpruntInput = {
@@ -15057,6 +15292,22 @@ export namespace Prisma {
     emprunt?: EmpruntUncheckedUpdateManyWithoutEquipementNestedInput
   }
 
+  export type NotificationUpsertWithWhereUniqueWithoutDemandeEmpruntInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutDemandeEmpruntInput, NotificationUncheckedUpdateWithoutDemandeEmpruntInput>
+    create: XOR<NotificationCreateWithoutDemandeEmpruntInput, NotificationUncheckedCreateWithoutDemandeEmpruntInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutDemandeEmpruntInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutDemandeEmpruntInput, NotificationUncheckedUpdateWithoutDemandeEmpruntInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutDemandeEmpruntInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutDemandeEmpruntInput>
+  }
+
   export type EmpruntCreateWithoutEquipementInput = {
     dateEmprunt?: Date | string
     dateRetourPrevu: Date | string
@@ -15101,6 +15352,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
+    notification?: NotificationCreateNestedManyWithoutDemandeEmpruntInput
   }
 
   export type DemandeEmpruntUncheckedCreateWithoutEquipementInput = {
@@ -15113,6 +15365,7 @@ export namespace Prisma {
     type?: $Enums.TypeDemande
     createdAt?: Date | string
     updatedAt?: Date | string
+    notification?: NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput
   }
 
   export type DemandeEmpruntCreateOrConnectWithoutEquipementInput = {
@@ -15187,6 +15440,36 @@ export namespace Prisma {
     create: XOR<EmpruntCreateWithoutNotificationInput, EmpruntUncheckedCreateWithoutNotificationInput>
   }
 
+  export type DemandeEmpruntCreateWithoutNotificationInput = {
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
+    equipement: EquipementCreateNestedOneWithoutDemandeEmpruntInput
+  }
+
+  export type DemandeEmpruntUncheckedCreateWithoutNotificationInput = {
+    id?: number
+    utilisateurId: number
+    equipementId: number
+    dateDemande?: Date | string
+    dateRetourPrevu: Date | string
+    usage: string
+    statut?: $Enums.StatutDemande
+    type?: $Enums.TypeDemande
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DemandeEmpruntCreateOrConnectWithoutNotificationInput = {
+    where: DemandeEmpruntWhereUniqueInput
+    create: XOR<DemandeEmpruntCreateWithoutNotificationInput, DemandeEmpruntUncheckedCreateWithoutNotificationInput>
+  }
+
   export type ConsommableCreateWithoutNotificationInput = {
     nom: string
     quantiteDisponible: number
@@ -15253,6 +15536,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DemandeEmpruntUpsertWithoutNotificationInput = {
+    update: XOR<DemandeEmpruntUpdateWithoutNotificationInput, DemandeEmpruntUncheckedUpdateWithoutNotificationInput>
+    create: XOR<DemandeEmpruntCreateWithoutNotificationInput, DemandeEmpruntUncheckedCreateWithoutNotificationInput>
+    where?: DemandeEmpruntWhereInput
+  }
+
+  export type DemandeEmpruntUpdateToOneWithWhereWithoutNotificationInput = {
+    where?: DemandeEmpruntWhereInput
+    data: XOR<DemandeEmpruntUpdateWithoutNotificationInput, DemandeEmpruntUncheckedUpdateWithoutNotificationInput>
+  }
+
+  export type DemandeEmpruntUpdateWithoutNotificationInput = {
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+    equipement?: EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+  }
+
+  export type DemandeEmpruntUncheckedUpdateWithoutNotificationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    utilisateurId?: IntFieldUpdateOperationsInput | number
+    equipementId?: IntFieldUpdateOperationsInput | number
+    dateDemande?: DateTimeFieldUpdateOperationsInput | Date | string
+    dateRetourPrevu?: DateTimeFieldUpdateOperationsInput | Date | string
+    usage?: StringFieldUpdateOperationsInput | string
+    statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
+    type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ConsommableUpsertWithoutNotificationInput = {
     update: XOR<ConsommableUpdateWithoutNotificationInput, ConsommableUncheckedUpdateWithoutNotificationInput>
     create: XOR<ConsommableCreateWithoutNotificationInput, ConsommableUncheckedCreateWithoutNotificationInput>
@@ -15297,11 +15616,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntCreateNestedOneWithoutNotificationInput
+    demandeEmprunt?: DemandeEmpruntCreateNestedOneWithoutNotificationInput
   }
 
   export type NotificationUncheckedCreateWithoutConsommableInput = {
     id?: number
     empruntId?: number | null
+    demandeEmpruntId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
@@ -15593,6 +15914,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     equipement?: EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+    notification?: NotificationUpdateManyWithoutDemandeEmpruntNestedInput
   }
 
   export type DemandeEmpruntUncheckedUpdateWithoutUtilisateurInput = {
@@ -15605,6 +15927,7 @@ export namespace Prisma {
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notification?: NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput
   }
 
   export type DemandeEmpruntUncheckedUpdateManyWithoutUtilisateurInput = {
@@ -15650,6 +15973,7 @@ export namespace Prisma {
 
   export type NotificationCreateManyEmpruntInput = {
     id?: number
+    demandeEmpruntId?: number | null
     consommableId?: number | null
     message: string
     DateEnvoi?: Date | string
@@ -15666,11 +15990,13 @@ export namespace Prisma {
     vu?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    demandeEmprunt?: DemandeEmpruntUpdateOneWithoutNotificationNestedInput
     consommable?: ConsommableUpdateOneWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateWithoutEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
+    demandeEmpruntId?: NullableIntFieldUpdateOperationsInput | number | null
     consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15682,6 +16008,54 @@ export namespace Prisma {
 
   export type NotificationUncheckedUpdateManyWithoutEmpruntInput = {
     id?: IntFieldUpdateOperationsInput | number
+    demandeEmpruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    consommableId?: NullableIntFieldUpdateOperationsInput | number | null
+    message?: StringFieldUpdateOperationsInput | string
+    DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationCreateManyDemandeEmpruntInput = {
+    id?: number
+    empruntId?: number | null
+    consommableId?: number | null
+    message: string
+    DateEnvoi?: Date | string
+    type?: $Enums.TypeNotification
+    vu?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type NotificationUpdateWithoutDemandeEmpruntInput = {
+    message?: StringFieldUpdateOperationsInput | string
+    DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emprunt?: EmpruntUpdateOneWithoutNotificationNestedInput
+    consommable?: ConsommableUpdateOneWithoutNotificationNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutDemandeEmpruntInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    consommableId?: NullableIntFieldUpdateOperationsInput | number | null
+    message?: StringFieldUpdateOperationsInput | string
+    DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
+    type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
+    vu?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutDemandeEmpruntInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    empruntId?: NullableIntFieldUpdateOperationsInput | number | null
     consommableId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15761,6 +16135,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
+    notification?: NotificationUpdateManyWithoutDemandeEmpruntNestedInput
   }
 
   export type DemandeEmpruntUncheckedUpdateWithoutEquipementInput = {
@@ -15773,6 +16148,7 @@ export namespace Prisma {
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    notification?: NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput
   }
 
   export type DemandeEmpruntUncheckedUpdateManyWithoutEquipementInput = {
@@ -15790,6 +16166,7 @@ export namespace Prisma {
   export type NotificationCreateManyConsommableInput = {
     id?: number
     empruntId?: number | null
+    demandeEmpruntId?: number | null
     message: string
     DateEnvoi?: Date | string
     type?: $Enums.TypeNotification
@@ -15816,11 +16193,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUpdateOneWithoutNotificationNestedInput
+    demandeEmprunt?: DemandeEmpruntUpdateOneWithoutNotificationNestedInput
   }
 
   export type NotificationUncheckedUpdateWithoutConsommableInput = {
     id?: IntFieldUpdateOperationsInput | number
     empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    demandeEmpruntId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification
@@ -15832,6 +16211,7 @@ export namespace Prisma {
   export type NotificationUncheckedUpdateManyWithoutConsommableInput = {
     id?: IntFieldUpdateOperationsInput | number
     empruntId?: NullableIntFieldUpdateOperationsInput | number | null
+    demandeEmpruntId?: NullableIntFieldUpdateOperationsInput | number | null
     message?: StringFieldUpdateOperationsInput | string
     DateEnvoi?: DateTimeFieldUpdateOperationsInput | Date | string
     type?: EnumTypeNotificationFieldUpdateOperationsInput | $Enums.TypeNotification

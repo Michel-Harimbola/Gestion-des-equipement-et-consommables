@@ -176,6 +176,7 @@ exports.Prisma.EquipementScalarFieldEnum = {
 exports.Prisma.NotificationScalarFieldEnum = {
   id: 'id',
   empruntId: 'empruntId',
+  demandeEmpruntId: 'demandeEmpruntId',
   consommableId: 'consommableId',
   message: 'message',
   DateEnvoi: 'DateEnvoi',
@@ -279,7 +280,9 @@ exports.Obtention = exports.$Enums.Obtention = {
 
 exports.TypeNotification = exports.$Enums.TypeNotification = {
   AlerteStock: 'AlerteStock',
-  RappelRetour: 'RappelRetour'
+  RappelRetour: 'RappelRetour',
+  Acceptation: 'Acceptation',
+  Refus: 'Refus'
 };
 
 exports.Periode = exports.$Enums.Periode = {

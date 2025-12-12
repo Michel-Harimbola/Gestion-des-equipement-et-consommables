@@ -23,12 +23,11 @@ class EmpruntService {
           throw new Error("Équipement introuvable.");
         }
         //vérifier disponnibilité équipement
-        if (equipement.disponibilite !== "Disponible" && equipement.disponibilite == "EnMaintenance" && equipement.disponibilite == "Indisponible") {
-          throw new Error(`L'équipement "${equipement.nom}" n'est pas disponible.`);
-        }
+        // if (equipement.disponibilite !== "Disponible" && equipement.disponibilite == "EnMaintenance" && equipement.disponibilite == "Indisponible") {
+        //   throw new Error(`L'équipement "${equipement.nom}" n'est pas disponible.`);
+        // }
 
         const transaction = await prisma.$transaction(async (tx) => {
-            //création emprunt
             const emprunt = await prisma.emprunt.create({
                 data: {
                     dateRetourPrevu: new Date(dateRetourPrevu),
@@ -37,7 +36,7 @@ class EmpruntService {
                     equipementId: equipId,
                 },
             });
-            //mise à jour l'état de l'équipement
+           
             await tx.equipement.update({
                 where: { id: equipId },
                 data: {

@@ -31,6 +31,7 @@
             return {
                 id: user.id,
                 email: user.email,
+                role: user.role,
                 token: generateToken({ id: user.id, role: user.role }),
             };
         }
@@ -49,6 +50,7 @@
             return {
                 id: user.id,
                 email: user.email,
+                role: user.role,
                 token: generateToken({ id: user.id, role: user.role }),
             };
         }

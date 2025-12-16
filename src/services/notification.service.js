@@ -9,6 +9,9 @@ class NotificationService {
 
   static async getAllStockNotifications() {
     const notifications = await prisma.notification.findMany({
+      where: {
+        type: { in: ["AlerteStock", "RappelRetour"] }
+      },
       orderBy: { DateEnvoi: "desc" },
       include: {
         consommable: { select: { id: true, nom: true, quantiteDisponible: true, seuilCritique: true } },

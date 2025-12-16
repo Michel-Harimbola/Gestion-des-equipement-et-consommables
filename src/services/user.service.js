@@ -105,9 +105,34 @@ class UserService {
         return { users, total, page, limit };
     }
 
-    static async updateUser(id, data) {
+    static async updateUser(id, data, currentUser) {
         const userId = parseInt(id, 10);
         if(isNaN(userId)) throw new Error("ID invalide");
+
+        const targetUser = await prisma.utilisateur.findUnique({
+            where: { id: userId },
+        });
+
+        if (!targetUser) throw new Error("Utilisateur introuvable");
+
+        if (targetUser.role === "admin") {
+
+            if (currentUser.id !== targetUser.id) {
+            throw new Error("Vous ne pouvez pas modifier l'administrateur");
+            }
+
+            if (data.role || data.email || data.nom || data.prenom) {
+                throw new Error("Modification de champs système interdite");
+            }
+        }
+
+        if (
+            targetUser.role === "admin" &&
+            data.role &&
+            data.role !== "admin"
+        ) {
+            throw new Error("Le rôle admin est immuable");
+        }
 
         const user = await prisma.utilisateur.update({
             where: {id: userId },
@@ -120,6 +145,16 @@ class UserService {
     static async deleteUser(id) {
         const userId = parseInt(id, 10);
         if(isNaN(userId)) throw new Error("ID invalide");
+
+        const targetUser = await prisma.utilisateur.findUnique({
+            where: { id: userId },
+        });
+
+        if (!targetUser) throw new Error("Utilisateur introuvable");
+
+        if (targetUser.role === "admin") {
+            throw new Error("Impossible de supprimer l'administrateur");
+        }
 
         await prisma.utilisateur.delete({
             where: { id: userId }

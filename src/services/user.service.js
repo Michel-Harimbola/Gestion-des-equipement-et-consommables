@@ -116,7 +116,6 @@ class UserService {
         if (!targetUser) throw new Error("Utilisateur introuvable");
 
         if (targetUser.role === "admin") {
-
             if (currentUser.id !== targetUser.id) {
             throw new Error("Vous ne pouvez pas modifier l'administrateur");
             }

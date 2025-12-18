@@ -62,7 +62,17 @@ class NotificationService {
       prisma.notification.count()
     ]);
 
-  return { notifications, total, page, limit };
+    return { notifications, total, page, limit };
+  }
+
+  static async deleteNotification(id) {
+    const idNotif = parseInt(id, 10);
+
+    if(isNaN(idNotif)) throw new Error("Id invalid");
+
+    await prisma.notification.delete({
+      where: { id: idNotif },
+    });
   }
 
   static async markAllAsRead(userId) {

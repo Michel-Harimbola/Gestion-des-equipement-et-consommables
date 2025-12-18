@@ -38,3 +38,12 @@ exports.getAllNotifications = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.deleteNotification = async (req, res) => {
+    try {
+        const result = await NotificationService.deleteNotification(req.params.id);
+        res.status(204).json(result);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}

@@ -169,6 +169,7 @@ exports.Prisma.EquipementScalarFieldEnum = {
   prix: 'prix',
   fournisseur: 'fournisseur',
   donateur: 'donateur',
+  photo: 'photo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

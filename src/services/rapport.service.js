@@ -12,8 +12,8 @@ class RapportService {
         endOfMonth.setHours(23, 59, 59, 999);
 
 
-        // 1. Récupérer les stats
-        const utilisationEquipements = await prisma.emprunt.count({
+        // Emprunts
+        const totalEmprunts = await prisma.emprunt.count({
             where: {
                 dateEmprunt: {
                     gte: startOfMonth,
@@ -22,6 +22,19 @@ class RapportService {
             }
         });
 
+        const empruntsEnCours = await prisma.emprunt.count({
+            where: { statut: "EnCours" },
+        });
+
+        const empruntsEnRetard = await prisma.emprunt.count({
+            where: { statut: "EnRetard" },
+        });
+
+        const empruntsRetournes = await prisma.emprunt.count({
+            where: { statut: "Retourner" },
+        });
+
+        // Consommation
         const consommation = await prisma.utilisationConsommable.aggregate({
             _sum: { quantiteUtilise: true },
             where: {
@@ -32,22 +45,59 @@ class RapportService {
             }
         });
 
+        // Stock et alertes
         const stockDisponible = await prisma.consommable.count({
-            where: { quantiteDisponible: { gt: 0 } }
+            where: { quantiteDisponible: { gt: 0 } },
         });
 
-        // 2. Construire le contenu
+        const stockCritique = await prisma.consommable.findMany({
+            where: {
+                quantiteDisponible: {
+                    lte: prisma.consommable.fields.seuilCritique,
+                },
+            },
+            select: {
+                id: true,
+                nom: true,
+                quantiteDisponible: true,
+                seuilCritique: true,
+            },
+        });
+
+        // Construire le contenu
         const contenu = {
-            periode: "Mois " + (startOfMonth.getMonth() + 1),
-            utilisationEquipements,
-            consommationTotale: consommation._sum.quantite || 0,
-            stockDisponible,
+            periode: {
+                debut: startOfMonth,
+                fin: endOfMonth,
+                type: "Mensuel",
+            },
+
+            emprunts: {
+                total: totalEmprunts,
+                enCours: empruntsEnCours,
+                enRetard: empruntsEnRetard,
+                retournes: empruntsRetournes,
+            },
+
+            consommation: {
+                quantiteTotaleUtilisee: consommation._sum.quantiteUtilise || 0,
+            },
+
+            stock: {
+                consommablesDisponibles: stockDisponible,
+                alertesStockCritique: stockCritique,
+            },
+
+            meta: {
+                genereLe: new Date(),
+                version: "1.0",
+            },
         };
 
-        // 3. Sauvegarder en base
+        // Sauvegarder en base
         const rapport = await prisma.rapport.create({
             data: {
-                contenu: JSON.stringify(contenu),
+                contenu: JSON.stringify(contenu, null, 1),
                 periode: "Mensuel"
             }
         });

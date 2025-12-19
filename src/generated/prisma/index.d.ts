@@ -5453,6 +5453,7 @@ export namespace Prisma {
     prix: number | null
     fournisseur: string | null
     donateur: string | null
+    photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5468,6 +5469,7 @@ export namespace Prisma {
     prix: number | null
     fournisseur: string | null
     donateur: string | null
+    photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5483,6 +5485,7 @@ export namespace Prisma {
     prix: number
     fournisseur: number
     donateur: number
+    photo: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5510,6 +5513,7 @@ export namespace Prisma {
     prix?: true
     fournisseur?: true
     donateur?: true
+    photo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5525,6 +5529,7 @@ export namespace Prisma {
     prix?: true
     fournisseur?: true
     donateur?: true
+    photo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5540,6 +5545,7 @@ export namespace Prisma {
     prix?: true
     fournisseur?: true
     donateur?: true
+    photo?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5642,6 +5648,7 @@ export namespace Prisma {
     prix: number
     fournisseur: string | null
     donateur: string | null
+    photo: string | null
     createdAt: Date
     updatedAt: Date
     _count: EquipementCountAggregateOutputType | null
@@ -5676,6 +5683,7 @@ export namespace Prisma {
     prix?: boolean
     fournisseur?: boolean
     donateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
@@ -5694,6 +5702,7 @@ export namespace Prisma {
     prix?: boolean
     fournisseur?: boolean
     donateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["equipement"]>
@@ -5709,6 +5718,7 @@ export namespace Prisma {
     prix?: boolean
     fournisseur?: boolean
     donateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["equipement"]>
@@ -5724,11 +5734,12 @@ export namespace Prisma {
     prix?: boolean
     fournisseur?: boolean
     donateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EquipementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "numeroDeSerie" | "marque" | "disponibilite" | "etatMateriel" | "obtention" | "prix" | "fournisseur" | "donateur" | "createdAt" | "updatedAt", ExtArgs["result"]["equipement"]>
+  export type EquipementOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "numeroDeSerie" | "marque" | "disponibilite" | "etatMateriel" | "obtention" | "prix" | "fournisseur" | "donateur" | "photo" | "createdAt" | "updatedAt", ExtArgs["result"]["equipement"]>
   export type EquipementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     emprunt?: boolean | Equipement$empruntArgs<ExtArgs>
     demandeEmprunt?: boolean | Equipement$demandeEmpruntArgs<ExtArgs>
@@ -5754,6 +5765,7 @@ export namespace Prisma {
       prix: number
       fournisseur: string | null
       donateur: string | null
+      photo: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["equipement"]>
@@ -6191,6 +6203,7 @@ export namespace Prisma {
     readonly prix: FieldRef<"Equipement", 'Float'>
     readonly fournisseur: FieldRef<"Equipement", 'String'>
     readonly donateur: FieldRef<"Equipement", 'String'>
+    readonly photo: FieldRef<"Equipement", 'String'>
     readonly createdAt: FieldRef<"Equipement", 'DateTime'>
     readonly updatedAt: FieldRef<"Equipement", 'DateTime'>
   }
@@ -11332,6 +11345,7 @@ export namespace Prisma {
     prix: 'prix',
     fournisseur: 'fournisseur',
     donateur: 'donateur',
+    photo: 'photo',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11884,6 +11898,7 @@ export namespace Prisma {
     prix?: FloatFilter<"Equipement"> | number
     fournisseur?: StringNullableFilter<"Equipement"> | string | null
     donateur?: StringNullableFilter<"Equipement"> | string | null
+    photo?: StringNullableFilter<"Equipement"> | string | null
     createdAt?: DateTimeFilter<"Equipement"> | Date | string
     updatedAt?: DateTimeFilter<"Equipement"> | Date | string
     emprunt?: EmpruntListRelationFilter
@@ -11901,6 +11916,7 @@ export namespace Prisma {
     prix?: SortOrder
     fournisseur?: SortOrderInput | SortOrder
     donateur?: SortOrderInput | SortOrder
+    photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     emprunt?: EmpruntOrderByRelationAggregateInput
@@ -11921,6 +11937,7 @@ export namespace Prisma {
     prix?: FloatFilter<"Equipement"> | number
     fournisseur?: StringNullableFilter<"Equipement"> | string | null
     donateur?: StringNullableFilter<"Equipement"> | string | null
+    photo?: StringNullableFilter<"Equipement"> | string | null
     createdAt?: DateTimeFilter<"Equipement"> | Date | string
     updatedAt?: DateTimeFilter<"Equipement"> | Date | string
     emprunt?: EmpruntListRelationFilter
@@ -11938,6 +11955,7 @@ export namespace Prisma {
     prix?: SortOrder
     fournisseur?: SortOrderInput | SortOrder
     donateur?: SortOrderInput | SortOrder
+    photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EquipementCountOrderByAggregateInput
@@ -11961,6 +11979,7 @@ export namespace Prisma {
     prix?: FloatWithAggregatesFilter<"Equipement"> | number
     fournisseur?: StringNullableWithAggregatesFilter<"Equipement"> | string | null
     donateur?: StringNullableWithAggregatesFilter<"Equipement"> | string | null
+    photo?: StringNullableWithAggregatesFilter<"Equipement"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Equipement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Equipement"> | Date | string
   }
@@ -12538,6 +12557,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntCreateNestedManyWithoutEquipementInput
@@ -12555,6 +12575,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntUncheckedCreateNestedManyWithoutEquipementInput
@@ -12571,6 +12592,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUpdateManyWithoutEquipementNestedInput
@@ -12588,6 +12610,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUncheckedUpdateManyWithoutEquipementNestedInput
@@ -12605,6 +12628,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12619,6 +12643,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12634,6 +12659,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13371,6 +13397,7 @@ export namespace Prisma {
     prix?: SortOrder
     fournisseur?: SortOrder
     donateur?: SortOrder
+    photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13391,6 +13418,7 @@ export namespace Prisma {
     prix?: SortOrder
     fournisseur?: SortOrder
     donateur?: SortOrder
+    photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13406,6 +13434,7 @@ export namespace Prisma {
     prix?: SortOrder
     fournisseur?: SortOrder
     donateur?: SortOrder
+    photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14946,6 +14975,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     demandeEmprunt?: DemandeEmpruntCreateNestedManyWithoutEquipementInput
@@ -14962,6 +14992,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     demandeEmprunt?: DemandeEmpruntUncheckedCreateNestedManyWithoutEquipementInput
@@ -15062,6 +15093,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     demandeEmprunt?: DemandeEmpruntUpdateManyWithoutEquipementNestedInput
@@ -15078,6 +15110,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     demandeEmprunt?: DemandeEmpruntUncheckedUpdateManyWithoutEquipementNestedInput
@@ -15155,6 +15188,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntCreateNestedManyWithoutEquipementInput
@@ -15171,6 +15205,7 @@ export namespace Prisma {
     prix: number
     fournisseur?: string | null
     donateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     emprunt?: EmpruntUncheckedCreateNestedManyWithoutEquipementInput
@@ -15271,6 +15306,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUpdateManyWithoutEquipementNestedInput
@@ -15287,6 +15323,7 @@ export namespace Prisma {
     prix?: FloatFieldUpdateOperationsInput | number
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emprunt?: EmpruntUncheckedUpdateManyWithoutEquipementNestedInput

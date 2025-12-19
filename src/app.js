@@ -18,6 +18,8 @@ app.use('/api/utilisation', require("./routes/utilisationConsommable.route.js"))
 app.use('/api/dashboard', require('./routes/dashboard.route.js'));
 app.use('/api/rapport', require('./routes/rapport.route.js'));
 
+app.use("/uploads", express.static("uploads"));
+
 
 // Route de base(pour le test)
 app.get('/', (req, res) => {

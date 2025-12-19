@@ -2,7 +2,7 @@ const EquipementService = require("../services/equipement.service.js");
 
 exports.createEquipement = async (req, res) => {
     try {
-        const result = await EquipementService.createEquipement(req.body);
+        const result = await EquipementService.createEquipement(req.body, req.file);
         res.status(201).json(result);
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -1,10 +1,11 @@
 const express = require("express");
 const EquipementController = require("../controllers/equipement.controller.js");
 const auth = require("../middlewares/authMiddleware.js");
+const upload = require("../middlewares/upload.js");
 
 const router = express.Router();
 
-router.post("/create", auth, EquipementController.createEquipement);
+router.post("/create", auth, upload.single("photo"), EquipementController.createEquipement);
 router.get("/search", auth, EquipementController.searchEquipements);
 router.get("/:id", auth, EquipementController.getEquipementById);
 router.get("/", auth, EquipementController.getAllEquipements);

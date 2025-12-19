@@ -110,7 +110,7 @@ class EmpruntService {
                 take: limit,
                 include: {
                     equipement: { 
-                        select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                        select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true }
                     }
                 }
             }),

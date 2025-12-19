@@ -1,7 +1,7 @@
 const prisma = require("../lib/prisma.js");
 
 class EquipementService {
-    static async createEquipement(data) {
+    static async createEquipement(data, file) {
         const {nom, numeroDeSerie, marque, disponibilite, etatMateriel, obtention, prix, fournisseur, donateur} = data;
         const equipement = await prisma.equipement.create({
             data: {
@@ -14,6 +14,7 @@ class EquipementService {
                 prix: Number(prix),
                 fournisseur: fournisseur,
                 donateur: donateur,
+                photo: file ? `/uploads/equipements/${file.filename}` : null,
             },
         });
 
@@ -37,6 +38,7 @@ class EquipementService {
                 prix: true,
                 fournisseur: true,
                 donateur: true,
+                photo: true,
             },
         });
         if(!equipement) throw new Error("Equipement non trouvé");
@@ -60,6 +62,7 @@ class EquipementService {
                     prix: true,
                     fournisseur: true,
                     donateur: true,
+                    photo: true,
                 },
                 skip,
                 take: limit,

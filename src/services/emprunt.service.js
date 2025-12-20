@@ -22,10 +22,6 @@ class EmpruntService {
         if (!equipement) {
           throw new Error("Équipement introuvable.");
         }
-        //vérifier disponnibilité équipement
-        // if (equipement.disponibilite !== "Disponible" && equipement.disponibilite == "EnMaintenance" && equipement.disponibilite == "Indisponible") {
-        //   throw new Error(`L'équipement "${equipement.nom}" n'est pas disponible.`);
-        // }
 
         const transaction = await prisma.$transaction(async (tx) => {
             const emprunt = await prisma.emprunt.create({
@@ -68,7 +64,7 @@ class EmpruntService {
             where: { id: empruntId },
             include: { 
                 utilisateur: { nom: true, prenom: true, email: true },
-                equipement: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
+                equipement: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true },
             },
         });
         if(!emprunt) throw new Error("Emprunt non trouvé");
@@ -89,7 +85,7 @@ class EmpruntService {
                         select: { nom: true, prenom: true, email: true }
                     },
                     equipement: {
-                        select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true },
+                        select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true },
                     },
                 },
             }),
@@ -149,7 +145,7 @@ class EmpruntService {
                         select: { nom: true, prenom: true, email: true }
                     },
                     equipement: {
-                        select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                        select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true }
                     }
                 }
             }),
@@ -183,7 +179,7 @@ class EmpruntService {
                 take: limit,
                 include: {
                     equipement: { 
-                        select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                        select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true }
                     }
                 }
             }),
@@ -206,7 +202,7 @@ class EmpruntService {
             },
             include: {
                 equipement: { 
-                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true }
                 }
             }
         });
@@ -224,7 +220,7 @@ class EmpruntService {
                     select: { nom: true, prenom: true, email: true }
                 },
                 equipement: {
-                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                    select: { id: true, nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true }
                 }
             }
         });
@@ -341,7 +337,7 @@ class EmpruntService {
             });
 
             io.emit("notif_retard", notif);
-            // EMAIL
+            
             const subject = "⚠️ Rappel : Emprunt en retard";
             const html = generateRetardEmailHTML(emprunt.utilisateur.nom, emprunt.equipement.nom);
     

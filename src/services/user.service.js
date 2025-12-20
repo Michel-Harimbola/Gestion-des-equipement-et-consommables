@@ -37,6 +37,7 @@ class UserService {
                 prenom: true,
                 email: true,
                 role: true,
+                photo: true,
                 createdAt: true,
                 updateAt: true,
             },
@@ -57,6 +58,7 @@ class UserService {
                     prenom: true,
                     email: true,
                     role: true,
+                    photo: true,
                     createdAt: true,
                     updateAt: true,
                 },
@@ -92,6 +94,7 @@ class UserService {
                     prenom: true,
                     email: true,
                     role: true,
+                    photo: true,
                     createdAt: true,
                     updateAt: true,
                 },
@@ -120,7 +123,7 @@ class UserService {
             throw new Error("Vous ne pouvez pas modifier l'administrateur");
             }
 
-            if (data.role || data.email || data.nom || data.prenom) {
+            if (data.role || data.email) {
                 throw new Error("Modification de champs système interdite");
             }
         }

@@ -44,7 +44,12 @@ exports.searchUsers = async(req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const result = await UserService.updateUser(req.params.id, req.body, req.user);
+        const data = { ...req.body };
+        if (req.file) {
+            data.photo = `/uploads/users/${req.file.filename}`;
+        }
+
+        const result = await UserService.updateUser(req.params.id, data, req.user);
         res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -49,8 +49,11 @@ class AuthService {
 
         return {
             id: user.id,
+            nom: user.nom,
+            prenom: user.prenom,
             email: user.email,
             role: user.role,
+            photo: user.photo,
             token: generateToken({ id: user.id, role: user.role }),
         };
     }

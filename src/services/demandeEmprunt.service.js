@@ -112,7 +112,7 @@ class DemandeEmpruntService {
       prisma.demandeEmprunt.findMany({
         include: {
           utilisateur: { select: { nom: true, prenom: true, email: true } },
-          equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true } },
+          equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true, photo: true } },
         },
         orderBy: { createdAt: "desc" },
         skip,
@@ -266,13 +266,18 @@ class DemandeEmpruntService {
           equipementId: demande.equipementId,
           statut: { in: ["EnCours", "EnRetard", "EnAttente"] },
         },
+        include: {
+          equipement: { 
+            select: { nom: true, numeroDeSerie: true, marque: true }
+          }
+        }
       });
 
       if (!emprunt) throw new Error("Aucun emprunt en cours pour ce matériel.");
 
       await EmpruntService.returnEmprunt(emprunt.id, demande.utilisateurId);
 
-      messageNotif = `Votre demande de retour pour l'équipement "${emprunt.equipement.nom}" a été approuvée.`;
+      messageNotif = `Votre demande de retour pour l'équipement "${emprunt.equipement.marque}" a été approuvée.`;
 
       const notif = await prisma.notification.create({
           data: { 
@@ -300,7 +305,7 @@ class DemandeEmpruntService {
       where: { id: demandeId },
       include: {
         equipement: {
-          select : { nom: true},
+          select : { nom: true, marque: true },
         }
       }
     });
@@ -319,7 +324,7 @@ class DemandeEmpruntService {
         data: { disponibilite: "Disponible" },
       });
 
-      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.nom}" a été refusée.`;
+      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.marque}" a été refusée.`;
 
     } else if (demande.type === "RETOUR") {
       await prisma.equipement.update({

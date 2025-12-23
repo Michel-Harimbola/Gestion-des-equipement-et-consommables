@@ -128,13 +128,21 @@ class UserService {
             }
         }
 
-        if (
-            targetUser.role === "admin" &&
-            data.role &&
-            data.role !== "admin"
-        ) {
+        if ( targetUser.role === "admin" && data.role && data.role !== "admin") {
             throw new Error("Le rôle admin est immuable");
         }
+
+        const user = await prisma.utilisateur.update({
+            where: {id: userId },
+            data
+        });
+
+        return user;
+    }
+
+    static async updatePersoInformation(id, data) {
+        const userId = parseInt(id, 10);
+        if(isNaN(userId)) throw new Error("ID invalide");
 
         const user = await prisma.utilisateur.update({
             where: {id: userId },

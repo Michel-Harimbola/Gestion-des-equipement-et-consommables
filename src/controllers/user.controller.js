@@ -56,6 +56,15 @@ exports.updateUser = async (req, res) => {
     }
 }
 
+exports.updatePersoInformation = async (req, res) => {
+    try {
+        const result = await UserService.updatePersoInformation(req.params.id, req.body);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+}
+
 exports.deleteUser = async (req, res) => {
     try {
         const result = await UserService.deleteUser(req.params.id);

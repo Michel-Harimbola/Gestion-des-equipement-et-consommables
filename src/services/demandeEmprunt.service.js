@@ -282,7 +282,7 @@ class DemandeEmpruntService {
       const notif = await prisma.notification.create({
           data: { 
             message: messageNotif, 
-            type: "RappelRetour", 
+            type: "Acceptation", 
             empruntId: emprunt.id,
             demandeEmpruntId: demandeId,
           },

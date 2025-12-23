@@ -10,6 +10,7 @@ router.get("/search", auth, UserController.searchUsers);
 router.get("/:id", auth, UserController.getUserById);
 router.get("/", auth, UserController.getAllUsers);
 router.put("/:id", auth, upload.single("photo"), UserController.updateUser);
+router.put("/:id/PersonalInformation", auth, UserController.updatePersoInformation);
 router.delete("/:id", auth, UserController.deleteUser);
 
 module.exports = router;

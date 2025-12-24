@@ -59,7 +59,7 @@ class AuthService {
     }
 
     static async changePassword(id, oldPassword, newPassword) {
-        const userId = parseInt(id, 10);
+        const userId = parseInt(id, 10); 
         if (isNaN(userId)) throw new Error("ID invalide");
 
         const user = await prisma.utilisateur.findUnique({

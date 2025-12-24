@@ -43,7 +43,7 @@ class DemandeEmpruntService {
   }
 
   static async demandeRetour(utilisateurId, data) {
-    const { equipementId, empruntId } = data;
+    const { equipementId, empruntId, etatMateriel } = data;
     const utilisateurIdInt = parseInt(utilisateurId, 10);
     const equipementIdInt = parseInt(equipementId, 10);
     const empruntIdInt = parseInt(empruntId, 10);
@@ -88,7 +88,10 @@ class DemandeEmpruntService {
 
     await prisma.equipement.update({
       where: { id: equipementIdInt },
-      data: { disponibilite: "EnMaintenance" },
+      data: { 
+        disponibilite: "EnMaintenance",
+        etatMateriel: etatMateriel,
+      },
     });
 
     await prisma.emprunt.update({

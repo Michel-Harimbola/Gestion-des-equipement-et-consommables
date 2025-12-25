@@ -155,6 +155,7 @@ exports.Prisma.DemandeEmpruntScalarFieldEnum = {
   usage: 'usage',
   statut: 'statut',
   type: 'type',
+  motif: 'motif',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

@@ -76,7 +76,7 @@ class NotificationService {
   }
 
   static async markAllAsRead(userId) {
-    return prisma.notification.updateMany({
+    await prisma.notification.updateMany({
       where: {
         emprunt: {
           utilisateurId: userId
@@ -84,7 +84,17 @@ class NotificationService {
       },
       data: { vu: true }
     })
+
+    await prisma.notification.updateMany({
+      where: { 
+        demandeEmprunt: { utilisateurId: userId }
+      },
+      data: { vu: true }
+    });
+
+    return { success: true }
   }
+
 }
 
 module.exports = NotificationService;

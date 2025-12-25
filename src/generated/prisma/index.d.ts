@@ -4263,6 +4263,7 @@ export namespace Prisma {
     usage: string | null
     statut: $Enums.StatutDemande | null
     type: $Enums.TypeDemande | null
+    motif: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4276,6 +4277,7 @@ export namespace Prisma {
     usage: string | null
     statut: $Enums.StatutDemande | null
     type: $Enums.TypeDemande | null
+    motif: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4289,6 +4291,7 @@ export namespace Prisma {
     usage: number
     statut: number
     type: number
+    motif: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4316,6 +4319,7 @@ export namespace Prisma {
     usage?: true
     statut?: true
     type?: true
+    motif?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4329,6 +4333,7 @@ export namespace Prisma {
     usage?: true
     statut?: true
     type?: true
+    motif?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4342,6 +4347,7 @@ export namespace Prisma {
     usage?: true
     statut?: true
     type?: true
+    motif?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4442,6 +4448,7 @@ export namespace Prisma {
     usage: string
     statut: $Enums.StatutDemande
     type: $Enums.TypeDemande
+    motif: string | null
     createdAt: Date
     updatedAt: Date
     _count: DemandeEmpruntCountAggregateOutputType | null
@@ -4474,6 +4481,7 @@ export namespace Prisma {
     usage?: boolean
     statut?: boolean
     type?: boolean
+    motif?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
@@ -4491,6 +4499,7 @@ export namespace Prisma {
     usage?: boolean
     statut?: boolean
     type?: boolean
+    motif?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
@@ -4506,6 +4515,7 @@ export namespace Prisma {
     usage?: boolean
     statut?: boolean
     type?: boolean
+    motif?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
@@ -4521,11 +4531,12 @@ export namespace Prisma {
     usage?: boolean
     statut?: boolean
     type?: boolean
+    motif?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DemandeEmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "equipementId" | "dateDemande" | "dateRetourPrevu" | "usage" | "statut" | "type" | "createdAt" | "updatedAt", ExtArgs["result"]["demandeEmprunt"]>
+  export type DemandeEmpruntOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "utilisateurId" | "equipementId" | "dateDemande" | "dateRetourPrevu" | "usage" | "statut" | "type" | "motif" | "createdAt" | "updatedAt", ExtArgs["result"]["demandeEmprunt"]>
   export type DemandeEmpruntInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     utilisateur?: boolean | UtilisateurDefaultArgs<ExtArgs>
     equipement?: boolean | EquipementDefaultArgs<ExtArgs>
@@ -4557,6 +4568,7 @@ export namespace Prisma {
       usage: string
       statut: $Enums.StatutDemande
       type: $Enums.TypeDemande
+      motif: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["demandeEmprunt"]>
@@ -4993,6 +5005,7 @@ export namespace Prisma {
     readonly usage: FieldRef<"DemandeEmprunt", 'String'>
     readonly statut: FieldRef<"DemandeEmprunt", 'StatutDemande'>
     readonly type: FieldRef<"DemandeEmprunt", 'TypeDemande'>
+    readonly motif: FieldRef<"DemandeEmprunt", 'String'>
     readonly createdAt: FieldRef<"DemandeEmprunt", 'DateTime'>
     readonly updatedAt: FieldRef<"DemandeEmprunt", 'DateTime'>
   }
@@ -11341,6 +11354,7 @@ export namespace Prisma {
     usage: 'usage',
     statut: 'statut',
     type: 'type',
+    motif: 'motif',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11827,6 +11841,7 @@ export namespace Prisma {
     usage?: StringFilter<"DemandeEmprunt"> | string
     statut?: EnumStatutDemandeFilter<"DemandeEmprunt"> | $Enums.StatutDemande
     type?: EnumTypeDemandeFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    motif?: StringNullableFilter<"DemandeEmprunt"> | string | null
     createdAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
@@ -11843,6 +11858,7 @@ export namespace Prisma {
     usage?: SortOrder
     statut?: SortOrder
     type?: SortOrder
+    motif?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     utilisateur?: UtilisateurOrderByWithRelationInput
@@ -11862,6 +11878,7 @@ export namespace Prisma {
     usage?: StringFilter<"DemandeEmprunt"> | string
     statut?: EnumStatutDemandeFilter<"DemandeEmprunt"> | $Enums.StatutDemande
     type?: EnumTypeDemandeFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    motif?: StringNullableFilter<"DemandeEmprunt"> | string | null
     createdAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     utilisateur?: XOR<UtilisateurScalarRelationFilter, UtilisateurWhereInput>
@@ -11878,6 +11895,7 @@ export namespace Prisma {
     usage?: SortOrder
     statut?: SortOrder
     type?: SortOrder
+    motif?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DemandeEmpruntCountOrderByAggregateInput
@@ -11899,6 +11917,7 @@ export namespace Prisma {
     usage?: StringWithAggregatesFilter<"DemandeEmprunt"> | string
     statut?: EnumStatutDemandeWithAggregatesFilter<"DemandeEmprunt"> | $Enums.StatutDemande
     type?: EnumTypeDemandeWithAggregatesFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    motif?: StringNullableWithAggregatesFilter<"DemandeEmprunt"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"DemandeEmprunt"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DemandeEmprunt"> | Date | string
   }
@@ -12489,6 +12508,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
@@ -12505,6 +12525,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput
@@ -12516,6 +12537,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
@@ -12532,6 +12554,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput
@@ -12546,6 +12569,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12556,6 +12580,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12569,6 +12594,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13339,6 +13365,7 @@ export namespace Prisma {
     usage?: SortOrder
     statut?: SortOrder
     type?: SortOrder
+    motif?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13358,6 +13385,7 @@ export namespace Prisma {
     usage?: SortOrder
     statut?: SortOrder
     type?: SortOrder
+    motif?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13371,6 +13399,7 @@ export namespace Prisma {
     usage?: SortOrder
     statut?: SortOrder
     type?: SortOrder
+    motif?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14812,6 +14841,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     equipement: EquipementCreateNestedOneWithoutDemandeEmpruntInput
@@ -14826,6 +14856,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput
@@ -14930,6 +14961,7 @@ export namespace Prisma {
     usage?: StringFilter<"DemandeEmprunt"> | string
     statut?: EnumStatutDemandeFilter<"DemandeEmprunt"> | $Enums.StatutDemande
     type?: EnumTypeDemandeFilter<"DemandeEmprunt"> | $Enums.TypeDemande
+    motif?: StringNullableFilter<"DemandeEmprunt"> | string | null
     createdAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
     updatedAt?: DateTimeFilter<"DemandeEmprunt"> | Date | string
   }
@@ -15423,6 +15455,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
@@ -15437,6 +15470,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutDemandeEmpruntInput
@@ -15520,6 +15554,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisateur: UtilisateurCreateNestedOneWithoutDemandeEmpruntInput
@@ -15535,6 +15570,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15627,6 +15663,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
@@ -15642,6 +15679,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15932,6 +15970,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15989,6 +16028,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     equipement?: EquipementUpdateOneRequiredWithoutDemandeEmpruntNestedInput
@@ -16003,6 +16043,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput
@@ -16016,6 +16057,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16163,6 +16205,7 @@ export namespace Prisma {
     usage: string
     statut?: $Enums.StatutDemande
     type?: $Enums.TypeDemande
+    motif?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16210,6 +16253,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisateur?: UtilisateurUpdateOneRequiredWithoutDemandeEmpruntNestedInput
@@ -16224,6 +16268,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutDemandeEmpruntNestedInput
@@ -16237,6 +16282,7 @@ export namespace Prisma {
     usage?: StringFieldUpdateOperationsInput | string
     statut?: EnumStatutDemandeFieldUpdateOperationsInput | $Enums.StatutDemande
     type?: EnumTypeDemandeFieldUpdateOperationsInput | $Enums.TypeDemande
+    motif?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

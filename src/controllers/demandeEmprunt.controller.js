@@ -80,7 +80,8 @@ exports.approuverDemande = async (req, res) => {
 
 exports.refuserDemande = async (req, res) => {
   try {
-    const result = await DemandeEmpruntService.refuserDemande(req.params.id);
+    const { motif } = req.body;
+    const result = await DemandeEmpruntService.refuserDemande(req.params.id, motif);
     res.status(200).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });

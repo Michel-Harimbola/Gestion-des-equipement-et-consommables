@@ -300,7 +300,7 @@ class DemandeEmpruntService {
   }
 
 
-  static async refuserDemande(id) {
+  static async refuserDemande(id, motif) {
     const demandeId = parseInt(id, 10);
     const io = getIO();
 
@@ -316,7 +316,10 @@ class DemandeEmpruntService {
 
     await prisma.demandeEmprunt.update({
       where: { id: demandeId },
-      data: { statut: "refuser" },
+      data: { 
+        statut: "refuser",
+        motif: motif,
+      },
     });
 
     let messageNotif = "";
@@ -327,7 +330,8 @@ class DemandeEmpruntService {
         data: { disponibilite: "Disponible" },
       });
 
-      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.marque}" a été refusée.`;
+      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.marque}" a été refusée.
+                      Motif: ${motif}`;
 
     } else if (demande.type === "RETOUR") {
       await prisma.equipement.update({

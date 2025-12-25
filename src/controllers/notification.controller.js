@@ -13,7 +13,7 @@ exports.getUserNotification = async (req, res) => {
 exports.markAllAsRead = async (req, res) => {
   try {
     const result = await NotificationService.markAllAsRead(req.user.id);
-    res.json({ message: "Toutes vos notifications sont maintenant vues" });
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

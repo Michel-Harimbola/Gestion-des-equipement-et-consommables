@@ -330,8 +330,7 @@ class DemandeEmpruntService {
         data: { disponibilite: "Disponible" },
       });
 
-      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.marque}" a été refusée.
-                      Motif: ${motif}`;
+      messageNotif = `Votre demande d'emprunt pour l'équipement "${demande.equipement.marque}" a été refusée. Motif: ${motif}`;
 
     } else if (demande.type === "RETOUR") {
       await prisma.equipement.update({

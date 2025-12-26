@@ -31,13 +31,11 @@ class UtilisationConsommableService {
       },
     });
 
-    // Réduit le quantiteDisponible du consommable
     await prisma.consommable.update({
       where: { id: consommableId },
       data: { quantiteDisponible: quantiteRestante },
     });
     
-    // Vérifier si le quantiteRestante <= seuilCritique et envoyer le notification d'alerte
     if(quantiteRestante <= consommable.seuilCritique) {
       const notif = await notificationService.createNotification({
         message: `${consommable.nom}: ${quantiteRestante} restant.`,
@@ -58,7 +56,7 @@ class UtilisationConsommableService {
       prisma.utilisationConsommable.findMany({
         include: {
           utilisateur: { select: { id: true, nom: true } },
-          consommable: { select: { id: true, nom: true } },
+          consommable: { select: { id: true, nom: true, marque: true, photo: true } },
         },
         orderBy: { dateUtilisation: "desc" },
         skip,
@@ -67,7 +65,29 @@ class UtilisationConsommableService {
       prisma.utilisationConsommable.count()
     ]);
 
-  return { UseCons, total, page, limit };
+    return { UseCons, total, page, limit };
+  }
+
+  static async getUserUtilisation(userId, { page = 1, limit = 12 }) {
+    const skip = (page - 1) * limit;
+
+    const [UseCons, total] = await Promise.all([
+      prisma.utilisationConsommable.findMany({
+        where: { utilisateurId: userId },
+        include: {
+          utilisateur: { select: { id: true, nom: true } },
+          consommable: { select: { id: true, nom: true, marque: true, photo: true } },
+        },
+        orderBy: { dateUtilisation: "desc" },
+        skip,
+        take: limit,
+      }),
+      prisma.utilisationConsommable.count({
+        where: { utilisateurId: userId },
+      })
+    ]);
+
+    return { UseCons, total, page, limit };
   }
 
   static async getById(id) {
@@ -102,10 +122,49 @@ class UtilisationConsommableService {
             orderBy: { dateUtilisation: "desc" },
             include: {
                 utilisateur: { select: { id: true, nom: true } },
-                consommable: { select: { id: true, nom: true } },
+                consommable: { select: { id: true, nom: true, marque: true, photo: true } },
             }
         }),
         prisma.utilisationConsommable.count({ where })
+    ]);
+
+    return { UseCons, total, page, limit };
+  }
+
+  static async searchUserUtilisation(userId, q, page = 1, limit = 12) {
+    page = parseInt(page, 10) || 1;
+    limit = parseInt(limit, 10) || 12;
+    const skip = (page - 1) * limit;
+
+    const where = {
+        OR: [
+            { utilisateur: { nom: { contains: q, mode: "insensitive" } } },
+            { utilisateur: { prenom: { contains: q, mode: "insensitive" } } },
+
+            { consommable: { nom: { contains: q, mode: "insensitive" } } },
+        ]
+    };
+
+    const [UseCons, total] = await Promise.all([
+        prisma.utilisationConsommable.findMany({
+            where: { 
+              utilisateurId: userId,
+              ...where 
+            },
+            skip,
+            take: limit,
+            orderBy: { dateUtilisation: "desc" },
+            include: {
+                utilisateur: { select: { id: true, nom: true } },
+                consommable: { select: { id: true, nom: true, marque: true, photo: true } },
+            }
+        }),
+        prisma.utilisationConsommable.count({ 
+          where: { 
+            utilisateurId: userId,
+            ...where 
+          },
+        })
     ]);
 
     return { UseCons, total, page, limit };

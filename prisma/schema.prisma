@@ -105,11 +105,13 @@ model Notification {
 model Consommable {
   id                      Int        @id  @default(autoincrement())
   nom                     String     @db.VarChar(30)
+  marque                  String     @db.VarChar(30)
   quantiteDisponible      Int        
   seuilCritique           Int
   obtention               Obtention   @default(Achat)
-  fournisseur    String?
-  donnateur      String?
+  fournisseur             String?
+  donnateur               String?
+  photo                   String?
   createdAt               DateTime    @default(now())
   updatedAt               DateTime    @updatedAt
 

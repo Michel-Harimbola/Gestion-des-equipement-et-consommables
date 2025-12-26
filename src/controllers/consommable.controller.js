@@ -2,7 +2,7 @@ const ConsommableService = require("../services/consommable.service.js");
 
 exports.createConsommable = async (req, res) => {
     try {
-        const result = await ConsommableService.createConsommable(req.body);
+        const result = await ConsommableService.createConsommable(req.body, req.file);
         res.status(201).json(result);
     } catch (error) {
         res.status(400).json({ error: error.message });

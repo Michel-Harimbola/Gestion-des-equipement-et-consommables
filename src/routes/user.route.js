@@ -1,9 +1,10 @@
 const express = require("express");
 const UserController = require("../controllers/user.controller.js");
-const upload = require("../middlewares/uploadUserPhoto.js");
+const createUpload = require("../middlewares/upload.js");
 const auth = require("../middlewares/authMiddleware.js");
 
 const router = express.Router();
+const upload = createUpload("users");
 
 router.post("/create", auth, UserController.createUser);
 router.get("/search", auth, UserController.searchUsers);

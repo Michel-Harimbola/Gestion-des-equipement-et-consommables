@@ -192,11 +192,13 @@ exports.Prisma.NotificationScalarFieldEnum = {
 exports.Prisma.ConsommableScalarFieldEnum = {
   id: 'id',
   nom: 'nom',
+  marque: 'marque',
   quantiteDisponible: 'quantiteDisponible',
   seuilCritique: 'seuilCritique',
   obtention: 'obtention',
   fournisseur: 'fournisseur',
   donnateur: 'donnateur',
+  photo: 'photo',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

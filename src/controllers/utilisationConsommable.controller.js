@@ -21,6 +21,17 @@ exports.getAll = async (req, res) => {
   }
 }
 
+exports.getUserUtilisation = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const result = await UtilisationConsommableService.getUserUtilisation(req.user.id, { page, limit });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 exports.getById = async (req, res) => {
   try {
     const result = await UtilisationConsommableService.getById(req.params.id);
@@ -34,6 +45,17 @@ exports.searchUtilisation = async (req, res) => {
     try {
         const { q = "", page = 1, limit = 12 } = req.query;
         const result = await UtilisationConsommableService.searchUtilisation(q, parseInt(page), parseInt(limit));
+        res.json(result);
+    } catch (err) {
+        console.error("Erreur recherche utilisation consommable:", err);
+        res.status(500).json({ error: "Erreur interne serveur" });
+    }
+};
+
+exports.searchUserUtilisation = async (req, res) => {
+    try {
+        const { q = "", page = 1, limit = 12 } = req.query;
+        const result = await UtilisationConsommableService.searchUserUtilisation(req.user.id, q, parseInt(page), parseInt(limit));
         res.json(result);
     } catch (err) {
         console.error("Erreur recherche utilisation consommable:", err);

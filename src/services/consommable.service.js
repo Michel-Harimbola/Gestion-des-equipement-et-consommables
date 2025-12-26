@@ -1,9 +1,19 @@
 const prisma = require("../lib/prisma.js");
 
 class ConsommableService {
-    static async createConsommable(data) {
+    static async createConsommable(data, file) {
+        const {nom, marque, quantiteDisponible, seuilCritique, obtention, fournisseur, donnateur} = data;
         const consommable = await prisma.consommable.create({
-            data,
+            data: {
+                nom: nom,
+                marque: marque,
+                quantiteDisponible: Number(quantiteDisponible),
+                seuilCritique: Number(seuilCritique),
+                obtention: obtention,
+                fournisseur: fournisseur,
+                donnateur: donnateur,
+                photo: file ? `/uploads/consommables/${file.filename}` : null,
+            },
         });
 
         return consommable;
@@ -18,11 +28,13 @@ class ConsommableService {
             select: {
                 id: true,
                 nom: true,
+                marque: true,
                 quantiteDisponible: true,
                 seuilCritique: true,
                 obtention: true,
                 fournisseur: true,
                 donnateur: true,
+                photo: true,
             },
         });
         if(!consommable) throw new Error("Consommable non trouvé");
@@ -38,11 +50,13 @@ class ConsommableService {
                 select: {
                     id: true,
                     nom: true,
+                    marque: true,
                     quantiteDisponible: true,
                     seuilCritique: true,
                     obtention: true,
                     fournisseur: true,
                     donnateur: true,
+                    photo: true,
                 },
                 orderBy: { createdAt: "desc" },
                 skip,
@@ -71,11 +85,13 @@ class ConsommableService {
                 select: {
                     id: true,
                     nom: true,
+                    marque: true,
                     quantiteDisponible: true,
                     seuilCritique: true,
                     obtention: true,
                     fournisseur: true,
                     donnateur: true,
+                    photo: true,
                 },
                 orderBy: { createdAt: "desc" },
                 skip,

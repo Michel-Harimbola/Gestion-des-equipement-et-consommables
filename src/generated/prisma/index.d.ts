@@ -7955,11 +7955,13 @@ export namespace Prisma {
   export type ConsommableMinAggregateOutputType = {
     id: number | null
     nom: string | null
+    marque: string | null
     quantiteDisponible: number | null
     seuilCritique: number | null
     obtention: $Enums.Obtention | null
     fournisseur: string | null
     donnateur: string | null
+    photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7967,11 +7969,13 @@ export namespace Prisma {
   export type ConsommableMaxAggregateOutputType = {
     id: number | null
     nom: string | null
+    marque: string | null
     quantiteDisponible: number | null
     seuilCritique: number | null
     obtention: $Enums.Obtention | null
     fournisseur: string | null
     donnateur: string | null
+    photo: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7979,11 +7983,13 @@ export namespace Prisma {
   export type ConsommableCountAggregateOutputType = {
     id: number
     nom: number
+    marque: number
     quantiteDisponible: number
     seuilCritique: number
     obtention: number
     fournisseur: number
     donnateur: number
+    photo: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8005,11 +8011,13 @@ export namespace Prisma {
   export type ConsommableMinAggregateInputType = {
     id?: true
     nom?: true
+    marque?: true
     quantiteDisponible?: true
     seuilCritique?: true
     obtention?: true
     fournisseur?: true
     donnateur?: true
+    photo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8017,11 +8025,13 @@ export namespace Prisma {
   export type ConsommableMaxAggregateInputType = {
     id?: true
     nom?: true
+    marque?: true
     quantiteDisponible?: true
     seuilCritique?: true
     obtention?: true
     fournisseur?: true
     donnateur?: true
+    photo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8029,11 +8039,13 @@ export namespace Prisma {
   export type ConsommableCountAggregateInputType = {
     id?: true
     nom?: true
+    marque?: true
     quantiteDisponible?: true
     seuilCritique?: true
     obtention?: true
     fournisseur?: true
     donnateur?: true
+    photo?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8128,11 +8140,13 @@ export namespace Prisma {
   export type ConsommableGroupByOutputType = {
     id: number
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention: $Enums.Obtention
     fournisseur: string | null
     donnateur: string | null
+    photo: string | null
     createdAt: Date
     updatedAt: Date
     _count: ConsommableCountAggregateOutputType | null
@@ -8159,11 +8173,13 @@ export namespace Prisma {
   export type ConsommableSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nom?: boolean
+    marque?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
     obtention?: boolean
     fournisseur?: boolean
     donnateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     notification?: boolean | Consommable$notificationArgs<ExtArgs>
@@ -8174,11 +8190,13 @@ export namespace Prisma {
   export type ConsommableSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nom?: boolean
+    marque?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
     obtention?: boolean
     fournisseur?: boolean
     donnateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["consommable"]>
@@ -8186,11 +8204,13 @@ export namespace Prisma {
   export type ConsommableSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     nom?: boolean
+    marque?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
     obtention?: boolean
     fournisseur?: boolean
     donnateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["consommable"]>
@@ -8198,16 +8218,18 @@ export namespace Prisma {
   export type ConsommableSelectScalar = {
     id?: boolean
     nom?: boolean
+    marque?: boolean
     quantiteDisponible?: boolean
     seuilCritique?: boolean
     obtention?: boolean
     fournisseur?: boolean
     donnateur?: boolean
+    photo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ConsommableOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "quantiteDisponible" | "seuilCritique" | "obtention" | "fournisseur" | "donnateur" | "createdAt" | "updatedAt", ExtArgs["result"]["consommable"]>
+  export type ConsommableOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nom" | "marque" | "quantiteDisponible" | "seuilCritique" | "obtention" | "fournisseur" | "donnateur" | "photo" | "createdAt" | "updatedAt", ExtArgs["result"]["consommable"]>
   export type ConsommableInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     notification?: boolean | Consommable$notificationArgs<ExtArgs>
     utilisationsConsommable?: boolean | Consommable$utilisationsConsommableArgs<ExtArgs>
@@ -8225,11 +8247,13 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       nom: string
+      marque: string
       quantiteDisponible: number
       seuilCritique: number
       obtention: $Enums.Obtention
       fournisseur: string | null
       donnateur: string | null
+      photo: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["consommable"]>
@@ -8659,11 +8683,13 @@ export namespace Prisma {
   interface ConsommableFieldRefs {
     readonly id: FieldRef<"Consommable", 'Int'>
     readonly nom: FieldRef<"Consommable", 'String'>
+    readonly marque: FieldRef<"Consommable", 'String'>
     readonly quantiteDisponible: FieldRef<"Consommable", 'Int'>
     readonly seuilCritique: FieldRef<"Consommable", 'Int'>
     readonly obtention: FieldRef<"Consommable", 'Obtention'>
     readonly fournisseur: FieldRef<"Consommable", 'String'>
     readonly donnateur: FieldRef<"Consommable", 'String'>
+    readonly photo: FieldRef<"Consommable", 'String'>
     readonly createdAt: FieldRef<"Consommable", 'DateTime'>
     readonly updatedAt: FieldRef<"Consommable", 'DateTime'>
   }
@@ -11400,11 +11426,13 @@ export namespace Prisma {
   export const ConsommableScalarFieldEnum: {
     id: 'id',
     nom: 'nom',
+    marque: 'marque',
     quantiteDisponible: 'quantiteDisponible',
     seuilCritique: 'seuilCritique',
     obtention: 'obtention',
     fournisseur: 'fournisseur',
     donnateur: 'donnateur',
+    photo: 'photo',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12116,11 +12144,13 @@ export namespace Prisma {
     NOT?: ConsommableWhereInput | ConsommableWhereInput[]
     id?: IntFilter<"Consommable"> | number
     nom?: StringFilter<"Consommable"> | string
+    marque?: StringFilter<"Consommable"> | string
     quantiteDisponible?: IntFilter<"Consommable"> | number
     seuilCritique?: IntFilter<"Consommable"> | number
     obtention?: EnumObtentionFilter<"Consommable"> | $Enums.Obtention
     fournisseur?: StringNullableFilter<"Consommable"> | string | null
     donnateur?: StringNullableFilter<"Consommable"> | string | null
+    photo?: StringNullableFilter<"Consommable"> | string | null
     createdAt?: DateTimeFilter<"Consommable"> | Date | string
     updatedAt?: DateTimeFilter<"Consommable"> | Date | string
     notification?: NotificationListRelationFilter
@@ -12130,11 +12160,13 @@ export namespace Prisma {
   export type ConsommableOrderByWithRelationInput = {
     id?: SortOrder
     nom?: SortOrder
+    marque?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
     obtention?: SortOrder
     fournisseur?: SortOrderInput | SortOrder
     donnateur?: SortOrderInput | SortOrder
+    photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     notification?: NotificationOrderByRelationAggregateInput
@@ -12147,11 +12179,13 @@ export namespace Prisma {
     OR?: ConsommableWhereInput[]
     NOT?: ConsommableWhereInput | ConsommableWhereInput[]
     nom?: StringFilter<"Consommable"> | string
+    marque?: StringFilter<"Consommable"> | string
     quantiteDisponible?: IntFilter<"Consommable"> | number
     seuilCritique?: IntFilter<"Consommable"> | number
     obtention?: EnumObtentionFilter<"Consommable"> | $Enums.Obtention
     fournisseur?: StringNullableFilter<"Consommable"> | string | null
     donnateur?: StringNullableFilter<"Consommable"> | string | null
+    photo?: StringNullableFilter<"Consommable"> | string | null
     createdAt?: DateTimeFilter<"Consommable"> | Date | string
     updatedAt?: DateTimeFilter<"Consommable"> | Date | string
     notification?: NotificationListRelationFilter
@@ -12161,11 +12195,13 @@ export namespace Prisma {
   export type ConsommableOrderByWithAggregationInput = {
     id?: SortOrder
     nom?: SortOrder
+    marque?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
     obtention?: SortOrder
     fournisseur?: SortOrderInput | SortOrder
     donnateur?: SortOrderInput | SortOrder
+    photo?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ConsommableCountOrderByAggregateInput
@@ -12181,11 +12217,13 @@ export namespace Prisma {
     NOT?: ConsommableScalarWhereWithAggregatesInput | ConsommableScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Consommable"> | number
     nom?: StringWithAggregatesFilter<"Consommable"> | string
+    marque?: StringWithAggregatesFilter<"Consommable"> | string
     quantiteDisponible?: IntWithAggregatesFilter<"Consommable"> | number
     seuilCritique?: IntWithAggregatesFilter<"Consommable"> | number
     obtention?: EnumObtentionWithAggregatesFilter<"Consommable"> | $Enums.Obtention
     fournisseur?: StringNullableWithAggregatesFilter<"Consommable"> | string | null
     donnateur?: StringNullableWithAggregatesFilter<"Consommable"> | string | null
+    photo?: StringNullableWithAggregatesFilter<"Consommable"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Consommable"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Consommable"> | Date | string
   }
@@ -12803,11 +12841,13 @@ export namespace Prisma {
 
   export type ConsommableCreateInput = {
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationCreateNestedManyWithoutConsommableInput
@@ -12817,11 +12857,13 @@ export namespace Prisma {
   export type ConsommableUncheckedCreateInput = {
     id?: number
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutConsommableInput
@@ -12830,11 +12872,13 @@ export namespace Prisma {
 
   export type ConsommableUpdateInput = {
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUpdateManyWithoutConsommableNestedInput
@@ -12844,11 +12888,13 @@ export namespace Prisma {
   export type ConsommableUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutConsommableNestedInput
@@ -12858,22 +12904,26 @@ export namespace Prisma {
   export type ConsommableCreateManyInput = {
     id?: number
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ConsommableUpdateManyMutationInput = {
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12881,11 +12931,13 @@ export namespace Prisma {
   export type ConsommableUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13694,11 +13746,13 @@ export namespace Prisma {
   export type ConsommableCountOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
+    marque?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
     obtention?: SortOrder
     fournisseur?: SortOrder
     donnateur?: SortOrder
+    photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13712,11 +13766,13 @@ export namespace Prisma {
   export type ConsommableMaxOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
+    marque?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
     obtention?: SortOrder
     fournisseur?: SortOrder
     donnateur?: SortOrder
+    photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13724,11 +13780,13 @@ export namespace Prisma {
   export type ConsommableMinOrderByAggregateInput = {
     id?: SortOrder
     nom?: SortOrder
+    marque?: SortOrder
     quantiteDisponible?: SortOrder
     seuilCritique?: SortOrder
     obtention?: SortOrder
     fournisseur?: SortOrder
     donnateur?: SortOrder
+    photo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15582,11 +15640,13 @@ export namespace Prisma {
 
   export type ConsommableCreateWithoutNotificationInput = {
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisationsConsommable?: UtilisationConsommableCreateNestedManyWithoutConsommableInput
@@ -15595,11 +15655,13 @@ export namespace Prisma {
   export type ConsommableUncheckedCreateWithoutNotificationInput = {
     id?: number
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     utilisationsConsommable?: UtilisationConsommableUncheckedCreateNestedManyWithoutConsommableInput
@@ -15697,11 +15759,13 @@ export namespace Prisma {
 
   export type ConsommableUpdateWithoutNotificationInput = {
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisationsConsommable?: UtilisationConsommableUpdateManyWithoutConsommableNestedInput
@@ -15710,11 +15774,13 @@ export namespace Prisma {
   export type ConsommableUncheckedUpdateWithoutNotificationInput = {
     id?: IntFieldUpdateOperationsInput | number
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     utilisationsConsommable?: UtilisationConsommableUncheckedUpdateManyWithoutConsommableNestedInput
@@ -15848,11 +15914,13 @@ export namespace Prisma {
 
   export type ConsommableCreateWithoutUtilisationsConsommableInput = {
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationCreateNestedManyWithoutConsommableInput
@@ -15861,11 +15929,13 @@ export namespace Prisma {
   export type ConsommableUncheckedCreateWithoutUtilisationsConsommableInput = {
     id?: number
     nom: string
+    marque: string
     quantiteDisponible: number
     seuilCritique: number
     obtention?: $Enums.Obtention
     fournisseur?: string | null
     donnateur?: string | null
+    photo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     notification?: NotificationUncheckedCreateNestedManyWithoutConsommableInput
@@ -15927,11 +15997,13 @@ export namespace Prisma {
 
   export type ConsommableUpdateWithoutUtilisationsConsommableInput = {
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUpdateManyWithoutConsommableNestedInput
@@ -15940,11 +16012,13 @@ export namespace Prisma {
   export type ConsommableUncheckedUpdateWithoutUtilisationsConsommableInput = {
     id?: IntFieldUpdateOperationsInput | number
     nom?: StringFieldUpdateOperationsInput | string
+    marque?: StringFieldUpdateOperationsInput | string
     quantiteDisponible?: IntFieldUpdateOperationsInput | number
     seuilCritique?: IntFieldUpdateOperationsInput | number
     obtention?: EnumObtentionFieldUpdateOperationsInput | $Enums.Obtention
     fournisseur?: NullableStringFieldUpdateOperationsInput | string | null
     donnateur?: NullableStringFieldUpdateOperationsInput | string | null
+    photo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     notification?: NotificationUncheckedUpdateManyWithoutConsommableNestedInput

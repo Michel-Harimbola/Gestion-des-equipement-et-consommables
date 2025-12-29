@@ -122,10 +122,6 @@ class UserService {
             if (currentUser.id !== targetUser.id) {
             throw new Error("Vous ne pouvez pas modifier l'administrateur");
             }
-
-            if (data.role || data.email) {
-                throw new Error("Modification de champs système interdite");
-            }
         }
 
         if ( targetUser.role === "admin" && data.role && data.role !== "admin") {

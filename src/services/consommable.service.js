@@ -2,7 +2,7 @@ const prisma = require("../lib/prisma.js");
 
 class ConsommableService {
     static async createConsommable(data, file) {
-        const {nom, marque, quantiteDisponible, seuilCritique, obtention, fournisseur, donnateur} = data;
+        const {nom, marque, quantiteDisponible, seuilCritique, obtention, categorie, fournisseur, donnateur} = data;
         const consommable = await prisma.consommable.create({
             data: {
                 nom: nom,
@@ -10,6 +10,7 @@ class ConsommableService {
                 quantiteDisponible: Number(quantiteDisponible),
                 seuilCritique: Number(seuilCritique),
                 obtention: obtention,
+                categorie: categorie,
                 fournisseur: fournisseur,
                 donnateur: donnateur,
                 photo: file ? `/uploads/consommables/${file.filename}` : null,
@@ -32,6 +33,7 @@ class ConsommableService {
                 quantiteDisponible: true,
                 seuilCritique: true,
                 obtention: true,
+                categorie: true,
                 fournisseur: true,
                 donnateur: true,
                 photo: true,
@@ -54,6 +56,7 @@ class ConsommableService {
                     quantiteDisponible: true,
                     seuilCritique: true,
                     obtention: true,
+                    categorie: true,
                     fournisseur: true,
                     donnateur: true,
                     photo: true,
@@ -89,6 +92,7 @@ class ConsommableService {
                     quantiteDisponible: true,
                     seuilCritique: true,
                     obtention: true,
+                    categorie: true,
                     fournisseur: true,
                     donnateur: true,
                     photo: true,

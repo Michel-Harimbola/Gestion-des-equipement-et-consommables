@@ -103,17 +103,18 @@ model Notification {
 }
 
 model Consommable {
-  id                      Int        @id  @default(autoincrement())
-  nom                     String     @db.VarChar(30)
-  marque                  String     @db.VarChar(30)
+  id                      Int              @id  @default(autoincrement())
+  nom                     String           @db.VarChar(30)
+  marque                  String           @db.VarChar(30)
   quantiteDisponible      Int        
   seuilCritique           Int
-  obtention               Obtention   @default(Achat)
+  obtention               Obtention        @default(Achat)
+  categorie               Categorie        @default(Bureautique)
   fournisseur             String?
   donnateur               String?
   photo                   String?
-  createdAt               DateTime    @default(now())
-  updatedAt               DateTime    @updatedAt
+  createdAt               DateTime         @default(now())
+  updatedAt               DateTime         @updatedAt
 
   notification            Notification[]
   utilisationsConsommable UtilisationConsommable[]
@@ -199,4 +200,14 @@ enum StatutDemande {
 enum TypeDemande {
   EMPRUNT
   RETOUR
+}
+
+enum Categorie {
+  Bureautique
+  Informatique
+  Evenementiel
+  Nettoyage
+  Maintenance
+  Communication
+  Autre
 }

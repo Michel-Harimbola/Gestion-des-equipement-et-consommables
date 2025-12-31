@@ -103,7 +103,7 @@ class DemandeEmpruntService {
       where: { id: demandeRetour.id },
       include: {
         utilisateur: { select: { nom: true, prenom: true } },
-        equipement: { select: { nom: true, numeroDeSerie: true, marque: true } },
+        equipement: { select: { nom: true, numeroDeSerie: true, marque: true, photo: true  } },
       },
     });
   }
@@ -135,7 +135,7 @@ class DemandeEmpruntService {
         where: { statut: "enAttente" },
         include: {
           utilisateur: { select: { nom: true, prenom: true, email: true } },
-          equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true } },
+          equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true, photo: true  } },
         },
         orderBy: { createdAt: "desc" },
         skip,
@@ -176,7 +176,7 @@ class DemandeEmpruntService {
                       select: { nom: true, prenom: true, email: true }
                   },
                   equipement: {
-                      select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true }
+                      select: { nom: true, marque: true, numeroDeSerie: true, etatMateriel: true, photo: true  }
                   }
               }
           }),
@@ -194,7 +194,7 @@ class DemandeEmpruntService {
       },
       orderBy: { dateDemande: "desc" },
       include: {
-        equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true } }
+        equipement: { select: { nom: true, numeroDeSerie: true, marque: true, etatMateriel: true, photo: true  } }
       },
     });
 

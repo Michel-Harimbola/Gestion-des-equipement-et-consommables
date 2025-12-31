@@ -56,7 +56,7 @@ class UtilisationConsommableService {
       prisma.utilisationConsommable.findMany({
         include: {
           utilisateur: { select: { id: true, nom: true } },
-          consommable: { select: { id: true, nom: true, marque: true, photo: true, categorie: true } },
+          consommable: { select: { id: true, nom: true, marque: true, categorie: true, photo: true } },
         },
         orderBy: { dateUtilisation: "desc" },
         skip,
@@ -76,7 +76,7 @@ class UtilisationConsommableService {
         where: { utilisateurId: userId },
         include: {
           utilisateur: { select: { id: true, nom: true } },
-          consommable: { select: { id: true, nom: true, marque: true, photo: true, categorie: true } },
+          consommable: { select: { id: true, nom: true, marque: true, categorie: true, photo: true } },
         },
         orderBy: { dateUtilisation: "desc" },
         skip,
@@ -122,7 +122,7 @@ class UtilisationConsommableService {
             orderBy: { dateUtilisation: "desc" },
             include: {
                 utilisateur: { select: { id: true, nom: true } },
-                consommable: { select: { id: true, nom: true, marque: true, photo: true, categorie: true } },
+                consommable: { select: { id: true, nom: true, marque: true, categorie: true, photo: true } },
             }
         }),
         prisma.utilisationConsommable.count({ where })
@@ -156,7 +156,7 @@ class UtilisationConsommableService {
             orderBy: { dateUtilisation: "desc" },
             include: {
                 utilisateur: { select: { id: true, nom: true } },
-                consommable: { select: { id: true, nom: true, marque: true, photo: true, categorie: true } },
+                consommable: { select: { id: true, nom: true, marque: true, categorie: true, photo: true } },
             }
         }),
         prisma.utilisationConsommable.count({ 
